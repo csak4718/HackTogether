@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.appevents.AppEventsLogger;
+import com.parse.ParseObject;
 
 import apt.hacktogether.R;
 
@@ -16,23 +17,26 @@ public class LoginActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        // Logs 'install' and 'app activate' App Events.
+//        AppEventsLogger.activateApp(this);
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//
+//        // Logs 'app deactivate' App Event.
+//        AppEventsLogger.deactivateApp(this);
+//    }
 
 
     @Override
