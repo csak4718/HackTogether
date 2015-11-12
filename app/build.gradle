@@ -30,7 +30,11 @@ dependencies {
     compile 'com.layer.sdk:layer-sdk:0.18.2'
     compile 'com.google.android.gms:play-services-gcm:7.5.0'
     compile 'org.slf4j:slf4j-nop:1.5.8'
-    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+//    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.parse:parse-android:1.+'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'de.greenrobot:eventbus:2.4.0'
+
 }
