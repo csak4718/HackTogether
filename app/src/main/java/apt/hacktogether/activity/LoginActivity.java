@@ -97,7 +97,6 @@ public class LoginActivity extends BaseActivity {
         }
         else {
             setupLoginButton();
-            Log.d("showAnimation", "get into showLoginAnimation()");
             showLoginAnimation();
         }
     }
@@ -195,8 +194,8 @@ public class LoginActivity extends BaseActivity {
         });
         mTxvSplashLogo.setAnimation(animation);
 
-        Log.d("Animation", "Start Now");
-        animation.startNow();
+        Log.d("Animation", "startAnimation");
+        mTxvSplashLogo.startAnimation(animation);
     }
 
     public void onEvent(UserProfileEvent event) {
