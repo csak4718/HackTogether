@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="facebook_app_id">1489518554685857</string>
     <string name="app_name">HackTogether</string>
     <string name="hello_world">Hello world!</string>
@@ -7,5 +8,6 @@
     <string name="title_activity_base">BaseActivity</string>
     <string name="login_fb">Log in with Facebook</string>
     <string name="title_activity_main">MainActivity</string>
-
+    <string name="title_activity_conversations">ConversationsActivity</string>
+    <string name="messenger">Messenger</string>
 </resources>
