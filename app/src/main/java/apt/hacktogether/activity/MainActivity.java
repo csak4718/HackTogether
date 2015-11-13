@@ -2,12 +2,16 @@ package apt.hacktogether.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.parse.ParseUser;
+
 import apt.hacktogether.R;
+import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.utils.Utils;
 
 public class MainActivity extends BaseActivity {
@@ -25,6 +29,14 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    //Called when the Activity starts, or when the App is coming to the foreground.
+    public void onResume() {
+        super.onResume();
+
+        // Check to see the state of the LayerClient, and if everything is set up, then good; do nothing.
+        Utils.checkSetup(this);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
