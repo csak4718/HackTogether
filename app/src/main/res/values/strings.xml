@@ -10,4 +10,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_conversations">ConversationsActivity</string>
     <string name="messenger">Messenger</string>
+    <string name="title_activity_message">MessageActivity</string>
+
 </resources>

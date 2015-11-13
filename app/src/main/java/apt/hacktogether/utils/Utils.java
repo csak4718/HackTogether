@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import apt.hacktogether.activity.ConversationsActivity;
+import apt.hacktogether.activity.LoginActivity;
 import apt.hacktogether.activity.MainActivity;
 
 /**
@@ -19,4 +20,10 @@ public class Utils {
         Intent it = new Intent(activity, ConversationsActivity.class);
         activity.startActivity(it);
     }
+
+    public static void gotoLoginActivity(Activity activity){
+        Intent it = new Intent(activity, LoginActivity.class);
+        activity.startActivity(it);
+    }
+
 }

@@ -49,6 +49,10 @@
             android:name=".activity.ConversationsActivity"
             android:label="@string/title_activity_conversations" >
         </activity>
+        <activity
+            android:name=".activity.MessageActivity"
+            android:label="@string/title_activity_message" >
+        </activity>
     </application>
 
 </manifest>

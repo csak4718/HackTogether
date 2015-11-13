@@ -95,16 +95,16 @@ public class ParseImpl {
         return friends;
     }
 
-    //Takes a ParseObject id and returns the associated username (handle) for display purposes
+    //Takes a ParseObject id and returns the associated username (De-Wei: Here we return user's nickname) for display purposes
     public static String getUsername(String id){
 
         //Does this id appear in the "all users" list?
         if(id != null && allUsers != null && allUsers.containsKey(id) && allUsers.get(id) != null)
-            return allUsers.get(id).getUsername();
+            return allUsers.get(id).getString(Common.OBJECT_USER_NICK);
 
         //Does this id belong to the currently signed in user?
         if(id != null && ParseUser.getCurrentUser() != null && id.equals(ParseUser.getCurrentUser().getObjectId()))
-            return ParseUser.getCurrentUser().getUsername();
+            return ParseUser.getCurrentUser().getString(Common.OBJECT_USER_NICK);
 
         //If the handle can't be found, return whatever value was passed in
         return id;
