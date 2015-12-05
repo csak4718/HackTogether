@@ -11,5 +11,10 @@
     <string name="title_activity_conversations">ConversationsActivity</string>
     <string name="messenger">Messenger</string>
     <string name="title_activity_message">MessageActivity</string>
+    <string name="title_activity_browse">BrowseActivity</string>
+    <string name="group_manage">Group Manage</string>
+    <string name="settings">Settings</string>
+    <string name="hackathons">Hackathons</string>
+    <string name="title_activity_group_manage">GroupManageActivity</string>
 
 </resources>

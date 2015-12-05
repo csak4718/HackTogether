@@ -2,6 +2,8 @@ package apt.hacktogether.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,22 +13,36 @@ import android.widget.Button;
 import com.parse.ParseUser;
 
 import apt.hacktogether.R;
+import apt.hacktogether.adapter.HackathonsAdapter;
 import apt.hacktogether.layer.LayerImpl;
+import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
+    @Bind(R.id.recyclerView_hackathons) RecyclerView mRecyclerView;
+    private HackathonsAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button toConversations = (Button) findViewById(R.id.btn_ConversationsActivity);
-        toConversations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.gotoConversationsActivity(MainActivity.this);
-            }
-        });
+        ButterKnife.bind(this);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter
+        mAdapter = new HackathonsAdapter(this, Common.HACKATHONS);
+        mRecyclerView.setAdapter(mAdapter);
+
     }
 
     //Called when the Activity starts, or when the App is coming to the foreground.

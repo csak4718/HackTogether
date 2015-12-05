@@ -1,12 +1,15 @@
 package apt.hacktogether.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.parse.ParseUser;
 
+import apt.hacktogether.activity.BrowseActivity;
 import apt.hacktogether.activity.ConversationsActivity;
+import apt.hacktogether.activity.GroupManageActivity;
 import apt.hacktogether.activity.LoginActivity;
 import apt.hacktogether.activity.MainActivity;
 import apt.hacktogether.layer.LayerImpl;
@@ -47,5 +50,21 @@ public class Utils {
         Intent it = new Intent(activity, LoginActivity.class);
         activity.startActivity(it);
     }
+
+    public static void gotoBrowseActivity(Context context, String hackathonName){
+        Intent it = new Intent(context, BrowseActivity.class);
+        it.putExtra(Common.EXTRA_HACKATHON_NAME, hackathonName);
+        context.startActivity(it);
+    }
+
+    public static void gotoGroupManageActivity(Activity activity){
+        Intent it = new Intent(activity, GroupManageActivity.class);
+        activity.startActivity(it);
+    }
+//      TODO: uncomment later
+//    public static void gotoSettingsActivity(Activity activity){
+//        Intent it = new Intent(activity, SettingsActivity.class);
+//        activity.startActivity(it);
+//    }
 
 }
