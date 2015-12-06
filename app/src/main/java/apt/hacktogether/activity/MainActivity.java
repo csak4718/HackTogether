@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import apt.hacktogether.R;
@@ -25,11 +26,30 @@ public class MainActivity extends BaseActivity {
     private HackathonsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    public void testCreateUserProfile(){
+        // participate which hackathon
+//        ParseObject hackathon = new ParseObject(Common.OBJECT_HACKATHON);
+
+        // need teammate or not
+
+
+        // interested in:
+
+        // skills:
+
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+
+        // testing function: testCreateUserProfile
+        testCreateUserProfile();
+
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

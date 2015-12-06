@@ -6,7 +6,7 @@
     </style>
 
     <style name="toolbarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
     </style>
 
 </resources>

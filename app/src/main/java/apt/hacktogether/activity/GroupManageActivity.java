@@ -6,13 +6,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import apt.hacktogether.R;
+import apt.hacktogether.utils.Utils;
 
-public class GroupManageActivity extends ActionBarActivity {
+public class GroupManageActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_manage);
+    }
+
+    //Called when the Activity starts, or when the App is coming to the foreground.
+    public void onResume() {
+        super.onResume();
+
+        // Check to see the state of the LayerClient, and if everything is set up, then good; do nothing.
+        Utils.checkSetup(this);
+
     }
 
 

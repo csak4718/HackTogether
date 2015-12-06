@@ -4,14 +4,23 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.Map;
 
+import apt.hacktogether.event.GroupTabEvent;
+import apt.hacktogether.event.PersonTabEvent;
+import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -53,4 +62,51 @@ public class ParseUtils {
         });
     }
 
+    static public void getHackersNeedGuy(String hackathon_name) {
+        // get the Hackathon object first
+        ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+        hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, hackathon_name);
+        hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if(e == null) {
+
+                    // get hackersNeedGuy
+                    ParseRelation<ParseUser> hackersNeedGuy = object.getRelation(Common.OBJECT_HACKATHON_HACKERSNEEDGUY);
+                    hackersNeedGuy.getQuery().findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> list, ParseException e) {
+                            if (e == null){
+                                EventBus.getDefault().post(new PersonTabEvent(list));
+                            }
+                        }
+                    });
+
+                }
+
+            }
+        });
+    }
+
+    static public void getGroupsNeedGuy(String hackathon_name) {
+        // get the Hackathon object first
+        ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+        hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, hackathon_name);
+        hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if(e == null) {
+
+                    // get groupsNeedGuy
+                    ParseRelation<ParseObject> groupsNeedGuy = object.getRelation(Common.OBJECT_HACKATHON_GROUPSNEEDGUY);
+                    groupsNeedGuy.getQuery().findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> list, ParseException e) {
+                            EventBus.getDefault().post(new GroupTabEvent(list));
+                        }
+                    });
+
+                }
+
+            }
+        });
+    }
 }

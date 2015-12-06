@@ -25,14 +25,21 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BrowseActivity extends BaseActivity {
+    /*
+     DrawerLayout
+     */
     @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
     @Bind(R.id.drawer_img_profile) CircleImageView imgProfile;
     @Bind(R.id.drawer_txt_name)TextView txtName;
-
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
 
+    /*
+     Fragment
+     */
     FragmentBrowse fragmentBrowse;
+
+    private String hackathonName;
 
     @OnClick(R.id.btn_conversation) void goConversation() {
         Utils.gotoConversationsActivity(BrowseActivity.this);
@@ -91,13 +98,17 @@ public class BrowseActivity extends BaseActivity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    public String getHackathonName() {
+        return hackathonName;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
         ButterKnife.bind(this);
 
-        String hackathonName = getIntent().getStringExtra(Common.EXTRA_HACKATHON_NAME);
+        hackathonName = getIntent().getStringExtra(Common.EXTRA_HACKATHON_NAME);
         setupActionBar(hackathonName);
 
         setupDrawer();
