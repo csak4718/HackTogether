@@ -5,11 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import apt.hacktogether.R;
+import apt.hacktogether.activity.BrowseActivity;
 import apt.hacktogether.adapter.ViewPagerAdapter;
 import apt.hacktogether.utils.Common;
 
@@ -17,14 +19,18 @@ import apt.hacktogether.utils.Common;
  * Created by de-weikung on 12/4/15.
  */
 public class FragmentBrowse extends Fragment{
+    private final static String TAG = "FragmentBrowse";
     private View mView;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
+    private String hackathonName;
 
     private void setupAdapter() {
-        adapter.addFrag(FragmentBrowseTab.newInstance(Common.PERSON_TAB), Common.TAB_NAME_PERSON);
-        adapter.addFrag(FragmentBrowseTab.newInstance(Common.GROUP_TAB), Common.TAB_NAME_GROUP);
+
+
+        adapter.addFrag(FragmentBrowseTab.newInstance(Common.PERSON_TAB, hackathonName), Common.TAB_NAME_PERSON);
+        adapter.addFrag(FragmentBrowseTab.newInstance(Common.GROUP_TAB, hackathonName), Common.TAB_NAME_GROUP);
     }
 
     public void refreshAllTab() {
@@ -42,6 +48,9 @@ public class FragmentBrowse extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        BrowseActivity browseActivity = (BrowseActivity) getActivity();
+        hackathonName = browseActivity.getHackathonName();
+
         mView = inflater.inflate(R.layout.fragment_browse, container, false);
         return mView;
     }

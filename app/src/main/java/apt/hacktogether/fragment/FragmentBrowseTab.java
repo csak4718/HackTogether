@@ -3,6 +3,7 @@ package apt.hacktogether.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,9 @@ import de.greenrobot.event.EventBus;
  * Created by de-weikung on 12/5/15.
  */
 public class FragmentBrowseTab extends FragmentTab {
+    private final static String TAG = "FragmentBrowseTab";
     private int mType;
+    private String hackathonName;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private View mView;
@@ -38,12 +41,12 @@ public class FragmentBrowseTab extends FragmentTab {
     private List<ParseUser> mList_hackersNeedGuy;
     private List<ParseObject> mList_groupsNeedGuy;
     private BaseAdapter mAdapter;
-    private BrowseActivity browseActivity;
 
-    public static FragmentBrowseTab newInstance(int type) {
+    public static FragmentBrowseTab newInstance(int type, String hackathon_name) {
         FragmentBrowseTab fragment = new FragmentBrowseTab();
         Bundle args = new Bundle();
         args.putInt("type", type);
+        args.putString("hackathon_name", hackathon_name);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,14 +56,12 @@ public class FragmentBrowseTab extends FragmentTab {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         mType = args.getInt("type");
+        hackathonName = args.getString("hackathon_name");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        browseActivity = (BrowseActivity) getActivity();
-
         mView = inflater.inflate(R.layout.fragment_browse_tab, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_refresh);
         mListView = (ListView) mView.findViewById(R.id.listview_browse_tab);
@@ -94,10 +95,10 @@ public class FragmentBrowseTab extends FragmentTab {
     @Override
     public void getNewData() {
         if(mType == Common.PERSON_TAB) {
-            ParseUtils.getHackersNeedGuy(browseActivity.getHackathonName());
+            ParseUtils.getHackersNeedGuy(hackathonName);
         }
         else if(mType == Common.GROUP_TAB) {
-            ParseUtils.getGroupsNeedGuy(browseActivity.getHackathonName());
+            ParseUtils.getGroupsNeedGuy(hackathonName);
         }
     }
 

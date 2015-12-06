@@ -27,10 +27,11 @@
 
     </RelativeLayout>
 
+    <!--The layout of navigation drawer-->
     <LinearLayout
         android:id="@+id/navigation_view"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
+        android:layout_width="222dp"
         android:orientation="vertical"
         android:layout_gravity="start"
         >

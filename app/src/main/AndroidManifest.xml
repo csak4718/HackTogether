@@ -55,7 +55,8 @@
         </activity>
         <activity
             android:name=".activity.BrowseActivity"
-            android:label="@string/title_activity_browse" >
+            android:label="@string/title_activity_browse"
+            android:theme="@style/BrowseActivityTheme">
         </activity>
         <activity
             android:name=".activity.GroupManageActivity"
