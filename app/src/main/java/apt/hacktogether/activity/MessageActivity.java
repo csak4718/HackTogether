@@ -223,7 +223,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
     }
 
 
-    //Handle the sendButtona nd Add/Remove Participants button (if displayed)
+    //Handle the sendButton and Add/Remove Participants button (if displayed)
     public void onClick(View v) {
 
         switch (v.getId()) {
