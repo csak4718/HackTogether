@@ -18,5 +18,7 @@
     <string name="title_activity_group_manage">GroupManageActivity</string>
     <string name="chat">Chat</string>
     <string name="group_chat">Group Chat</string>
+    <string name="title_activity_edit_group">EditGroupActivity</string>
+    <string name="title_activity_create_group">CreateGroupActivity</string>
 
 </resources>

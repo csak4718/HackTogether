@@ -13,12 +13,15 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
 
 import apt.hacktogether.event.GroupTabEvent;
+import apt.hacktogether.event.InviteGroupsTabEvent;
+import apt.hacktogether.event.MyGroupsTabEvent;
 import apt.hacktogether.event.PersonTabEvent;
 import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -107,5 +110,49 @@ public class ParseUtils {
 
             }
         });
+    }
+
+    static public void getMyGroups(){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
+        myGroups.getQuery().findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                EventBus.getDefault().post(new MyGroupsTabEvent(list));
+            }
+        });
+    }
+
+    static public void getInviteGroups(){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseRelation<ParseObject> inviteGroups = currentUser.getRelation(Common.OBJECT_USER_INVITEGROUPS);
+        inviteGroups.getQuery().findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                EventBus.getDefault().post(new InviteGroupsTabEvent(list));
+            }
+        });
+    }
+
+    static public void moveInviteGroupToMyGroup(final ParseObject inviteGroup){
+        // add to myGroups
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
+        myGroups.add(inviteGroup);
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                // remove from inviteGroups
+                ParseRelation<ParseObject> inviteGroups = currentUser.getRelation(Common.OBJECT_USER_INVITEGROUPS);
+                inviteGroups.remove(inviteGroup);
+                currentUser.saveInBackground();
+            }
+        });
+    }
+
+    static public void removePendingMember(ParseObject inviteGroup){
+        ParseRelation<ParseUser> pendingMembers = inviteGroup.getRelation(Common.OBJECT_GROUP_PENDINGMEMBERS);
+        pendingMembers.remove(ParseUser.getCurrentUser());
+        inviteGroup.saveInBackground();
     }
 }

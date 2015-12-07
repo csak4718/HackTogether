@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,35 +21,34 @@ import java.util.List;
 
 import apt.hacktogether.R;
 import apt.hacktogether.utils.Common;
+import apt.hacktogether.utils.ParseUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by de-weikung on 12/5/15.
+ * Created by de-weikung on 12/7/15.
  */
-public class GroupTabAdapter extends BaseAdapter {
+public class InviteGroupsTabAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private List<ParseObject> mList;
 
     static class ViewHolder {
-
         @Bind(R.id.txt_group_name) public TextView txtGroupName;
+        @Bind(R.id.txt_hackathon_attend) public TextView txtHackathonAttend;
         @Bind(R.id.ll_members) public LinearLayout ll_Members;
         @Bind(R.id.txt_group_interests) public TextView txtGroupInterests;
         @Bind(R.id.txt_look_for_skills) public TextView txtLookForSkills;
-        @OnClick(R.id.btn_chat_room) void goMessage(){
-//            TODO
-        }
+        @Bind(R.id.btn_accept) public ImageButton acceptButton;
+        @Bind(R.id.btn_reject) public ImageButton rejectButton;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-    public GroupTabAdapter(Context context, List<ParseObject> list) {
+    public InviteGroupsTabAdapter(Context context, List<ParseObject> list) {
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
         mList = list;
@@ -71,9 +71,9 @@ public class GroupTabAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if(convertView == null) {
-            convertView = mInflater.inflate(R.layout.card_group_tab, parent, false);
+            convertView = mInflater.inflate(R.layout.card_invite_groups_tab, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
@@ -81,11 +81,28 @@ public class GroupTabAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final ParseObject group = mList.get(position);
-        holder.txtGroupName.setText(group.getString(Common.OBJECT_GROUP_NAME));
-        getMembers(group, holder);
-        getGroupInterests(group, holder);
-        getLookForSkills(group, holder);
+        final ParseObject inviteGroup = mList.get(position);
+        holder.txtGroupName.setText(inviteGroup.getString(Common.OBJECT_GROUP_NAME));
+        holder.txtHackathonAttend.setText(inviteGroup.getString(Common.OBJECT_GROUP_HACKATHONATTEND));
+        getMembers(inviteGroup, holder);
+        getGroupInterests(inviteGroup, holder);
+        getLookForSkills(inviteGroup, holder);
+
+        final View finalConvertView = convertView;
+        holder.acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalConvertView.setVisibility(View.GONE);
+                ParseUtils.moveInviteGroupToMyGroup(inviteGroup);
+            }
+        });
+        holder.rejectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalConvertView.setVisibility(View.GONE);
+                ParseUtils.removePendingMember(inviteGroup);
+            }
+        });
 
         return convertView;
     }

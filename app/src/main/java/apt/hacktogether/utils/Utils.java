@@ -9,6 +9,8 @@ import com.parse.ParseUser;
 
 import apt.hacktogether.activity.BrowseActivity;
 import apt.hacktogether.activity.ConversationsActivity;
+import apt.hacktogether.activity.CreateGroupActivity;
+import apt.hacktogether.activity.EditGroupActivity;
 import apt.hacktogether.activity.GroupManageActivity;
 import apt.hacktogether.activity.LoginActivity;
 import apt.hacktogether.activity.MainActivity;
@@ -61,6 +63,18 @@ public class Utils {
         Intent it = new Intent(activity, GroupManageActivity.class);
         activity.startActivity(it);
     }
+
+    public static void gotoEditGroupActivity(Context context, String groupName){
+        Intent it = new Intent(context, EditGroupActivity.class);
+        it.putExtra(Common.EXTRA_GROUP_NAME, groupName);
+        context.startActivity(it);
+    }
+
+    public static void gotoCreateGroupActivity(Activity activity){
+        Intent it = new Intent(activity, CreateGroupActivity.class);
+        activity.startActivity(it);
+    }
+
 //      TODO: uncomment later
 //    public static void gotoSettingsActivity(Activity activity){
 //        Intent it = new Intent(activity, SettingsActivity.class);

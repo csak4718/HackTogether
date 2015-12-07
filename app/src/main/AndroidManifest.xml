@@ -56,11 +56,19 @@
         <activity
             android:name=".activity.BrowseActivity"
             android:label="@string/title_activity_browse"
-            android:theme="@style/BrowseActivityTheme">
+            android:theme="@style/BrowseActivityTheme" >
         </activity>
         <activity
             android:name=".activity.GroupManageActivity"
             android:label="@string/title_activity_group_manage" >
+        </activity>
+        <activity
+            android:name=".activity.EditGroupActivity"
+            android:label="@string/title_activity_edit_group" >
+        </activity>
+        <activity
+            android:name=".activity.CreateGroupActivity"
+            android:label="@string/title_activity_create_group" >
         </activity>
     </application>
 

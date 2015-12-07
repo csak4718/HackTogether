@@ -10,6 +10,8 @@
     <item name="black" type="color">#000000</item>
 
     <color name="yellow">#FFD000</color>
+    <color name="green">#007300</color>
+    <color name="red">#CC0000</color>
 
     <color name="blue_green_1">#4CCFE0</color>
     <color name="blue_green_2">#00ABC0</color>
