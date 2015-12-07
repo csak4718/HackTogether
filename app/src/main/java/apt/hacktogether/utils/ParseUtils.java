@@ -69,7 +69,6 @@ public class ParseUtils {
         hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
             public void done(ParseObject object, ParseException e) {
                 if(e == null) {
-
                     // get hackersNeedGuy
                     ParseRelation<ParseUser> hackersNeedGuy = object.getRelation(Common.OBJECT_HACKATHON_HACKERSNEEDGUY);
                     hackersNeedGuy.getQuery().findInBackground(new FindCallback<ParseUser>() {

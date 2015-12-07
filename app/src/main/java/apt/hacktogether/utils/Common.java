@@ -12,8 +12,11 @@ public class Common {
     public final static String OBJECT_USER_PROFILE_PIC = "profile_pic";
     public final static String OBJECT_USER_FB_NAME = "fbName";
     public final static String OBJECT_USER_FB_ID = "fbId";
+    public final static String OBJECT_USER_MYHACKATHONS = "myHackathons";
+    public final static String OBJECT_USER_MYNEEDGUYHACKATHONS = "myNeedGuyHackathons";
     public final static String OBJECT_USER_INTERESTS = "interests";
     public final static String OBJECT_USER_SKILLS = "skills";
+    public final static String OBJECT_USER_MYGROUPS = "myGroups";
 
     public final static String OBJECT_GROUP_NAME = "groupName";
     public final static String OBJECT_GROUP_MEMBERS = "members";
@@ -24,10 +27,18 @@ public class Common {
     public final static String OBJECT_HACKATHON_NAME = "hackathonName";
     public final static String OBJECT_HACKATHON_HACKERSNEEDGUY = "hackersNeedGuy";
     public final static String OBJECT_HACKATHON_GROUPSNEEDGUY = "groupsNeedGuy";
+    public final static String OBJECT_HACKATHON_HACKERS = "hackers";
+    public final static String OBJECT_HACKATHON_GROUPS = "groups";
 
+    public final static String OBJECT_INTEREST = "Interest";
     public final static String OBJECT_INTEREST_NAME = "interestName";
+    public final static String OBJECT_INTEREST_INTERESTED_HACKERS = "interested_hackers";
+    public final static String OBJECT_INTEREST_INTERESTED_GROUPS = "interested_groups";
 
+    public final static String OBJECT_SKILL = "Skill";
     public final static String OBJECT_SKILL_NAME = "skillName";
+    public final static String OBJECT_SKILL_SKILLED_HACKERS = "skilled_hackers";
+    public final static String OBJECT_SKILL_LOOKFOR_GROUPS = "lookFor_groups";
 
 
 

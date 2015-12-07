@@ -41,6 +41,9 @@ public class FragmentBrowse extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        BrowseActivity browseActivity = (BrowseActivity) getActivity();
+        hackathonName = browseActivity.getHackathonName();
+
         adapter = new ViewPagerAdapter(getChildFragmentManager());
         setupAdapter();
     }
@@ -48,9 +51,6 @@ public class FragmentBrowse extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        BrowseActivity browseActivity = (BrowseActivity) getActivity();
-        hackathonName = browseActivity.getHackathonName();
-
         mView = inflater.inflate(R.layout.fragment_browse, container, false);
         return mView;
     }

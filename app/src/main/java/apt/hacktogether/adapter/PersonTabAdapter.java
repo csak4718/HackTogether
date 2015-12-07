@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
@@ -38,12 +39,17 @@ public class PersonTabAdapter extends BaseAdapter {
         @Bind(R.id.txt_person_name) public TextView txtPersonName;
         @Bind(R.id.txt_interest) public TextView txtInterest;
         @Bind(R.id.txt_skill) public TextView txtSkill;
-        @OnClick(R.id.btn_chat_room) void goMessage(){
-//            TODO
-        }
+        public Button chatRoomButton;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
+            chatRoomButton = (Button) view.findViewById(R.id.btn_chat_room);
+            chatRoomButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: go to MessageActivity
+                }
+            });
         }
     }
 
@@ -91,6 +97,7 @@ public class PersonTabAdapter extends BaseAdapter {
         getHackerInterests(hacker, holder);
         getHackerSkills(hacker, holder);
 
+        if (ParseUser.getCurrentUser().getObjectId().equals(hacker.getObjectId())) holder.chatRoomButton.setVisibility(View.GONE);
         return convertView;
     }
 
