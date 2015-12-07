@@ -35,11 +35,12 @@
         <item name="android:textColorPrimary">@color/black</item>
         <item name="android:background">@color/light_blue</item>
     </style>
-
-    <style name="BrowseActivityTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="MyActivityTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <!-- colorPrimary is used for the default action bar background -->
         <item name="windowActionModeOverlay">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
+
+
 </resources>
