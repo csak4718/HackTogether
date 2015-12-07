@@ -57,10 +57,6 @@ public class GroupManageActivity extends BaseActivity {
         mDrawerLayout.closeDrawers();
     }
 
-    @OnClick(R.id.btn_create_group) void createGroup() {
-        Utils.gotoCreateGroupActivity(GroupManageActivity.this);
-    }
-
     private void setupActionBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);

@@ -34,6 +34,7 @@ public class FragmentGroupManageTab extends FragmentTab {
     private int mType;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FloatingActionButton createGroupButton;
     private View mView;
     private ListView mListView;
     private List<ParseObject> mList;
@@ -60,6 +61,16 @@ public class FragmentGroupManageTab extends FragmentTab {
         mView = inflater.inflate(R.layout.fragment_group_manage_tab, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_refresh);
         mListView = (ListView) mView.findViewById(R.id.listview_group_manage_tab);
+        if (mType == Common.MYGROUPS_TAB) {
+            createGroupButton = (FloatingActionButton) mView.findViewById(R.id.btn_create_group);
+            createGroupButton.setVisibility(View.VISIBLE);
+            createGroupButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.gotoCreateGroupActivity(getActivity());
+                }
+            });
+        }
         mList = new ArrayList<>();
         setupAdapter();
         mListView.setAdapter(mAdapter);
@@ -73,10 +84,7 @@ public class FragmentGroupManageTab extends FragmentTab {
 
         getNewData();
 
-        if (mType == Common.MYGROUPS_TAB) {
-            FloatingActionButton createGroupButton = (FloatingActionButton) mView.findViewById(R.id.btn_create_group);
-            createGroupButton.setVisibility(View.VISIBLE);
-        }
+
 
         return mView;
     }
