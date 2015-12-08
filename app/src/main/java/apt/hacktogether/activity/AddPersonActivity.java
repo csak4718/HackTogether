@@ -66,11 +66,12 @@ public class AddPersonActivity extends BaseActivity {
             LinearLayout ll_horizontal = new LinearLayout(this);
             ll_horizontal.setOrientation(LinearLayout.HORIZONTAL);
             LinearLayout.LayoutParams ll_horizontal_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            ll_horizontal_params.setMargins(20, 0, 20, 0);
             ll_horizontal.setLayoutParams(ll_horizontal_params);
 
             CheckBox checkBox = new CheckBox(this);
-            checkBox.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams checkBox_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            checkBox_params.setMargins(10, 10, 0, 0);
+            checkBox.setLayoutParams(checkBox_params);
             checkBox.setButtonDrawable(R.drawable.custom_checkbox_design);
             checkBox.setText(ParseImpl.getUsername(friendId));
             checkBox.setTextSize(0);
@@ -80,7 +81,7 @@ public class AddPersonActivity extends BaseActivity {
 
             CircleImageView imgProfile = new CircleImageView(this);
             LinearLayout.LayoutParams imgProfile_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            imgProfile_params.setMargins(20, 4, 23, 0);
+            imgProfile_params.setMargins(20, 10, 23, 10);
             imgProfile.setLayoutParams(imgProfile_params);
             imgProfile.getLayoutParams().height = 80;
             imgProfile.getLayoutParams().width = 80;
@@ -91,7 +92,7 @@ public class AddPersonActivity extends BaseActivity {
 
             TextView textView = new TextView(this);
             LinearLayout.LayoutParams textView_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            textView_params.setMargins(0, 4, 0, 0);
+            textView_params.setMargins(0, 16, 0, 0);
             textView.setLayoutParams(textView_params);
             textView.setText(ParseImpl.getUsername(friendId));
             textView.setTextSize(20);
