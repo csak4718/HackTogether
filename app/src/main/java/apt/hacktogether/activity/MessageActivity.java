@@ -34,7 +34,6 @@ import apt.hacktogether.R;
 import apt.hacktogether.adapter.MessageQueryAdapter;
 import apt.hacktogether.adapter.QueryAdapter;
 import apt.hacktogether.event.AddPersonToMessageEvent;
-import apt.hacktogether.event.MessageToAddPersonEvent;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Utils;
@@ -75,6 +74,9 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         EventBus.getDefault().register(this);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
 
         //View containing all messages in the target Conversastion
         mMessagesView = (RecyclerView) findViewById(R.id.mRecyclerView);
@@ -155,12 +157,6 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         populateToField(mConversation.getParticipants());
     }
 
-//    @Override
-//    public void onStart() {
-//
-//        super.onStart();
-//    }
-
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
@@ -169,9 +165,6 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
     public void onEvent(AddPersonToMessageEvent event) {
         mTargetParticipants = event.mPersonIdList;
-//        mTargetParticipants.clear();
-//        mTargetParticipants.addAll(event.mPersonIdList);
-
         populateToField(mTargetParticipants);
     }
 
@@ -189,8 +182,9 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
                 TextView tv = new TextView(this);
                 tv.setText(ParseImpl.getUsername(id));
                 tv.setTextSize(16);
+                tv.setTextColor(getResources().getColor(R.color.white));
                 tv.setPadding(5, 5, 5, 5);
-                tv.setBackgroundColor(Color.LTGRAY);
+                tv.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
                 participantList[idx] = tv;
 
                 idx++;
@@ -260,7 +254,6 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
             case R.id.addParticipants:
                 Log.d("Activity", "Add participant button pressed");
-//                EventBus.getDefault().post(new MessageToAddPersonEvent(mTargetParticipants));
                 Utils.gotoAddPersonActivity(MessageActivity.this, mTargetParticipants);
 //                showParticipantPicker();
                 break;
@@ -404,5 +397,26 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
     }
     protected void onHideKeyboard() {
         mMessagesView.smoothScrollToPosition(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_message, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if(id == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -22,5 +22,6 @@
     <string name="title_activity_create_group">CreateGroupActivity</string>
     <string name="title_activity_add_person">AddPersonActivity</string>
     <string name="select_hackers">Select Hackers</string>
+    <string name="recent_chats">Recent Chats</string>
 
 </resources>

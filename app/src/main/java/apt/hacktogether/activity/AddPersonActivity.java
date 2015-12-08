@@ -21,7 +21,6 @@ import java.util.Set;
 
 import apt.hacktogether.R;
 import apt.hacktogether.event.AddPersonToMessageEvent;
-import apt.hacktogether.event.MessageToAddPersonEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
@@ -36,6 +35,7 @@ public class AddPersonActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_person);
 
+        // getIntent().getStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST) might be null
         mPersonIdList = getIntent().getStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST);
 
 
@@ -64,29 +64,37 @@ public class AddPersonActivity extends BaseActivity {
 
             LinearLayout ll_horizontal = new LinearLayout(this);
             ll_horizontal.setOrientation(LinearLayout.HORIZONTAL);
-            ll_horizontal.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams ll_horizontal_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            ll_horizontal_params.setMargins(30, 0, 30, 10);
+            ll_horizontal.setLayoutParams(ll_horizontal_params);
 
             CheckBox checkBox = new CheckBox(this);
             checkBox.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            checkBox.setButtonDrawable(R.drawable.custom_checkbox_design);
             checkBox.setText(ParseImpl.getUsername(friendId));
-            checkBox.setTextSize(1);
+            checkBox.setTextSize(0);
             checkBox.setTextColor(getResources().getColor(R.color.white));
             //If this user is already selected, mark the checkbox
             if(mPersonIdList.contains(friendId)) checkBox.setChecked(true);
 
             CircleImageView imgProfile = new CircleImageView(this);
-            imgProfile.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            imgProfile.getLayoutParams().height = 60;
-            imgProfile.getLayoutParams().width = 60;
+            LinearLayout.LayoutParams imgProfile_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imgProfile_params.setMargins(20, 4, 23, 0);
+            imgProfile.setLayoutParams(imgProfile_params);
+            imgProfile.getLayoutParams().height = 80;
+            imgProfile.getLayoutParams().width = 80;
             ParseFile imgFile = ParseImpl.getUserIcon(friendId);
             Picasso.with(this)
                     .load(imgFile.getUrl())
                     .into(imgProfile);
 
             TextView textView = new TextView(this);
-            textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams textView_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            textView_params.setMargins(0, 4, 0, 0);
+            textView.setLayoutParams(textView_params);
             textView.setText(ParseImpl.getUsername(friendId));
             textView.setTextSize(20);
+            textView.setTextColor(getResources().getColor(R.color.black));
 
 
 
@@ -126,110 +134,6 @@ public class AddPersonActivity extends BaseActivity {
         ll_vertical.addView(confirmButton);
     }
 
-//    @Override
-//    public void onStart() {
-//        EventBus.getDefault().register(this);
-//        super.onStart();
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        EventBus.getDefault().unregister(this);
-//        super.onStop();
-//    }
-
-//    public void onEvent(MessageToAddPersonEvent event) {
-//        mPersonIdList.clear();
-//        mPersonIdList.addAll(event.mTargetParticipants);
-//
-//        //Update user list from Parse
-//        ParseImpl.cacheAllUsers();
-//
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setTitle(R.string.select_hackers);
-//
-//        LinearLayout ll_vertical = (LinearLayout) findViewById(R.id.vertical_ll);
-//
-//        //Grab a list of all friendID (For now, all friendID are equivalent to all userID except current userID)
-//        Set friendIds = ParseImpl.getAllFriends();
-//
-//        //A Map of the horizontal linear layout with the Parse Object ID
-//        final HashMap<CheckBox, String> allUsers = new HashMap<>();
-//
-//        if(mPersonIdList == null) mPersonIdList = new ArrayList<>();
-//
-//        //Go through each friendID and create a horizontal linear layout with a human readable name mapped to the
-//        // Object ID
-//        Iterator itr = friendIds.iterator();
-//        while(itr.hasNext()) {
-//            String friendId = (String)itr.next();
-//
-//
-//            LinearLayout ll_horizontal = new LinearLayout(this);
-//            ll_horizontal.setOrientation(LinearLayout.HORIZONTAL);
-//            ll_horizontal.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//
-//            CheckBox checkBox = new CheckBox(this);
-//            checkBox.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//            checkBox.setText(ParseImpl.getUsername(friendId));
-//            checkBox.setTextSize(1);
-//            checkBox.setTextColor(getResources().getColor(R.color.white));
-//            //If this user is already selected, mark the checkbox
-//            if(mPersonIdList.contains(friendId)) checkBox.setChecked(true);
-//
-//            CircleImageView imgProfile = new CircleImageView(this);
-//            imgProfile.getLayoutParams().height = 60;
-//            imgProfile.getLayoutParams().width = 60;
-//            ParseFile imgFile = ParseImpl.getUserIcon(friendId);
-//            Picasso.with(this)
-//                    .load(imgFile.getUrl())
-//                    .into(imgProfile);
-//
-//            TextView textView = new TextView(this);
-//            textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//            textView.setText(ParseImpl.getUsername(friendId));
-//            textView.setTextSize(20);
-//
-//
-//
-//            ll_horizontal.addView(checkBox);
-//            ll_horizontal.addView(imgProfile);
-//            ll_horizontal.addView(textView);
-//
-//            ll_vertical.addView(ll_horizontal);
-//            allUsers.put(checkBox, friendId);
-//        }
-//
-//        ImageButton confirmButton = new ImageButton(this);
-//        confirmButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//        confirmButton.setImageResource(R.drawable.ic_check_black_24dp);
-//        confirmButton.setBackgroundColor(getResources().getColor(R.color.green));
-//        confirmButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mPersonIdList.clear();
-//                mPersonIdList.add(ParseUser.getCurrentUser().getObjectId());
-//
-//                Set checkboxes = allUsers.keySet();
-//                Iterator checkItr = checkboxes.iterator();
-//                while(checkItr.hasNext()){
-//                    CheckBox currCheck = (CheckBox)checkItr.next();
-//                    if(currCheck != null && currCheck.isChecked()){
-//                        String friendID = allUsers.get(currCheck);
-//                        mPersonIdList.add(friendID);
-//                    }
-//                }
-//
-//                EventBus.getDefault().post(new AddPersonToMessageEvent(mPersonIdList));
-//                AddPersonActivity.this.finish();
-//            }
-//        });
-//
-//        ll_vertical.addView(confirmButton);
-//    }
-
-
-
     //Called when the Activity starts, or when the App is coming to the foreground.
     public void onResume() {
         super.onResume();
@@ -253,9 +157,8 @@ public class AddPersonActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(id == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

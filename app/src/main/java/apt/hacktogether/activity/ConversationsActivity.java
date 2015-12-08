@@ -38,6 +38,9 @@ public class ConversationsActivity extends BaseActivity implements ConversationQ
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversations);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.recent_chats);
+
         //Register the button click listeners
         Button newConversationBtn = (Button) findViewById(R.id.newConversation);
         if (newConversationBtn != null)
@@ -182,9 +185,8 @@ public class ConversationsActivity extends BaseActivity implements ConversationQ
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(id == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
