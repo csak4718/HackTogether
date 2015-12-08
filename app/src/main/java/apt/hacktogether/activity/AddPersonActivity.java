@@ -2,6 +2,7 @@ package apt.hacktogether.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,7 +66,7 @@ public class AddPersonActivity extends BaseActivity {
             LinearLayout ll_horizontal = new LinearLayout(this);
             ll_horizontal.setOrientation(LinearLayout.HORIZONTAL);
             LinearLayout.LayoutParams ll_horizontal_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            ll_horizontal_params.setMargins(30, 0, 30, 10);
+            ll_horizontal_params.setMargins(20, 0, 20, 0);
             ll_horizontal.setLayoutParams(ll_horizontal_params);
 
             CheckBox checkBox = new CheckBox(this);
@@ -102,7 +103,14 @@ public class AddPersonActivity extends BaseActivity {
             ll_horizontal.addView(imgProfile);
             ll_horizontal.addView(textView);
 
-            ll_vertical.addView(ll_horizontal);
+            CardView cardView = new CardView(this);
+            LinearLayout.LayoutParams cardView_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            cardView_params.setMargins(0, 10, 0, 10);
+            cardView.setLayoutParams(cardView_params);
+
+            cardView.addView(ll_horizontal);
+            ll_vertical.addView(cardView);
+
             allUsers.put(checkBox, friendId);
         }
 
