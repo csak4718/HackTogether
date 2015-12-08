@@ -53,6 +53,7 @@ public class Common {
     // extra data in Intent (for going from one Activity to another)
     public final static String EXTRA_HACKATHON_NAME = "hackathon_name";
     public final static String EXTRA_GROUP_NAME = "group_name";
+    public final static String EXTRA_PERSON_ID_LIST = "person_id_list";
 
     // Tab
     public final static String TAB_NAME_PERSON = "Individual";

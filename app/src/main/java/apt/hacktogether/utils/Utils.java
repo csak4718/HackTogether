@@ -7,6 +7,9 @@ import android.util.Log;
 
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+
+import apt.hacktogether.activity.AddPersonActivity;
 import apt.hacktogether.activity.BrowseActivity;
 import apt.hacktogether.activity.ConversationsActivity;
 import apt.hacktogether.activity.CreateGroupActivity;
@@ -72,6 +75,12 @@ public class Utils {
 
     public static void gotoCreateGroupActivity(Activity activity){
         Intent it = new Intent(activity, CreateGroupActivity.class);
+        activity.startActivity(it);
+    }
+
+    public static void gotoAddPersonActivity(Activity activity, ArrayList<String> mTargetParticipants){
+        Intent it = new Intent(activity, AddPersonActivity.class);
+        it.putStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST, mTargetParticipants);
         activity.startActivity(it);
     }
 

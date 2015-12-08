@@ -28,6 +28,7 @@ import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
 
 public class MainActivity extends BaseActivity {
     @Bind(R.id.recyclerView_hackathons) RecyclerView mRecyclerView;
@@ -44,8 +45,10 @@ public class MainActivity extends BaseActivity {
         final ArrayList<Boolean> need_teammate_List = new ArrayList<>();
         need_teammate_List.add(true);
 
-        String[] interestNames = {"Android App", "iOS App"};
-        String[] skillNames = {"Java", "Swift", "Machine learning"};
+        String[] interestNames = {"Web App"};
+//        String[] interestNames = {"Android App", "iOS App"};
+        String[] skillNames = {"Java", "Machine learning"};
+//        String[] skillNames = {"Java", "Swift", "Machine learning"};
 
 
 
@@ -176,7 +179,7 @@ public class MainActivity extends BaseActivity {
 //        testCreateUserProfile();
 
         // test function
-        test();
+//        test();
 
 
         // use this setting to improve performance if you know that changes
@@ -189,7 +192,7 @@ public class MainActivity extends BaseActivity {
 
         // specify an adapter
         mAdapter = new HackathonsAdapter(this, Common.HACKATHONS);
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(new AlphaInAnimationAdapter(mAdapter));
 
     }
 

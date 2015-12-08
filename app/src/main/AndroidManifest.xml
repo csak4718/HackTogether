@@ -61,7 +61,7 @@
         <activity
             android:name=".activity.GroupManageActivity"
             android:label="@string/title_activity_group_manage"
-            android:theme="@style/MyActivityTheme">
+            android:theme="@style/MyActivityTheme" >
         </activity>
         <activity
             android:name=".activity.EditGroupActivity"
@@ -70,6 +70,10 @@
         <activity
             android:name=".activity.CreateGroupActivity"
             android:label="@string/title_activity_create_group" >
+        </activity>
+        <activity
+            android:name=".activity.AddPersonActivity"
+            android:label="@string/title_activity_add_person" >
         </activity>
     </application>
 
