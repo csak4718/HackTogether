@@ -303,6 +303,45 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         }
     }
 
+    //When a Conversation has Messages, we disable the ability to Add/Remove participants
+    private void hideAddParticipantsButton(){
+        if(mAddUserButton != null) {
+            mAddUserButton.setVisibility(View.GONE);
+        }
+    }
+
+    //When the RecyclerView changes size because of the Soft Keyboard, force scroll to the bottom
+    // in order to always show the latest message
+    protected void onShowKeyboard(int keyboardHeight) {
+        mMessagesView.smoothScrollToPosition(Integer.MAX_VALUE);
+    }
+    protected void onHideKeyboard() {
+        mMessagesView.smoothScrollToPosition(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_message, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if(id == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
     //Shows a list of all users that can be added to the Conversation
     private void showParticipantPicker(){
 
@@ -349,32 +388,32 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
         //When the user is done adding/removing participants, update the list of target users
         helpBuilder.setPositiveButton("Done",
-            new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // Do nothing but close the dialog
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing but close the dialog
 
-                    //Reset the target user list, and rebuild it based on which checkboxes are selected
-                    mTargetParticipants.clear();
+                        //Reset the target user list, and rebuild it based on which checkboxes are selected
+                        mTargetParticipants.clear();
 
 //                        mTargetParticipants.add(LayerImpl.getLayerClient().getAuthenticatedUserId());
-                    mTargetParticipants.add(ParseUser.getCurrentUser().getObjectId()); // equivalent to the above line.
+                        mTargetParticipants.add(ParseUser.getCurrentUser().getObjectId()); // equivalent to the above line.
 
-                    Set checkboxes = allUsers.keySet();
-                    Iterator checkItr = checkboxes.iterator();
-                    while(checkItr.hasNext()){
-                        CheckBox currCheck = (CheckBox)checkItr.next();
-                        if(currCheck != null && currCheck.isChecked()){
-                            String friendID = allUsers.get(currCheck);
-                            mTargetParticipants.add(friendID);
+                        Set checkboxes = allUsers.keySet();
+                        Iterator checkItr = checkboxes.iterator();
+                        while(checkItr.hasNext()){
+                            CheckBox currCheck = (CheckBox)checkItr.next();
+                            if(currCheck != null && currCheck.isChecked()){
+                                String friendID = allUsers.get(currCheck);
+                                mTargetParticipants.add(friendID);
+                            }
                         }
+
+                        Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
+
+                        //Draw the list of target users
+                        populateToField(mTargetParticipants);
                     }
-
-                    Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
-
-                    //Draw the list of target users
-                    populateToField(mTargetParticipants);
                 }
-            }
         );
 
 
@@ -382,42 +421,5 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         AlertDialog helpDialog = helpBuilder.create();
         helpDialog.show();
 
-    }
-
-    //When a Conversation has Messages, we disable the ability to Add/Remove participants
-    private void hideAddParticipantsButton(){
-        if(mAddUserButton != null) {
-            mAddUserButton.setVisibility(View.GONE);
-        }
-    }
-
-    //When the RecyclerView changes size because of the Soft Keyboard, force scroll to the bottom
-    // in order to always show the latest message
-    protected void onShowKeyboard(int keyboardHeight) {
-        mMessagesView.smoothScrollToPosition(Integer.MAX_VALUE);
-    }
-    protected void onHideKeyboard() {
-        mMessagesView.smoothScrollToPosition(Integer.MAX_VALUE);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_message, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if(id == android.R.id.home) {
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import apt.hacktogether.R;
+import apt.hacktogether.event.AddPersonToCreateGroupEvent;
 import apt.hacktogether.event.AddPersonToMessageEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
@@ -144,7 +145,8 @@ public class AddPersonActivity extends BaseActivity {
                     EventBus.getDefault().post(new AddPersonToMessageEvent(mPersonIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_CREATE_GROUP_ACTIVITY)) {
-                    // TODO: in the corresponding event in CreateGroupActivity, simply do assignment
+                    // in the corresponding event in CreateGroupActivity, simply do assignment and populate to fields
+                    EventBus.getDefault().post(new AddPersonToCreateGroupEvent(mPersonIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
                     // TODO: in the corresponding event in EditGroupActivity, pendingMembers Relation need to add selected persons

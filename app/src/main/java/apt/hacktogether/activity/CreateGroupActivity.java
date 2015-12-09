@@ -4,12 +4,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import apt.hacktogether.R;
@@ -29,7 +34,9 @@ public class CreateGroupActivity extends BaseActivity {
     @Bind(R.id.edt_group_name) EditText edtGroupName;
     @Bind(R.id.txt_hackathon_header) TextView txtHackathonHeader;
     @Bind(R.id.txt_hackathon_content) TextView txtHackathonContent;
-    @Bind(R.id.txt_member_header) TextView txtMemberHeader;
+    @OnClick(R.id.txt_member_header) void goAddPerson(){
+        Utils.gotoAddPersonActivity(CreateGroupActivity.this, selectedPersonIds, TAG);
+    }
     @Bind(R.id.ll_member_content) LinearLayout ll_MemberContent;
     @Bind(R.id.switch_need_teammates) Switch switchNeedTeammates;
     @Bind(R.id.spec_container) LinearLayout ll_SpecContainer;
@@ -38,6 +45,10 @@ public class CreateGroupActivity extends BaseActivity {
     @Bind(R.id.txt_look_for_skills_header) TextView txtLookForSkillsHeader;
     @Bind(R.id.ll_look_for_skills_content) LinearLayout ll_LookForSkillsContent;
     @OnClick(R.id.btn_confirm) void create(){
+        // TODO: from selectedPersonIds, use For Loop to add them into pendingMembers Relation
+        String groupName = edtGroupName.getText().toString();
+        
+        HashMap<String, ParseUser> allUsers = ParseImpl.get_allUsers();
 
     }
 
@@ -57,6 +68,22 @@ public class CreateGroupActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.create_group);
 
 
+        ll_MemberContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.gotoAddPersonActivity(CreateGroupActivity.this, selectedPersonIds, TAG);
+            }
+        });
+
+        switchNeedTeammates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) ll_SpecContainer.setVisibility(View.VISIBLE);
+                else ll_SpecContainer.setVisibility(View.GONE);
+            }
+        });
+
+        
     }
 
     public void onEvent(AddPersonToCreateGroupEvent event) {

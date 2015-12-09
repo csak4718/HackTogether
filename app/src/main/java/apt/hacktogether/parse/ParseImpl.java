@@ -125,4 +125,8 @@ public class ParseImpl {
         //If the handle can't be found, return null
         return null;
     }
+
+    public static HashMap<String, ParseUser> get_allUsers(){
+        return allUsers;
+    }
 }

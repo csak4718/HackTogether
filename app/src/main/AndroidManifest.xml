@@ -44,7 +44,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/MyActivityTheme">
+            android:theme="@style/MyActivityTheme" >
         </activity>
         <activity
             android:name=".activity.ConversationsActivity"
@@ -75,6 +75,10 @@
         <activity
             android:name=".activity.AddPersonActivity"
             android:label="@string/title_activity_add_person" >
+        </activity>
+        <activity
+            android:name=".activity.AddInterestActivity"
+            android:label="@string/title_activity_add_interest" >
         </activity>
     </application>
 
