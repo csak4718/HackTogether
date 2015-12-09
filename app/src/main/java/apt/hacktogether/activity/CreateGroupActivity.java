@@ -58,7 +58,7 @@ public class CreateGroupActivity extends BaseActivity {
     @OnClick(R.id.btn_confirm) void create(){
         // store data in parallel
         final ParseUser currentUser = ParseUser.getCurrentUser();
-        ParseObject group = new ParseObject(Common.OBJECT_GROUP);
+        final ParseObject group = new ParseObject(Common.OBJECT_GROUP);
 
         // groupName
         group.put(Common.OBJECT_GROUP_NAME, edtGroupName.getText().toString());
@@ -86,37 +86,42 @@ public class CreateGroupActivity extends BaseActivity {
         // needGuy
 
 
-        try {
-            group.save();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        group.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                // myGroups of User
+                ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
+                myGroups.add(group);
+                currentUser.saveInBackground();
+            }
+        });
+
 
 
         // myHackathons of User
-//        ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
-//        hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, txtHackathonContent.getText().toString());
-//        hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
-//            @Override
-//            public void done(ParseObject hackathon, ParseException e) {
-//                if (e == null){
-//                    ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
-//                    myHackathons.add(hackathon);
-//
-//                    // hackers of Hackathon
-//
-//                    // groupsNeedGuy of Hackathon (if switch is on)
-//
-//                    // groups of Hackathon
-//                }
-//            }
-//        });
+        ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+        hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, txtHackathonContent.getText().toString());
+        hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject hackathon, ParseException e) {
+                if (e == null){
+                    // hackers of Hackathon
+
+                    // groupsNeedGuy of Hackathon (if switch is on)
+
+                    // groups of Hackathon
 
 
-        // myGroups of User
-        ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
-        myGroups.add(group);
-        currentUser.saveInBackground();
+                    // write the following in save callback of hackathon save
+                    ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
+                    myHackathons.add(hackathon);
+                }
+            }
+        });
+
+
+
 
 
 
