@@ -1,5 +1,6 @@
 package apt.hacktogether.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -30,14 +31,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddPersonActivity extends BaseActivity {
     private ArrayList<String> mPersonIdList;
+    private String receiveTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_person);
 
-        // getIntent().getStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST) might be null
-        mPersonIdList = getIntent().getStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST);
+        Intent it = getIntent();
+        receiveTag = it.getStringExtra(Common.EXTRA_TAG);
+
+        // it.getStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST) might be null
+        mPersonIdList = it.getStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST);
 
 
         //Update user list from Parse
@@ -135,7 +140,16 @@ public class AddPersonActivity extends BaseActivity {
                     }
                 }
 
-                EventBus.getDefault().post(new AddPersonToMessageEvent(mPersonIdList));
+                if (receiveTag.equals(Common.TAG_MESSAGE_ACTIVITY)) {
+                    EventBus.getDefault().post(new AddPersonToMessageEvent(mPersonIdList));
+                }
+                else if(receiveTag.equals(Common.TAG_CREATE_GROUP_ACTIVITY)) {
+                    // TODO: in the corresponding event in CreateGroupActivity, simply do assignment
+                }
+                else if(receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
+                    // TODO: in the corresponding event in EditGroupActivity, pendingMembers Relation need to add selected persons
+                }
+
                 AddPersonActivity.this.finish();
             }
         });

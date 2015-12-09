@@ -63,15 +63,15 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"/>
-            <TextView
-                android:id="@+id/txt_member_content"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="20sp"
+            <LinearLayout
+                android:id="@+id/ll_member_content"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:paddingLeft="10dp"
                 android:paddingTop="15dp"
-                android:paddingBottom="15dp"/>
+                android:paddingBottom="15dp">
+            </LinearLayout>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -125,15 +125,15 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"/>
-                <TextView
-                    android:id="@+id/txt_group_interests_content"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
+                <LinearLayout
+                    android:id="@+id/ll_group_interests_content"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:paddingLeft="10dp"
                     android:paddingTop="15dp"
-                    android:paddingBottom="15dp"/>
+                    android:paddingBottom="15dp">
+                </LinearLayout>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -153,17 +153,25 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"/>
-                <TextView
-                    android:id="@+id/txt_look_for_skills_content"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
+                <LinearLayout
+                    android:id="@+id/ll_look_for_skills_content"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:paddingLeft="10dp"
                     android:paddingTop="15dp"
-                    android:paddingBottom="15dp"/>
+                    android:paddingBottom="15dp">
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_black_24dp"
+            android:background="@color/green"/>
+
     </LinearLayout>
 
 </ScrollView>

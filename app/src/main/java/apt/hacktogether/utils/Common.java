@@ -4,6 +4,10 @@ package apt.hacktogether.utils;
  * Created by de-weikung on 11/11/15.
  */
 public class Common {
+    public final static String TAG_MESSAGE_ACTIVITY = "MessageActivity";
+    public final static String TAG_CREATE_GROUP_ACTIVITY = "CreateGroupActivity";
+    public final static String TAG_EDIT_GROUP_ACTIVITY = "EditGroupActivity";
+
     /*
      Parse object
      */
@@ -54,6 +58,7 @@ public class Common {
     public final static String EXTRA_HACKATHON_NAME = "hackathon_name";
     public final static String EXTRA_GROUP_NAME = "group_name";
     public final static String EXTRA_PERSON_ID_LIST = "person_id_list";
+    public final static String EXTRA_TAG = "tag";
 
     // Tab
     public final static String TAB_NAME_PERSON = "Individual";
