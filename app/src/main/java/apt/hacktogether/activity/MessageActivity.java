@@ -128,16 +128,40 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
             Uri conversationURI = getIntent().getParcelableExtra("conversation-id");
             if(conversationURI != null)
                 mConversation = LayerImpl.getLayerClient().getConversation(conversationURI);
-
+            Intent it = getIntent();
             //This is an existing Conversation, display the messages, otherwise, allow the user to
             // add/remove participants and create a new Conversation
             if (mConversation != null)
                 setupMessagesView();
+            else if(it.getStringArrayListExtra("mTargetParticipants") != null){
+                Log.d("DebugBefore","List"+mTargetParticipants);
+                // the intent content would overwrite add participant every time
+                mTargetParticipants  = it.getStringArrayListExtra("mTargetParticipants");
+                populateToField(mTargetParticipants);
+                setupMessagesView_new();
+            }
             else
                 createNewConversationView();
         }
     }
 
+    private void setupMessagesView_new() {
+
+        Log.d("Activity", "Conversation exists, setting up view");
+
+        //Hide the "add users" button
+        hideAddParticipantsButton();
+
+        //Create the appropriate RecyclerView
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mMessagesView.setLayoutManager(layoutManager);
+
+        //And attach it to the appropriate QueryAdapter, which will automatically update the view
+        // when a new Message is added to the Conversation
+        createMessagesAdapter();
+
+        //Grab all the Participants and add them at the top of the screen (the "To:" field)
+    }
     //Existing Conversation, so render the messages in the RecyclerView
     private void setupMessagesView() {
 
@@ -255,6 +279,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
             case R.id.addParticipants:
                 Log.d("Activity", "Add participant button pressed");
+                Log.d("Display", "mTarget"+mTargetParticipants);
                 Utils.gotoAddPersonActivity(MessageActivity.this, mTargetParticipants, TAG);
 //                showParticipantPicker();
                 break;
