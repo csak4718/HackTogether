@@ -1,17 +1,24 @@
 package apt.hacktogether.activity;
 
+import android.content.res.Configuration;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -23,17 +30,79 @@ import java.util.List;
 
 import apt.hacktogether.R;
 import apt.hacktogether.adapter.HackathonsAdapter;
+import apt.hacktogether.fragment.FragmentBrowse;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.utils.Common;
+import apt.hacktogether.utils.ParseUtils;
 import apt.hacktogether.utils.Utils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.adapters.AnimationAdapter;
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
 
 public class MainActivity extends BaseActivity {
     @Bind(R.id.recyclerView_hackathons) RecyclerView mRecyclerView;
     private HackathonsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    /*
+  DrawerLayout
+  */
+    @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @Bind(R.id.drawer_img_profile) CircleImageView imgProfile;
+    @Bind(R.id.drawer_txt_name)TextView txtName;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private ActionBar mActionBar;
+
+    /*
+     Fragment
+     */
+    FragmentBrowse fragmentBrowse;
+
+    @OnClick(R.id.btn_conversation) void goConversation() {
+        Utils.gotoConversationsActivity(MainActivity.this);
+        mDrawerLayout.closeDrawers();
+    }
+    @OnClick(R.id.btn_group_manage) void goGroupManage() {
+        Utils.gotoGroupManageActivity(MainActivity.this);
+        mDrawerLayout.closeDrawers();
+    }
+    @OnClick(R.id.btn_hackathons) void goHackathons() {
+        Utils.gotoMainActivity(MainActivity.this);
+        mDrawerLayout.closeDrawers();
+    }
+    @OnClick(R.id.btn_settings) void goSettings() {
+//        TODO: uncomment later
+//        Utils.gotoSettingsActivity(BrowseActivity.this);
+        mDrawerLayout.closeDrawers();
+    }
+
+    private void setupActionBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        setSupportActionBar(toolbar);
+        mActionBar = getSupportActionBar();
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setTitle(R.string.hackathons);
+    }
+    private void setupDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.app_name,
+                R.string.app_name);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        /*
+         setup header layout
+         */
+        ParseFile imgFile = ParseUser.getCurrentUser().getParseFile(Common.OBJECT_USER_PROFILE_PIC);
+        ParseUtils.displayParseImage(imgFile, imgProfile);
+        txtName.setText(ParseUser.getCurrentUser().getString(Common.OBJECT_USER_NICK));
+
+    }
 
     public void testCreateUserProfile(){
         final ParseUser currentUser = ParseUser.getCurrentUser();
@@ -159,7 +228,7 @@ public class MainActivity extends BaseActivity {
         testObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                if (e==null){
+                if (e == null) {
                     ParseRelation<ParseUser> user = object.getRelation("user");
                     user.add(ParseUser.getCurrentUser());
                     object.saveInBackground();
@@ -173,11 +242,12 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        getSupportActionBar().setTitle(R.string.hackathons);
+        //getSupportActionBar().setTitle(R.string.hackathons);
 
         // testing function: testCreateUserProfile
 //        testCreateUserProfile();
-
+        setupActionBar();
+        setupDrawer();
         // test function
 //        test();
 
@@ -192,7 +262,10 @@ public class MainActivity extends BaseActivity {
 
         // specify an adapter
         mAdapter = new HackathonsAdapter(this, Common.HACKATHONS);
-        mRecyclerView.setAdapter(new AlphaInAnimationAdapter(mAdapter));
+        AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mAdapter);
+        ScaleInAnimationAdapter scaleAdapter = new ScaleInAnimationAdapter(alphaAdapter);
+        scaleAdapter.setFirstOnly(false);
+        mRecyclerView.setAdapter(scaleAdapter);
 
     }
 
@@ -206,9 +279,23 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_browse, menu);
         return true;
     }
 
@@ -217,12 +304,15 @@ public class MainActivity extends BaseActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
