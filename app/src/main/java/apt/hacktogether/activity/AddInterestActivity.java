@@ -29,6 +29,7 @@ public class AddInterestActivity extends BaseActivity {
         // it.getStringArrayListExtra(Common.EXTRA_INTEREST_ID_LIST) might be null
         mInterestIdList = it.getStringArrayListExtra(Common.EXTRA_INTEREST_ID_LIST);
 
+        // TODO
 //        ParseImpl.cacheAll();
     }
 
