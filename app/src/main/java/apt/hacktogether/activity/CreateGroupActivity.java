@@ -30,13 +30,13 @@ public class CreateGroupActivity extends BaseActivity {
     @Bind(R.id.txt_hackathon_header) TextView txtHackathonHeader;
     @Bind(R.id.txt_hackathon_content) TextView txtHackathonContent;
     @Bind(R.id.txt_member_header) TextView txtMemberHeader;
-    @Bind(R.id.txt_member_content) TextView txtMemberContent;
+    @Bind(R.id.ll_member_content) LinearLayout ll_MemberContent;
     @Bind(R.id.switch_need_teammates) Switch switchNeedTeammates;
     @Bind(R.id.spec_container) LinearLayout ll_SpecContainer;
     @Bind(R.id.txt_group_interests_header) TextView txtGroupInterestsHeader;
-    @Bind(R.id.txt_group_interests_content) TextView txtGroupInterestsContent;
+    @Bind(R.id.ll_group_interests_content) LinearLayout ll_GroupInterestsContent;
     @Bind(R.id.txt_look_for_skills_header) TextView txtLookForSkillsHeader;
-    @Bind(R.id.txt_look_for_skills_content) TextView txtLookForSkillsContent;
+    @Bind(R.id.ll_look_for_skills_content) LinearLayout ll_LookForSkillsContent;
     @OnClick(R.id.btn_confirm) void create(){
 
     }
@@ -87,7 +87,7 @@ public class CreateGroupActivity extends BaseActivity {
 
         //Uses the helper function to make sure all participant names are appropriately displayed
         // and not cut off due to size constraints
-        populateViewWithWrapping(mParticipantsList, participantList, this);
+        populateViewWithWrapping(ll_MemberContent, participantList, this);
     }
 
 
