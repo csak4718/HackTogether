@@ -43,7 +43,8 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:theme="@style/BrowseActivityTheme">
         </activity>
         <activity
             android:name=".activity.ConversationsActivity"
