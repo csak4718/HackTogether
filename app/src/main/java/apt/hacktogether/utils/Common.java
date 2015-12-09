@@ -24,6 +24,7 @@ public class Common {
     public final static String OBJECT_USER_INVITEGROUPS = "inviteGroups";
 
 
+    public final static String OBJECT_GROUP = "Group";
     public final static String OBJECT_GROUP_NAME = "groupName";
     public final static String OBJECT_GROUP_HACKATHONATTEND = "hackathonAttend";
     public final static String OBJECT_GROUP_MEMBERS = "members";
@@ -58,6 +59,8 @@ public class Common {
     public final static String EXTRA_HACKATHON_NAME = "hackathon_name";
     public final static String EXTRA_GROUP_NAME = "group_name";
     public final static String EXTRA_PERSON_ID_LIST = "person_id_list";
+    public final static String EXTRA_INTEREST_ID_LIST = "interest_id_list";
+    public final static String EXTRA_SKILL_ID_LIST = "skill_id_list";
     public final static String EXTRA_TAG = "tag";
 
     // Tab

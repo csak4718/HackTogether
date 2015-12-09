@@ -4,12 +4,24 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import apt.hacktogether.R;
@@ -26,10 +38,16 @@ import de.greenrobot.event.EventBus;
 public class CreateGroupActivity extends BaseActivity {
     public static final String TAG = Common.TAG_CREATE_GROUP_ACTIVITY;
 
+    private ArrayList<String> selectedPersonIds;
+    private ArrayList<String> groupInterestIds;
+    private ArrayList<String> lookForSkillIds;
+
     @Bind(R.id.edt_group_name) EditText edtGroupName;
     @Bind(R.id.txt_hackathon_header) TextView txtHackathonHeader;
     @Bind(R.id.txt_hackathon_content) TextView txtHackathonContent;
-    @Bind(R.id.txt_member_header) TextView txtMemberHeader;
+    @OnClick(R.id.txt_member_header) void goAddPerson(){
+        Utils.gotoAddPersonActivity(CreateGroupActivity.this, selectedPersonIds, TAG);
+    }
     @Bind(R.id.ll_member_content) LinearLayout ll_MemberContent;
     @Bind(R.id.switch_need_teammates) Switch switchNeedTeammates;
     @Bind(R.id.spec_container) LinearLayout ll_SpecContainer;
@@ -38,13 +56,77 @@ public class CreateGroupActivity extends BaseActivity {
     @Bind(R.id.txt_look_for_skills_header) TextView txtLookForSkillsHeader;
     @Bind(R.id.ll_look_for_skills_content) LinearLayout ll_LookForSkillsContent;
     @OnClick(R.id.btn_confirm) void create(){
+        // store data in parallel
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+        final ParseObject group = new ParseObject(Common.OBJECT_GROUP);
 
+        // groupName
+        group.put(Common.OBJECT_GROUP_NAME, edtGroupName.getText().toString());
+
+        // hackathonAttend
+
+
+        // members
+        ParseRelation<ParseUser> members = group.getRelation(Common.OBJECT_GROUP_MEMBERS);
+        members.add(currentUser);
+
+        // groupInterests
+
+
+        // lookForSkills
+
+
+        // pendingMembers
+        HashMap<String, ParseUser> allUsers = ParseImpl.get_allUsers();
+        ParseRelation<ParseUser> pendingMembers = group.getRelation(Common.OBJECT_GROUP_PENDINGMEMBERS);
+        for (String selectedPersonId: selectedPersonIds){
+            pendingMembers.add(allUsers.get(selectedPersonId));
+        }
+
+        // needGuy
+
+
+
+        group.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                // myGroups of User
+                ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
+                myGroups.add(group);
+                currentUser.saveInBackground();
+            }
+        });
+
+
+
+        // myHackathons of User
+        ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+        hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, txtHackathonContent.getText().toString());
+        hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject hackathon, ParseException e) {
+                if (e == null){
+                    // hackers of Hackathon
+
+                    // groupsNeedGuy of Hackathon (if switch is on)
+
+                    // groups of Hackathon
+
+
+                    // write the following in save callback of hackathon save
+                    ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
+                    myHackathons.add(hackathon);
+                }
+            }
+        });
+
+
+
+
+
+
+        CreateGroupActivity.this.finish();
     }
-
-    private ArrayList<String> selectedPersonIds;
-    private ArrayList<String> groupInterestIds;
-    private ArrayList<String> lookForSkillIds;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +139,22 @@ public class CreateGroupActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.create_group);
 
 
+        ll_MemberContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.gotoAddPersonActivity(CreateGroupActivity.this, selectedPersonIds, TAG);
+            }
+        });
+
+        switchNeedTeammates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) ll_SpecContainer.setVisibility(View.VISIBLE);
+                else ll_SpecContainer.setVisibility(View.GONE);
+            }
+        });
+
+        
     }
 
     public void onEvent(AddPersonToCreateGroupEvent event) {
@@ -65,24 +163,21 @@ public class CreateGroupActivity extends BaseActivity {
     }
 
     private void populateToField(List<String> participantIds){
-        //We will not include the Authenticated user in the "To:" field, since they know they are
-        // already part of the Conversation
-        TextView[] participantList = new TextView[participantIds.size()-1];
+        TextView[] participantList = new TextView[participantIds.size()];
         int idx = 0;
         for(String id : participantIds){
-            if(!id.equals(LayerImpl.getLayerClient().getAuthenticatedUserId())){
 
-                //Create a new stylized text view
-                TextView tv = new TextView(this);
-                tv.setText(ParseImpl.getUsername(id));
-                tv.setTextSize(16);
-                tv.setTextColor(getResources().getColor(R.color.white));
-                tv.setPadding(5, 5, 5, 5);
-                tv.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
-                participantList[idx] = tv;
+            //Create a new stylized text view
+            TextView tv = new TextView(this);
+            tv.setText(ParseImpl.getUsername(id));
+            tv.setTextSize(16);
+            tv.setTextColor(getResources().getColor(R.color.white));
+            tv.setPadding(5, 5, 5, 5);
+            tv.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
+            participantList[idx] = tv;
 
-                idx++;
-            }
+            idx++;
+
         }
 
         //Uses the helper function to make sure all participant names are appropriately displayed

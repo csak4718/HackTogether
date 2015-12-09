@@ -38,6 +38,7 @@ public class InviteGroupsTabAdapter extends BaseAdapter {
         @Bind(R.id.txt_group_name) public TextView txtGroupName;
         @Bind(R.id.txt_hackathon_attend) public TextView txtHackathonAttend;
         @Bind(R.id.ll_members) public LinearLayout ll_Members;
+        @Bind(R.id.ll_pending_members) public LinearLayout ll_pendingMembers;
         @Bind(R.id.txt_group_interests) public TextView txtGroupInterests;
         @Bind(R.id.txt_look_for_skills) public TextView txtLookForSkills;
         @Bind(R.id.btn_accept) public ImageButton acceptButton;
@@ -112,12 +113,15 @@ public class InviteGroupsTabAdapter extends BaseAdapter {
         membersRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> members, ParseException e) {
+                // remove first. Otherwise, will have repeated icons.
+                holder.ll_Members.removeAllViews();
+
                 for (ParseUser member: members){
                     ParseFile imgFile = member.getParseFile(Common.OBJECT_USER_PROFILE_PIC);
 
                     CircleImageView imgProfile = new CircleImageView(mContext);
-                    imgProfile.getLayoutParams().height = 50;
-                    imgProfile.getLayoutParams().width = 50;
+                    imgProfile.getLayoutParams().height = 60;
+                    imgProfile.getLayoutParams().width = 60;
                     imgProfile.setImageResource(R.drawable.ic_account_circle_black_48dp);
                     Picasso.with(mContext)
                             .load(imgFile.getUrl())

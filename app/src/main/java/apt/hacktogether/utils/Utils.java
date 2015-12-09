@@ -3,7 +3,10 @@ package apt.hacktogether.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.parse.ParseUser;
 
@@ -83,6 +86,14 @@ public class Utils {
         it.putStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST, mTargetParticipants);
         it.putExtra(Common.EXTRA_TAG, tag);
         activity.startActivity(it);
+    }
+
+    public static void toGrayScale(ImageView imgView){
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+        imgView.setColorFilter(filter);
     }
 
 //      TODO: uncomment later
