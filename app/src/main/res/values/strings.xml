@@ -24,5 +24,9 @@
     <string name="select_hackers">Select Hackers</string>
     <string name="recent_chats">Recent Chats</string>
     <string name="need_teammates">Need teammates: </string>
+    <string name="create_group">Create Group</string>
+
+    <string name="tag_message_activity">MessageActivity</string>
+    <string name="tag_create_group_activity">CreateGroupActivity</string>
 
 </resources>

@@ -36,6 +36,7 @@ import apt.hacktogether.adapter.QueryAdapter;
 import apt.hacktogether.event.AddPersonToMessageEvent;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.parse.ParseImpl;
+import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
 import de.greenrobot.event.EventBus;
 
@@ -46,7 +47,7 @@ import de.greenrobot.event.EventBus;
  */
 
 public class MessageActivity extends BaseActivity implements MessageQueryAdapter.MessageClickHandler {
-
+    public static final String TAG = Common.TAG_MESSAGE_ACTIVITY;
     //The owning conversation
     private Conversation mConversation;
 
@@ -160,7 +161,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
-        super.onStop();
+        super.onDestroy();
     }
 
     public void onEvent(AddPersonToMessageEvent event) {
@@ -254,7 +255,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
             case R.id.addParticipants:
                 Log.d("Activity", "Add participant button pressed");
-                Utils.gotoAddPersonActivity(MessageActivity.this, mTargetParticipants);
+                Utils.gotoAddPersonActivity(MessageActivity.this, mTargetParticipants, TAG);
 //                showParticipantPicker();
                 break;
         }

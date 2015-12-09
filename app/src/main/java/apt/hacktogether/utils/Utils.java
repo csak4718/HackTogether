@@ -78,9 +78,10 @@ public class Utils {
         activity.startActivity(it);
     }
 
-    public static void gotoAddPersonActivity(Activity activity, ArrayList<String> mTargetParticipants){
+    public static void gotoAddPersonActivity(Activity activity, ArrayList<String> mTargetParticipants, String tag){
         Intent it = new Intent(activity, AddPersonActivity.class);
         it.putStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST, mTargetParticipants);
+        it.putExtra(Common.EXTRA_TAG, tag);
         activity.startActivity(it);
     }
 
