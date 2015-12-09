@@ -1,5 +1,6 @@
 package apt.hacktogether.activity;
 
+import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -224,7 +225,7 @@ public class MainActivity extends BaseActivity {
         testObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                if (e==null){
+                if (e == null) {
                     ParseRelation<ParseUser> user = object.getRelation("user");
                     user.add(ParseUser.getCurrentUser());
                     object.saveInBackground();
@@ -272,6 +273,20 @@ public class MainActivity extends BaseActivity {
         // Check to see the state of the LayerClient, and if everything is set up, then good; do nothing.
         Utils.checkSetup(this);
 
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
