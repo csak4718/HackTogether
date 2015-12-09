@@ -28,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <HorizontalScrollView
+            android:id="@+id/scrollView_ll_members"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_group_name">
@@ -40,6 +41,18 @@
                     <!--android:src="@drawable/ic_account_circle_black_48dp"-->
                     <!--android:layout_width="50dp"-->
                     <!--android:layout_height="50dp" />-->
+            </LinearLayout>
+
+        </HorizontalScrollView>
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/scrollView_ll_members">
+            <LinearLayout
+                android:id="@+id/ll_pending_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
             </LinearLayout>
         </HorizontalScrollView>
     </RelativeLayout>
