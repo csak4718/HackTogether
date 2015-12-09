@@ -38,6 +38,7 @@ public class InviteGroupsTabAdapter extends BaseAdapter {
         @Bind(R.id.txt_group_name) public TextView txtGroupName;
         @Bind(R.id.txt_hackathon_attend) public TextView txtHackathonAttend;
         @Bind(R.id.ll_members) public LinearLayout ll_Members;
+        @Bind(R.id.ll_pending_members) public LinearLayout ll_pendingMembers;
         @Bind(R.id.txt_group_interests) public TextView txtGroupInterests;
         @Bind(R.id.txt_look_for_skills) public TextView txtLookForSkills;
         @Bind(R.id.btn_accept) public ImageButton acceptButton;
