@@ -17,11 +17,16 @@ public class Common {
     public final static String OBJECT_USER_INTERESTS = "interests";
     public final static String OBJECT_USER_SKILLS = "skills";
     public final static String OBJECT_USER_MYGROUPS = "myGroups";
+    public final static String OBJECT_USER_INVITEGROUPS = "inviteGroups";
+
 
     public final static String OBJECT_GROUP_NAME = "groupName";
+    public final static String OBJECT_GROUP_HACKATHONATTEND = "hackathonAttend";
     public final static String OBJECT_GROUP_MEMBERS = "members";
     public final static String OBJECT_GROUP_GROUPINTERESTS = "groupInterests";
     public final static String OBJECT_GROUP_LOOKFORSKILLS = "lookForSkills";
+    public final static String OBJECT_GROUP_PENDINGMEMBERS = "pendingMembers";
+    public final static String OBJECT_GROUP_NEEDGUY = "needGuy";
 
     public final static String OBJECT_HACKATHON = "Hackathon";
     public final static String OBJECT_HACKATHON_NAME = "hackathonName";
@@ -47,10 +52,18 @@ public class Common {
 
     // extra data in Intent (for going from one Activity to another)
     public final static String EXTRA_HACKATHON_NAME = "hackathon_name";
+    public final static String EXTRA_GROUP_NAME = "group_name";
+    public final static String EXTRA_PERSON_ID_LIST = "person_id_list";
 
     // Tab
     public final static String TAB_NAME_PERSON = "Individual";
     public final static String TAB_NAME_GROUP = "Group";
     public final static int PERSON_TAB = 0;
     public final static int GROUP_TAB = 1;
+
+    public final static String TAB_NAME_MYGROUPS = "My Groups";
+    public final static String TAB_NAME_INVITEGROUPS = "invitations";
+    public final static int MYGROUPS_TAB = 0;
+    public final static int INVITEGROUPS_TAB = 1;
+
 }

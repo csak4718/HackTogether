@@ -102,15 +102,6 @@ public class FragmentBrowseTab extends FragmentTab {
         }
     }
 
-    private void setupAdapter() {
-        if(mType == Common.PERSON_TAB) {
-            mAdapter = new PersonTabAdapter(getActivity(), mList_hackersNeedGuy);
-        }
-        else if(mType == Common.GROUP_TAB) {
-            mAdapter = new GroupTabAdapter(getActivity(), mList_groupsNeedGuy);
-        }
-    }
-
     @Override
     public void onStart() {
         EventBus.getDefault().register(this);
@@ -146,5 +137,14 @@ public class FragmentBrowseTab extends FragmentTab {
         mList_groupsNeedGuy.clear();
         mList_groupsNeedGuy.addAll(list);
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void setupAdapter() {
+        if(mType == Common.PERSON_TAB) {
+            mAdapter = new PersonTabAdapter(getActivity(), mList_hackersNeedGuy);
+        }
+        else if(mType == Common.GROUP_TAB) {
+            mAdapter = new GroupTabAdapter(getActivity(), mList_groupsNeedGuy);
+        }
     }
 }

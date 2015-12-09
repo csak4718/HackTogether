@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="hack_together_blue" type="color">#14436D</item>
     <item name="dark_blue" type="color">#FF0099CC</item>
     <item name="blue" type="color">#FF33B5E5</item>
     <item name="light_blue" type="color">#80cbff</item>
 
     <item name="white" type="color">#FFFFFF</item>
+    <color name="light_gray_line">#cccccc</color>
     <color name="drawer_header">#848484</color>
     <color name="drawer_content">#4A4A4A</color>
     <item name="black" type="color">#000000</item>
 
     <color name="yellow">#FFD000</color>
+    <color name="green">#007300</color>
+    <color name="red">#CC0000</color>
 
     <color name="blue_green_1">#4CCFE0</color>
     <color name="blue_green_2">#00ABC0</color>

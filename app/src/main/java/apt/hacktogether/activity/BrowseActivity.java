@@ -65,7 +65,6 @@ public class BrowseActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setHomeButtonEnabled(true);
         mActionBar.setTitle(hackathonName);
     }
 

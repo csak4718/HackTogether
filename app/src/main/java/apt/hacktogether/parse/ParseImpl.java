@@ -7,6 +7,7 @@ import com.parse.Parse;
 import com.parse.ParseCrashReporting;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
@@ -74,6 +75,7 @@ public class ParseImpl {
     public static void cacheAllUsers(){
 
         ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+        // TODO maybe need to change to find instead of findInBackground. Because sometimes we call getAllFriends immediately
         userQuery.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> results, ParseException e) {
                 if(e == null){
@@ -86,7 +88,7 @@ public class ParseImpl {
         });
     }
 
-    //Returns all users NOT including the currently signed in user
+    //Returns all userId NOT including the currently signed in user
     public static Set<String> getAllFriends(){
         Set<String> friends = allUsers.keySet();
         String currentUserId = ParseUser.getCurrentUser().getObjectId();
@@ -108,5 +110,19 @@ public class ParseImpl {
 
         //If the handle can't be found, return whatever value was passed in
         return id;
+    }
+
+    public static ParseFile getUserIcon(String id){
+
+        //Does this id appear in the "all users" list?
+        if(id != null && allUsers != null && allUsers.containsKey(id) && allUsers.get(id) != null)
+            return allUsers.get(id).getParseFile(Common.OBJECT_USER_PROFILE_PIC);
+
+        //Does this id belong to the currently signed in user?
+        if(id != null && ParseUser.getCurrentUser() != null && id.equals(ParseUser.getCurrentUser().getObjectId()))
+            return ParseUser.getCurrentUser().getParseFile(Common.OBJECT_USER_PROFILE_PIC);
+
+        //If the handle can't be found, return null
+        return null;
     }
 }

@@ -43,6 +43,7 @@ import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.adapters.AnimationAdapter;
 import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
+
 public class MainActivity extends BaseActivity {
     @Bind(R.id.recyclerView_hackathons) RecyclerView mRecyclerView;
     private HackathonsAdapter mAdapter;
@@ -113,8 +114,10 @@ public class MainActivity extends BaseActivity {
         final ArrayList<Boolean> need_teammate_List = new ArrayList<>();
         need_teammate_List.add(true);
 
-        String[] interestNames = {"Android App", "iOS App"};
-        String[] skillNames = {"Java", "Swift", "Machine learning"};
+        String[] interestNames = {"Web App"};
+//        String[] interestNames = {"Android App", "iOS App"};
+        String[] skillNames = {"Java", "Machine learning"};
+//        String[] skillNames = {"Java", "Swift", "Machine learning"};
 
 
 
@@ -246,7 +249,7 @@ public class MainActivity extends BaseActivity {
         setupActionBar();
         setupDrawer();
         // test function
-        test();
+//        test();
 
 
         // use this setting to improve performance if you know that changes

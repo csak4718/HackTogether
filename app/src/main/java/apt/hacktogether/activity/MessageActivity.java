@@ -33,8 +33,11 @@ import java.util.Set;
 import apt.hacktogether.R;
 import apt.hacktogether.adapter.MessageQueryAdapter;
 import apt.hacktogether.adapter.QueryAdapter;
+import apt.hacktogether.event.AddPersonToMessageEvent;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.parse.ParseImpl;
+import apt.hacktogether.utils.Utils;
+import de.greenrobot.event.EventBus;
 
 /*
  * MessageActivity.java
@@ -70,6 +73,10 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        EventBus.getDefault().register(this);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
 
         //View containing all messages in the target Conversastion
         mMessagesView = (RecyclerView) findViewById(R.id.mRecyclerView);
@@ -150,6 +157,17 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         populateToField(mConversation.getParticipants());
     }
 
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    public void onEvent(AddPersonToMessageEvent event) {
+        mTargetParticipants = event.mPersonIdList;
+        populateToField(mTargetParticipants);
+    }
+
     //Takes a String Array of user IDs, finds the display name, and adds them to the "To:" field
     // at the top of the Messages screen
     private void populateToField(List<String> participantIds){
@@ -164,8 +182,9 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
                 TextView tv = new TextView(this);
                 tv.setText(ParseImpl.getUsername(id));
                 tv.setTextSize(16);
+                tv.setTextColor(getResources().getColor(R.color.white));
                 tv.setPadding(5, 5, 5, 5);
-                tv.setBackgroundColor(Color.LTGRAY);
+                tv.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
                 participantList[idx] = tv;
 
                 idx++;
@@ -235,7 +254,8 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
             case R.id.addParticipants:
                 Log.d("Activity", "Add participant button pressed");
-                showParticipantPicker();
+                Utils.gotoAddPersonActivity(MessageActivity.this, mTargetParticipants);
+//                showParticipantPicker();
                 break;
         }
     }
@@ -297,15 +317,14 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         LinearLayout checkboxList = new LinearLayout(this);
         checkboxList.setOrientation(LinearLayout.VERTICAL);
 
-        //Grab a list of all friends
+        //Grab a list of all friends (For now, all friends are equivalent to all users except current user)
         Set friends = ParseImpl.getAllFriends();
 
-        //A Map of the CheckBox with the human readable username and the Parse Object ID
+        //A Map of the CheckBox with the human readable username and the Parse Object ID (The Value of Key Value pair is Object ID)
         final HashMap<CheckBox, String> allUsers = new HashMap<>();
 
         //Create the list of participants if it hasn't been instantiated
-        if(mTargetParticipants == null)
-            mTargetParticipants = new ArrayList<>();
+        if(mTargetParticipants == null) mTargetParticipants = new ArrayList<>();
 
         //Go through each friend and create a Checkbox with a human readable name mapped to the
         // Object ID
@@ -317,8 +336,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
             friend.setText(ParseImpl.getUsername(friendId));
 
             //If this user is already selected, mark the checkbox
-            if(mTargetParticipants.contains(friendId))
-                friend.setChecked(true);
+            if(mTargetParticipants.contains(friendId)) friend.setChecked(true);
 
             checkboxList.addView(friend);
 
@@ -330,31 +348,33 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
         //When the user is done adding/removing participants, update the list of target users
         helpBuilder.setPositiveButton("Done",
-                new DialogInterface.OnClickListener() {
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing but close the dialog
 
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing but close the dialog
+                    //Reset the target user list, and rebuild it based on which checkboxes are selected
+                    mTargetParticipants.clear();
 
-                        //Reset the target user list, and rebuild it based on which checkboxes are selected
-                        mTargetParticipants.clear();
-                        mTargetParticipants.add(LayerImpl.getLayerClient().getAuthenticatedUserId());
+//                        mTargetParticipants.add(LayerImpl.getLayerClient().getAuthenticatedUserId());
+                    mTargetParticipants.add(ParseUser.getCurrentUser().getObjectId()); // equivalent to the above line.
 
-                        Set checkboxes = allUsers.keySet();
-                        Iterator checkItr = checkboxes.iterator();
-                        while(checkItr.hasNext()){
-                            CheckBox currCheck = (CheckBox)checkItr.next();
-                            if(currCheck != null && currCheck.isChecked()){
-                                String friendID = allUsers.get(currCheck);
-                                mTargetParticipants.add(friendID);
-                            }
+                    Set checkboxes = allUsers.keySet();
+                    Iterator checkItr = checkboxes.iterator();
+                    while(checkItr.hasNext()){
+                        CheckBox currCheck = (CheckBox)checkItr.next();
+                        if(currCheck != null && currCheck.isChecked()){
+                            String friendID = allUsers.get(currCheck);
+                            mTargetParticipants.add(friendID);
                         }
-
-                        Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
-
-                        //Draw the list of target users
-                        populateToField(mTargetParticipants);
                     }
-                });
+
+                    Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
+
+                    //Draw the list of target users
+                    populateToField(mTargetParticipants);
+                }
+            }
+        );
 
 
         // Create and show the dialog box with list of all participants
@@ -377,5 +397,26 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
     }
     protected void onHideKeyboard() {
         mMessagesView.smoothScrollToPosition(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_message, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if(id == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
