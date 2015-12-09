@@ -28,6 +28,9 @@ import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.adapters.AnimationAdapter;
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 public class MainActivity extends BaseActivity {
     @Bind(R.id.recyclerView_hackathons) RecyclerView mRecyclerView;
@@ -189,7 +192,10 @@ public class MainActivity extends BaseActivity {
 
         // specify an adapter
         mAdapter = new HackathonsAdapter(this, Common.HACKATHONS);
-        mRecyclerView.setAdapter(mAdapter);
+        AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(mAdapter);
+        ScaleInAnimationAdapter scaleAdapter = new ScaleInAnimationAdapter(alphaAdapter);
+        scaleAdapter.setFirstOnly(false);
+        mRecyclerView.setAdapter(scaleAdapter);
 
     }
 
