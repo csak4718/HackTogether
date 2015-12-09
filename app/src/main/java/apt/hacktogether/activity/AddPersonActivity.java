@@ -129,7 +129,9 @@ public class AddPersonActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 mPersonIdList.clear();
-                mPersonIdList.add(ParseUser.getCurrentUser().getObjectId());
+                if (receiveTag.equals(Common.TAG_MESSAGE_ACTIVITY)){
+                    mPersonIdList.add(ParseUser.getCurrentUser().getObjectId());
+                }
 
                 Set checkboxes = allUsers.keySet();
                 Iterator checkItr = checkboxes.iterator();

@@ -27,8 +27,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_add_black_24dp"
-        app:fab_colorNormal="@color/light_blue"
+        android:src="@drawable/ic_add_white_24dp"
+        app:fab_colorNormal="@color/hack_together_blue"
         android:visibility="gone"/>
 
 </RelativeLayout>

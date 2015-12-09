@@ -73,20 +73,33 @@ public class ParseImpl {
     // your own user management system (based on a friends list, for example)
     private static HashMap<String, ParseUser> allUsers;
     public static void cacheAllUsers(){
-
+        // cache all users synchronously
         ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-        // TODO maybe need to change to find instead of findInBackground. Because sometimes we call getAllFriends immediately
-        userQuery.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> results, ParseException e) {
-                if(e == null){
-                    allUsers = new HashMap<>();
-                    for(int i = 0; i < results.size(); i++){
-                        allUsers.put(results.get(i).getObjectId(), results.get(i));
-                    }
-                }
+        try {
+            List<ParseUser> results = userQuery.find();
+            allUsers = new HashMap<>();
+            for(int i = 0; i < results.size(); i++){
+                allUsers.put(results.get(i).getObjectId(), results.get(i));
             }
-        });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
+//    public static void cacheAllUsers(){
+//        // cache all users asynchronously
+//        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+//        userQuery.findInBackground(new FindCallback<ParseUser>() {
+//            public void done(List<ParseUser> results, ParseException e) {
+//                if(e == null){
+//                    allUsers = new HashMap<>();
+//                    for(int i = 0; i < results.size(); i++){
+//                        allUsers.put(results.get(i).getObjectId(), results.get(i));
+//                    }
+//                }
+//            }
+//        });
+//    }
+
 
     //Returns all userId NOT including the currently signed in user
     public static Set<String> getAllFriends(){

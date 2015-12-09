@@ -40,6 +40,9 @@ public class MyGroupsTabAdapter extends BaseAdapter{
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
+            if (ll_Members.getChildCount() > 0){
+                ll_Members.removeAllViews();
+            }
         }
     }
 
@@ -92,6 +95,11 @@ public class MyGroupsTabAdapter extends BaseAdapter{
     }
 
     private void getMembers(ParseObject myGroup, final ViewHolder holder){
+        // remove first; otherwise, # of icons will be more and more after refreshing.
+        if (holder.ll_Members.getChildCount() > 0){
+            holder.ll_Members.removeAllViews();
+        }
+
         ParseRelation<ParseUser> membersRelation = myGroup.getRelation(Common.OBJECT_GROUP_MEMBERS);
         membersRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
             @Override
@@ -100,6 +108,8 @@ public class MyGroupsTabAdapter extends BaseAdapter{
                     ParseFile imgFile = member.getParseFile(Common.OBJECT_USER_PROFILE_PIC);
 
                     CircleImageView imgProfile = new CircleImageView(mContext);
+                    LinearLayout.LayoutParams imgProfile_params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    imgProfile.setLayoutParams(imgProfile_params);
                     imgProfile.getLayoutParams().height = 50;
                     imgProfile.getLayoutParams().width = 50;
                     imgProfile.setImageResource(R.drawable.ic_account_circle_black_48dp);
