@@ -2,12 +2,15 @@ package apt.hacktogether.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -58,11 +61,11 @@ public class CreateGroupActivity extends BaseActivity {
     @Bind(R.id.switch_need_teammates) Switch switchNeedTeammates;
     @Bind(R.id.spec_container) LinearLayout ll_SpecContainer;
 
-    @OnClick(R.id.txt_group_interests_header) void goAddInterest(){
+    @OnClick(R.id.ll_group_interests) void goAddInterest(){
         Utils.gotoAddInterestActivity(CreateGroupActivity.this, groupInterestIds, TAG);
     }
 
-    @Bind(R.id.ll_group_interests_content) LinearLayout ll_GroupInterestsContent;
+    @Bind(R.id.ll_group_interests_content) FlowLayout ll_GroupInterestsContent;
     @Bind(R.id.txt_look_for_skills_header) TextView txtLookForSkillsHeader;
     @Bind(R.id.ll_look_for_skills_content) LinearLayout ll_LookForSkillsContent;
 
@@ -169,12 +172,12 @@ public class CreateGroupActivity extends BaseActivity {
             }
         });
 
-        ll_GroupInterestsContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.gotoAddInterestActivity(CreateGroupActivity.this, groupInterestIds, TAG);
-            }
-        });
+//        ll_GroupInterestsContent.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Utils.gotoAddInterestActivity(CreateGroupActivity.this, groupInterestIds, TAG);
+//            }
+//        });
 
         
     }
@@ -209,7 +212,18 @@ public class CreateGroupActivity extends BaseActivity {
 
         //Uses the helper function to make sure all participant names are appropriately displayed
         // and not cut off due to size constraints
-        populateViewWithWrapping(ll_GroupInterestsContent, interestList, this);
+//        populateViewWithWrapping(ll_GroupInterestsContent, interestList, this);
+        // TODO: Move the following to BaseActivity
+        ll_GroupInterestsContent.removeAllViews();
+        for (TextView tv: interestList){
+            LinearLayout ll = new LinearLayout(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ll.setLayoutParams(params);
+            ll.setPadding(5, 5, 5, 5);
+
+            ll.addView(tv);
+            ll_GroupInterestsContent.addView(ll);
+        }
     }
 
     private void populateToMemberField(List<String> participantIds){
