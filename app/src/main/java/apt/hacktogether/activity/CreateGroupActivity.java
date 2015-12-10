@@ -20,13 +20,17 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.apmem.tools.layouts.FlowLayout;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import apt.hacktogether.R;
+import apt.hacktogether.event.AddInterestToCreateGroupEvent;
 import apt.hacktogether.event.AddPersonToCreateGroupEvent;
 import apt.hacktogether.layer.LayerImpl;
+import apt.hacktogether.layout.PredicateLayout;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
@@ -45,18 +49,24 @@ public class CreateGroupActivity extends BaseActivity {
     @Bind(R.id.edt_group_name) EditText edtGroupName;
     @Bind(R.id.txt_hackathon_header) TextView txtHackathonHeader;
     @Bind(R.id.txt_hackathon_content) TextView txtHackathonContent;
+
     @OnClick(R.id.txt_member_header) void goAddPerson(){
         Utils.gotoAddPersonActivity(CreateGroupActivity.this, selectedPersonIds, TAG);
     }
+
     @Bind(R.id.ll_member_content) LinearLayout ll_MemberContent;
     @Bind(R.id.switch_need_teammates) Switch switchNeedTeammates;
     @Bind(R.id.spec_container) LinearLayout ll_SpecContainer;
-    @Bind(R.id.txt_group_interests_header) TextView txtGroupInterestsHeader;
+
+    @OnClick(R.id.txt_group_interests_header) void goAddInterest(){
+        Utils.gotoAddInterestActivity(CreateGroupActivity.this, groupInterestIds, TAG);
+    }
+
     @Bind(R.id.ll_group_interests_content) LinearLayout ll_GroupInterestsContent;
     @Bind(R.id.txt_look_for_skills_header) TextView txtLookForSkillsHeader;
     @Bind(R.id.ll_look_for_skills_content) LinearLayout ll_LookForSkillsContent;
+
     @OnClick(R.id.btn_confirm) void create(){
-        // store data in parallel
         final ParseUser currentUser = ParseUser.getCurrentUser();
         final ParseObject group = new ParseObject(Common.OBJECT_GROUP);
 
@@ -71,6 +81,11 @@ public class CreateGroupActivity extends BaseActivity {
         members.add(currentUser);
 
         // groupInterests
+        HashMap<String, ParseObject> allInterests = ParseImpl.get_allInterests();
+        ParseRelation<ParseObject> groupInterests = group.getRelation(Common.OBJECT_GROUP_GROUPINTERESTS);
+        for (String groupInterestId: groupInterestIds){
+            groupInterests.add(allInterests.get(groupInterestId));
+        }
 
 
         // lookForSkills
@@ -114,8 +129,8 @@ public class CreateGroupActivity extends BaseActivity {
 
 
                     // write the following in save callback of hackathon save
-                    ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
-                    myHackathons.add(hackathon);
+//                    ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
+//                    myHackathons.add(hackathon);
                 }
             }
         });
@@ -154,15 +169,50 @@ public class CreateGroupActivity extends BaseActivity {
             }
         });
 
+        ll_GroupInterestsContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.gotoAddInterestActivity(CreateGroupActivity.this, groupInterestIds, TAG);
+            }
+        });
+
         
     }
 
     public void onEvent(AddPersonToCreateGroupEvent event) {
         selectedPersonIds = event.mPersonIdList;
-        populateToField(selectedPersonIds);
+        populateToMemberField(selectedPersonIds);
     }
 
-    private void populateToField(List<String> participantIds){
+    public void onEvent(AddInterestToCreateGroupEvent event){
+        groupInterestIds = event.mInterestIdList;
+        populateToInterestField(groupInterestIds);
+    }
+
+    private void populateToInterestField(List<String> interestIds){
+        TextView[] interestList = new TextView[interestIds.size()];
+        int idx = 0;
+        for(String id : interestIds){
+
+            //Create a new stylized text view
+            TextView tv = new TextView(this);
+            tv.setText(ParseImpl.getInterestName(id));
+            tv.setTextSize(16);
+            tv.setTextColor(getResources().getColor(R.color.white));
+            tv.setPadding(5, 5, 5, 5);
+            tv.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
+            interestList[idx] = tv;
+
+            idx++;
+
+        }
+
+        //Uses the helper function to make sure all participant names are appropriately displayed
+        // and not cut off due to size constraints
+        populateViewWithWrapping(ll_GroupInterestsContent, interestList, this);
+    }
+
+    private void populateToMemberField(List<String> participantIds){
         TextView[] participantList = new TextView[participantIds.size()];
         int idx = 0;
         for(String id : participantIds){

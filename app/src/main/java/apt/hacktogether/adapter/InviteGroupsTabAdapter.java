@@ -22,6 +22,7 @@ import java.util.List;
 import apt.hacktogether.R;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.ParseUtils;
+import apt.hacktogether.utils.Utils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -86,6 +87,7 @@ public class InviteGroupsTabAdapter extends BaseAdapter {
         holder.txtGroupName.setText(inviteGroup.getString(Common.OBJECT_GROUP_NAME));
         holder.txtHackathonAttend.setText(inviteGroup.getString(Common.OBJECT_GROUP_HACKATHONATTEND));
         getMembers(inviteGroup, holder);
+        getPendingMembers(inviteGroup, holder);
         getGroupInterests(inviteGroup, holder);
         getLookForSkills(inviteGroup, holder);
 
@@ -120,15 +122,48 @@ public class InviteGroupsTabAdapter extends BaseAdapter {
                     ParseFile imgFile = member.getParseFile(Common.OBJECT_USER_PROFILE_PIC);
 
                     CircleImageView imgProfile = new CircleImageView(mContext);
-                    imgProfile.getLayoutParams().height = 60;
-                    imgProfile.getLayoutParams().width = 60;
+                    LinearLayout.LayoutParams imgProfile_params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    imgProfile_params.setMargins(0, 0, 10, 10);
+                    imgProfile.setLayoutParams(imgProfile_params);
+                    imgProfile.getLayoutParams().height = 80;
+                    imgProfile.getLayoutParams().width = 80;
                     imgProfile.setImageResource(R.drawable.ic_account_circle_black_48dp);
                     Picasso.with(mContext)
                             .load(imgFile.getUrl())
                             .into(imgProfile);
-                    holder.ll_Members.addView(imgProfile);
 
+                    holder.ll_Members.addView(imgProfile);
                 }
+            }
+        });
+    }
+
+    private void getPendingMembers(final ParseObject group, final ViewHolder holder){
+        ParseRelation<ParseUser> pendingMembersRelation = group.getRelation(Common.OBJECT_GROUP_PENDINGMEMBERS);
+        pendingMembersRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> pendingMembers, ParseException e) {
+                // remove first. Otherwise, will have repeated icons.
+                holder.ll_pendingMembers.removeAllViews();
+
+                for (ParseUser pendingMember: pendingMembers){
+                    ParseFile imgFile = pendingMember.getParseFile(Common.OBJECT_USER_PROFILE_PIC);
+
+                    CircleImageView imgProfile = new CircleImageView(mContext);
+                    LinearLayout.LayoutParams imgProfile_params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    imgProfile_params.setMargins(0, 0, 10, 0);
+                    imgProfile.setLayoutParams(imgProfile_params);
+                    imgProfile.getLayoutParams().height = 80;
+                    imgProfile.getLayoutParams().width = 80;
+                    imgProfile.setImageResource(R.drawable.ic_account_circle_black_48dp);
+                    Picasso.with(mContext)
+                            .load(imgFile.getUrl())
+                            .into(imgProfile);
+                    Utils.toGrayScale(imgProfile);
+
+                    holder.ll_pendingMembers.addView(imgProfile);
+                }
+
             }
         });
     }

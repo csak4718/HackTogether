@@ -7,6 +7,7 @@ public class Common {
     public final static String TAG_MESSAGE_ACTIVITY = "MessageActivity";
     public final static String TAG_CREATE_GROUP_ACTIVITY = "CreateGroupActivity";
     public final static String TAG_EDIT_GROUP_ACTIVITY = "EditGroupActivity";
+    public final static String TAG_EDIT_PROFILE_ACTIVITY = "EditProfileActivity";
 
     /*
      Parse object

@@ -57,7 +57,7 @@ public class AddPersonActivity extends BaseActivity {
         //Grab a list of all friendID (For now, all friendID are equivalent to all userID except current userID)
         Set friendIds = ParseImpl.getAllFriends();
 
-        //A Map of the horizontal linear layout with the Parse Object ID
+        //A Map of the CheckBox with the Parse Object ID
         final HashMap<CheckBox, String> allUsers = new HashMap<>();
 
         if(mPersonIdList == null) mPersonIdList = new ArrayList<>();

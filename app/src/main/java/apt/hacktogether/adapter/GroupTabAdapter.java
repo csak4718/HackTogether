@@ -102,8 +102,11 @@ public class GroupTabAdapter extends BaseAdapter {
                     ParseFile imgFile = member.getParseFile(Common.OBJECT_USER_PROFILE_PIC);
 
                     CircleImageView imgProfile = new CircleImageView(mContext);
-                    imgProfile.getLayoutParams().height = 60;
-                    imgProfile.getLayoutParams().width = 60;
+                    LinearLayout.LayoutParams imgProfile_params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    imgProfile_params.setMargins(0, 0, 10, 10);
+                    imgProfile.setLayoutParams(imgProfile_params);
+                    imgProfile.getLayoutParams().height = 80;
+                    imgProfile.getLayoutParams().width = 80;
                     imgProfile.setImageResource(R.drawable.ic_account_circle_black_48dp);
                     Picasso.with(mContext)
                             .load(imgFile.getUrl())

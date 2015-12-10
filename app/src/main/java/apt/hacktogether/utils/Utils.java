@@ -12,6 +12,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
+import apt.hacktogether.activity.AddInterestActivity;
 import apt.hacktogether.activity.AddPersonActivity;
 import apt.hacktogether.activity.BrowseActivity;
 import apt.hacktogether.activity.ConversationsActivity;
@@ -84,6 +85,13 @@ public class Utils {
     public static void gotoAddPersonActivity(Activity activity, ArrayList<String> mTargetParticipants, String tag){
         Intent it = new Intent(activity, AddPersonActivity.class);
         it.putStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST, mTargetParticipants);
+        it.putExtra(Common.EXTRA_TAG, tag);
+        activity.startActivity(it);
+    }
+
+    public static void gotoAddInterestActivity(Activity activity, ArrayList<String> interestIds, String tag){
+        Intent it = new Intent(activity, AddInterestActivity.class);
+        it.putStringArrayListExtra(Common.EXTRA_INTEREST_ID_LIST, interestIds);
         it.putExtra(Common.EXTRA_TAG, tag);
         activity.startActivity(it);
     }
