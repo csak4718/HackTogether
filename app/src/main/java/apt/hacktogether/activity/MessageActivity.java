@@ -24,6 +24,8 @@ import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
 import com.parse.ParseUser;
 
+import org.apmem.tools.layouts.FlowLayout;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,7 +62,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
     private Button mAddUserButton;
 
     //Layout view of current participants
-    private LinearLayout mParticipantsList;
+    private FlowLayout mParticipantsList;
 
     //This is the actual view that contains all the messages
     private RecyclerView mMessagesView;
@@ -94,7 +96,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
         //A view containing a list of all the Participants in the Conversation (not including the
         // locally authenticated user)
-        mParticipantsList = (LinearLayout)findViewById(R.id.participantList);
+        mParticipantsList = (FlowLayout)findViewById(R.id.participantList);
 
         //If the soft keyboard changes the size of the mMessagesView, we want to force the scroll to
         // the bottom of the view so the latest message is always displayed
@@ -218,8 +220,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
         //Uses the helper function to make sure all participant names are appropriately displayed
         // and not cut off due to size constraints
-        addViewsToFlowLayout(ll_MemberContent, participantList, this);
-        populateViewWithWrapping(mParticipantsList, participantList, this);
+        addViewsToFlowLayout(mParticipantsList, participantList, this);
     }
 
     //If a Conversation ID was not passed into this Activity, we assume that a new Conversation is
@@ -280,9 +281,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
             case R.id.addParticipants:
                 Log.d("Activity", "Add participant button pressed");
-                Log.d("Display", "mTarget"+mTargetParticipants);
                 Utils.gotoAddPersonActivity(MessageActivity.this, mTargetParticipants, TAG);
-//                showParticipantPicker();
                 break;
         }
     }
@@ -369,83 +368,83 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
 
     //Shows a list of all users that can be added to the Conversation
-    private void showParticipantPicker(){
-
-        //Update user list from Parse
-        ParseImpl.cacheAllUsers();
-
-        //Create a new Dialog Box
-        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
-        helpBuilder.setTitle("Select Participants");
-        helpBuilder.setMessage("Add or remove participants from this conversation:\n");
-
-        //The Linear Layout View that will hold all the CheckBox views
-        LinearLayout checkboxList = new LinearLayout(this);
-        checkboxList.setOrientation(LinearLayout.VERTICAL);
-
-        //Grab a list of all friends (For now, all friends are equivalent to all users except current user)
-        Set friends = ParseImpl.getAllFriends();
-
-        //A Map of the CheckBox with the human readable username and the Parse Object ID (The Value of Key Value pair is Object ID)
-        final HashMap<CheckBox, String> allUsers = new HashMap<>();
-
-        //Create the list of participants if it hasn't been instantiated
-        if(mTargetParticipants == null) mTargetParticipants = new ArrayList<>();
-
-        //Go through each friend and create a Checkbox with a human readable name mapped to the
-        // Object ID
-        Iterator itr = friends.iterator();
-        while(itr.hasNext()) {
-            String friendId = (String)itr.next();
-
-            CheckBox friend = new CheckBox(this);
-            friend.setText(ParseImpl.getUsername(friendId));
-
-            //If this user is already selected, mark the checkbox
-            if(mTargetParticipants.contains(friendId)) friend.setChecked(true);
-
-            checkboxList.addView(friend);
-
-            allUsers.put(friend, friendId);
-        }
-
-        //Add the list of CheckBoxes to the Alert Dialog
-        helpBuilder.setView(checkboxList);
-
-        //When the user is done adding/removing participants, update the list of target users
-        helpBuilder.setPositiveButton("Done",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing but close the dialog
-
-                        //Reset the target user list, and rebuild it based on which checkboxes are selected
-                        mTargetParticipants.clear();
-
-//                        mTargetParticipants.add(LayerImpl.getLayerClient().getAuthenticatedUserId());
-                        mTargetParticipants.add(ParseUser.getCurrentUser().getObjectId()); // equivalent to the above line.
-
-                        Set checkboxes = allUsers.keySet();
-                        Iterator checkItr = checkboxes.iterator();
-                        while(checkItr.hasNext()){
-                            CheckBox currCheck = (CheckBox)checkItr.next();
-                            if(currCheck != null && currCheck.isChecked()){
-                                String friendID = allUsers.get(currCheck);
-                                mTargetParticipants.add(friendID);
-                            }
-                        }
-
-                        Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
-
-                        //Draw the list of target users
-                        populateToField(mTargetParticipants);
-                    }
-                }
-        );
-
-
-        // Create and show the dialog box with list of all participants
-        AlertDialog helpDialog = helpBuilder.create();
-        helpDialog.show();
-
-    }
+//    private void showParticipantPicker(){
+//
+//        //Update user list from Parse
+//        ParseImpl.cacheAllUsers();
+//
+//        //Create a new Dialog Box
+//        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
+//        helpBuilder.setTitle("Select Participants");
+//        helpBuilder.setMessage("Add or remove participants from this conversation:\n");
+//
+//        //The Linear Layout View that will hold all the CheckBox views
+//        LinearLayout checkboxList = new LinearLayout(this);
+//        checkboxList.setOrientation(LinearLayout.VERTICAL);
+//
+//        //Grab a list of all friends (For now, all friends are equivalent to all users except current user)
+//        Set friends = ParseImpl.getAllFriends();
+//
+//        //A Map of the CheckBox with the human readable username and the Parse Object ID (The Value of Key Value pair is Object ID)
+//        final HashMap<CheckBox, String> allUsers = new HashMap<>();
+//
+//        //Create the list of participants if it hasn't been instantiated
+//        if(mTargetParticipants == null) mTargetParticipants = new ArrayList<>();
+//
+//        //Go through each friend and create a Checkbox with a human readable name mapped to the
+//        // Object ID
+//        Iterator itr = friends.iterator();
+//        while(itr.hasNext()) {
+//            String friendId = (String)itr.next();
+//
+//            CheckBox friend = new CheckBox(this);
+//            friend.setText(ParseImpl.getUsername(friendId));
+//
+//            //If this user is already selected, mark the checkbox
+//            if(mTargetParticipants.contains(friendId)) friend.setChecked(true);
+//
+//            checkboxList.addView(friend);
+//
+//            allUsers.put(friend, friendId);
+//        }
+//
+//        //Add the list of CheckBoxes to the Alert Dialog
+//        helpBuilder.setView(checkboxList);
+//
+//        //When the user is done adding/removing participants, update the list of target users
+//        helpBuilder.setPositiveButton("Done",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // Do nothing but close the dialog
+//
+//                        //Reset the target user list, and rebuild it based on which checkboxes are selected
+//                        mTargetParticipants.clear();
+//
+////                        mTargetParticipants.add(LayerImpl.getLayerClient().getAuthenticatedUserId());
+//                        mTargetParticipants.add(ParseUser.getCurrentUser().getObjectId()); // equivalent to the above line.
+//
+//                        Set checkboxes = allUsers.keySet();
+//                        Iterator checkItr = checkboxes.iterator();
+//                        while(checkItr.hasNext()){
+//                            CheckBox currCheck = (CheckBox)checkItr.next();
+//                            if(currCheck != null && currCheck.isChecked()){
+//                                String friendID = allUsers.get(currCheck);
+//                                mTargetParticipants.add(friendID);
+//                            }
+//                        }
+//
+//                        Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
+//
+//                        //Draw the list of target users
+//                        populateToField(mTargetParticipants);
+//                    }
+//                }
+//        );
+//
+//
+//        // Create and show the dialog box with list of all participants
+//        AlertDialog helpDialog = helpBuilder.create();
+//        helpDialog.show();
+//
+//    }
 }

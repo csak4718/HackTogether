@@ -31,7 +31,9 @@ import java.util.List;
 
 import apt.hacktogether.R;
 import apt.hacktogether.event.AddInterestToCreateGroupEvent;
+import apt.hacktogether.event.AddOneHackathonToCreateGroupEvent;
 import apt.hacktogether.event.AddPersonToCreateGroupEvent;
+import apt.hacktogether.event.AddSkillToCreateGroupEvent;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.layout.PredicateLayout;
 import apt.hacktogether.parse.ParseImpl;
@@ -45,29 +47,37 @@ import de.greenrobot.event.EventBus;
 public class CreateGroupActivity extends BaseActivity {
     public static final String TAG = Common.TAG_CREATE_GROUP_ACTIVITY;
 
+    private String hackathonName;
     private ArrayList<String> selectedPersonIds;
     private ArrayList<String> groupInterestIds;
     private ArrayList<String> lookForSkillIds;
 
     @Bind(R.id.edt_group_name) EditText edtGroupName;
-    @Bind(R.id.txt_hackathon_header) TextView txtHackathonHeader;
-    @Bind(R.id.txt_hackathon_content) TextView txtHackathonContent;
+
+    @OnClick(R.id.ll_hackathon) void goAddOneHackathon(){
+        Utils.gotoAddOneHackathonActivity(CreateGroupActivity.this);
+    }
+    @Bind(R.id.ll_hackathon_content) FlowLayout ll_HackathonContent;
 
     @OnClick(R.id.ll_members) void goAddPerson(){
         Utils.gotoAddPersonActivity(CreateGroupActivity.this, selectedPersonIds, TAG);
     }
-
     @Bind(R.id.ll_member_content) FlowLayout ll_MemberContent;
+
     @Bind(R.id.switch_need_teammates) Switch switchNeedTeammates;
     @Bind(R.id.spec_container) LinearLayout ll_SpecContainer;
 
     @OnClick(R.id.ll_group_interests) void goAddInterest(){
         Utils.gotoAddInterestActivity(CreateGroupActivity.this, groupInterestIds, TAG);
     }
-
     @Bind(R.id.ll_group_interests_content) FlowLayout ll_GroupInterestsContent;
-    @Bind(R.id.txt_look_for_skills_header) TextView txtLookForSkillsHeader;
-    @Bind(R.id.ll_look_for_skills_content) LinearLayout ll_LookForSkillsContent;
+
+    @OnClick(R.id.ll_look_for_skills) void goAddSkill(){
+        Utils.gotoAddSkillActivity(CreateGroupActivity.this, lookForSkillIds, TAG);
+    }
+    @Bind(R.id.ll_look_for_skills_content) FlowLayout ll_LookForSkillsContent;
+
+
 
     @OnClick(R.id.btn_confirm) void create(){
         final ParseUser currentUser = ParseUser.getCurrentUser();
@@ -77,22 +87,35 @@ public class CreateGroupActivity extends BaseActivity {
         group.put(Common.OBJECT_GROUP_NAME, edtGroupName.getText().toString());
 
         // hackathonAttend
-
+        group.put(Common.OBJECT_GROUP_HACKATHONATTEND, hackathonName);
 
         // members
         ParseRelation<ParseUser> members = group.getRelation(Common.OBJECT_GROUP_MEMBERS);
         members.add(currentUser);
 
-        // groupInterests
-        HashMap<String, ParseObject> allInterests = ParseImpl.get_allInterests();
-        ParseRelation<ParseObject> groupInterests = group.getRelation(Common.OBJECT_GROUP_GROUPINTERESTS);
-        for (String groupInterestId: groupInterestIds){
-            groupInterests.add(allInterests.get(groupInterestId));
+        if (switchNeedTeammates.isChecked()){
+            // needGuy
+            // TODO, after finishing, Group Tab will show something if needGuy is true
+            group.put(Common.OBJECT_GROUP_NEEDGUY, true);
+
+            // groupInterests
+            HashMap<String, ParseObject> allInterests = ParseImpl.get_allInterests();
+            ParseRelation<ParseObject> groupInterests = group.getRelation(Common.OBJECT_GROUP_GROUPINTERESTS);
+            for (String groupInterestId: groupInterestIds){
+                groupInterests.add(allInterests.get(groupInterestId));
+            }
+
+            // lookForSkills
+            HashMap<String, ParseObject> allSkills = ParseImpl.get_allSkills();
+            ParseRelation<ParseObject> lookForSkills = group.getRelation(Common.OBJECT_GROUP_LOOKFORSKILLS);
+            for (String lookForSkillId: lookForSkillIds){
+                lookForSkills.add(allSkills.get(lookForSkillId));
+            }
         }
-
-
-        // lookForSkills
-
+        else{
+            // needGuy
+            group.put(Common.OBJECT_GROUP_NEEDGUY, false);
+        }
 
         // pendingMembers
         HashMap<String, ParseUser> allUsers = ParseImpl.get_allUsers();
@@ -101,30 +124,63 @@ public class CreateGroupActivity extends BaseActivity {
             pendingMembers.add(allUsers.get(selectedPersonId));
         }
 
-        // needGuy
-
-
-
         group.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                // myGroups of User
+                // add group into myGroups of User
                 ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
                 myGroups.add(group);
                 currentUser.saveInBackground();
+
+
+
+                // add group into inviteGroups of pending members
+
+
+
+                if (switchNeedTeammates.isChecked()){
+                    // add group into interested_groups of Interest
+                    for (String groupInterestId: groupInterestIds){
+                        ParseQuery<ParseObject> interestObjectQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
+                        interestObjectQuery.getInBackground(groupInterestId, new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject interest, ParseException e) {
+                                if (e == null){
+                                    ParseRelation<ParseObject> interested_groups = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_GROUPS);
+                                    interested_groups.add(group);
+                                    interest.saveInBackground();
+                                }
+                            }
+                        });
+                    }
+
+                    // add group into lookFor_groups of Skill
+                    for (String lookForSkillId: lookForSkillIds){
+                        ParseQuery<ParseObject> skillObjectQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
+                        skillObjectQuery.getInBackground(lookForSkillId, new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject skill, ParseException e) {
+                                if (e == null){
+                                    ParseRelation<ParseObject> lookFor_groups = skill.getRelation(Common.OBJECT_SKILL_LOOKFOR_GROUPS);
+                                    lookFor_groups.add(group);
+                                    skill.saveInBackground();
+                                }
+                            }
+                        });
+                    }
+                }
+
             }
         });
 
-
-
         // myHackathons of User
         ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
-        hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, txtHackathonContent.getText().toString());
+        hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, hackathonName);
         hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject hackathon, ParseException e) {
                 if (e == null){
-                    // hackers of Hackathon
+                    // hackers of Hackathon (simply add current user. Later, in invitation group tab, if user hit accept, he will be added into hackers of Hackathon AND not into hackersNeedGuy of Hackathon)
 
                     // groupsNeedGuy of Hackathon (if switch is on)
 
@@ -134,13 +190,13 @@ public class CreateGroupActivity extends BaseActivity {
                     // write the following in save callback of hackathon save
 //                    ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
 //                    myHackathons.add(hackathon);
+
+
+
+                    // Do not put the hackathon into myNeedGuyHackathons of current user
                 }
             }
         });
-
-
-
-
 
 
         CreateGroupActivity.this.finish();
@@ -175,6 +231,55 @@ public class CreateGroupActivity extends BaseActivity {
     public void onEvent(AddInterestToCreateGroupEvent event){
         groupInterestIds = event.mInterestIdList;
         populateToInterestField(groupInterestIds);
+    }
+
+    public void onEvent(AddSkillToCreateGroupEvent event){
+        lookForSkillIds = event.mSkillIdList;
+        populateToSkillField(lookForSkillIds);
+    }
+
+    public void onEvent(AddOneHackathonToCreateGroupEvent event){
+        hackathonName = event.hackathon_name;
+        populateToHackathonField(hackathonName);
+    }
+
+    private void populateToHackathonField(String hackathon_name){
+        TextView[] nameList = new TextView[1];
+
+        TextView tv = new TextView(this);
+        tv.setText(hackathon_name);
+        tv.setTextSize(16);
+        tv.setTextColor(getResources().getColor(R.color.white));
+        tv.setPadding(5, 5, 5, 5);
+        tv.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
+        nameList[0] = tv;
+
+        addViewsToFlowLayout(ll_HackathonContent, nameList, this);
+
+    }
+
+    private void populateToSkillField(List<String> skillIds){
+        TextView[] skillList = new TextView[skillIds.size()];
+        int idx = 0;
+        for(String id : skillIds){
+
+            //Create a new stylized text view
+            TextView tv = new TextView(this);
+            tv.setText(ParseImpl.getSkillName(id));
+            tv.setTextSize(16);
+            tv.setTextColor(getResources().getColor(R.color.white));
+            tv.setPadding(5, 5, 5, 5);
+            tv.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
+            skillList[idx] = tv;
+
+            idx++;
+
+        }
+
+        //Uses the helper function to make sure all participant names are appropriately displayed
+        // and not cut off due to size constraints
+        addViewsToFlowLayout(ll_LookForSkillsContent, skillList, this);
+
     }
 
     private void populateToInterestField(List<String> interestIds){

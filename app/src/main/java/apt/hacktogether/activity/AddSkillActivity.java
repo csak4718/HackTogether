@@ -18,49 +18,47 @@ import java.util.Iterator;
 import java.util.Set;
 
 import apt.hacktogether.R;
-import apt.hacktogether.event.AddInterestToCreateGroupEvent;
-
+import apt.hacktogether.event.AddSkillToCreateGroupEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
 import de.greenrobot.event.EventBus;
 
-
-public class AddInterestActivity extends BaseActivity {
-    private ArrayList<String> mInterestIdList;
+public class AddSkillActivity extends BaseActivity {
+    private ArrayList<String> mSkillIdList;
     private String receiveTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_interest);
+        setContentView(R.layout.activity_add_skill);
 
         Intent it = getIntent();
         receiveTag = it.getStringExtra(Common.EXTRA_TAG);
 
-        // it.getStringArrayListExtra(Common.EXTRA_INTEREST_ID_LIST) might be null
-        mInterestIdList = it.getStringArrayListExtra(Common.EXTRA_INTEREST_ID_LIST);
+        // it.getStringArrayListExtra(Common.EXTRA_SKILL_ID_LIST) might be null
+        mSkillIdList = it.getStringArrayListExtra(Common.EXTRA_SKILL_ID_LIST);
 
-        //Update interest list from Parse
-        ParseImpl.cacheAllInterests();
+        //Update skill list from Parse
+        ParseImpl.cacheAllSkills();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.select_interests);
+        getSupportActionBar().setTitle(R.string.select_skills);
 
         LinearLayout ll_vertical = (LinearLayout) findViewById(R.id.vertical_ll);
 
-        Set interestIds = ParseImpl.getAllInterestIds();
+        Set skillIds = ParseImpl.getAllSkillIds();
 
         //A Map of the CheckBox with the Parse Object ID
-        final HashMap<CheckBox, String> allInterests = new HashMap<>();
+        final HashMap<CheckBox, String> allSkills = new HashMap<>();
 
-        if (mInterestIdList == null) mInterestIdList = new ArrayList<>();
+        if (mSkillIdList == null) mSkillIdList = new ArrayList<>();
 
-        //Go through each interestID and create a horizontal linear layout with a human readable name mapped to the
+        //Go through each skillID and create a horizontal linear layout with a human readable name mapped to the
         // Object ID
-        Iterator itr = interestIds.iterator();
+        Iterator itr = skillIds.iterator();
         while(itr.hasNext()) {
-            String interestId = (String)itr.next();
+            String skillId = (String)itr.next();
 
 
             LinearLayout ll_horizontal = new LinearLayout(this);
@@ -73,17 +71,17 @@ public class AddInterestActivity extends BaseActivity {
             checkBox_params.setMargins(10, 10, 0, 0);
             checkBox.setLayoutParams(checkBox_params);
             checkBox.setButtonDrawable(R.drawable.custom_checkbox_design);
-            checkBox.setText(ParseImpl.getInterestName(interestId));
+            checkBox.setText(ParseImpl.getSkillName(skillId));
             checkBox.setTextSize(0);
             checkBox.setTextColor(getResources().getColor(R.color.white));
-            //If this interest is already selected, mark the checkbox
-            if(mInterestIdList.contains(interestId)) checkBox.setChecked(true);
+            //If this skill is already selected, mark the checkbox
+            if(mSkillIdList.contains(skillId)) checkBox.setChecked(true);
 
             TextView textView = new TextView(this);
             LinearLayout.LayoutParams textView_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             textView_params.setMargins(20, 16, 0, 0);
             textView.setLayoutParams(textView_params);
-            textView.setText(ParseImpl.getInterestName(interestId));
+            textView.setText(ParseImpl.getSkillName(skillId));
             textView.setTextSize(20);
             textView.setTextColor(getResources().getColor(R.color.black));
 
@@ -100,7 +98,7 @@ public class AddInterestActivity extends BaseActivity {
             cardView.addView(ll_horizontal);
             ll_vertical.addView(cardView);
 
-            allInterests.put(checkBox, interestId);
+            allSkills.put(checkBox, skillId);
         }
 
         ImageButton confirmButton = new ImageButton(this);
@@ -110,22 +108,22 @@ public class AddInterestActivity extends BaseActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mInterestIdList.clear();
+                mSkillIdList.clear();
 
-                Set checkboxes = allInterests.keySet();
+                Set checkboxes = allSkills.keySet();
                 Iterator checkItr = checkboxes.iterator();
                 while(checkItr.hasNext()){
                     CheckBox currCheck = (CheckBox)checkItr.next();
                     if(currCheck != null && currCheck.isChecked()){
-                        String interestID = allInterests.get(currCheck);
-                        mInterestIdList.add(interestID);
+                        String interestID = allSkills.get(currCheck);
+                        mSkillIdList.add(interestID);
                     }
                 }
 
 
                 if(receiveTag.equals(Common.TAG_CREATE_GROUP_ACTIVITY)) {
                     // in the corresponding event in CreateGroupActivity, simply do assignment and populate to fields
-                    EventBus.getDefault().post(new AddInterestToCreateGroupEvent(mInterestIdList));
+                    EventBus.getDefault().post(new AddSkillToCreateGroupEvent(mSkillIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
                     // TODO
@@ -134,7 +132,7 @@ public class AddInterestActivity extends BaseActivity {
                     // TODO
                 }
 
-                AddInterestActivity.this.finish();
+                AddSkillActivity.this.finish();
             }
         });
 
@@ -152,7 +150,7 @@ public class AddInterestActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_interest, menu);
+        getMenuInflater().inflate(R.menu.menu_add_skill, menu);
         return true;
     }
 

@@ -71,6 +71,43 @@ public class ParseImpl {
         installation.saveInBackground();
     }
 
+
+
+    private static HashMap<String, ParseObject> allSkills;
+    
+    public static HashMap<String, ParseObject> get_allSkills(){
+        return allSkills;
+    }
+
+    public static void cacheAllSkills(){
+        // cache all skills synchronously
+        ParseQuery<ParseObject> skillQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
+        try {
+            List<ParseObject> results = skillQuery.find();
+            allSkills = new HashMap<>();
+            for(int i = 0; i < results.size(); i++){
+                allSkills.put(results.get(i).getObjectId(), results.get(i));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Set<String> getAllSkillIds(){
+        Set<String> skillIdSet = allSkills.keySet();
+        return skillIdSet;
+    }
+
+    public static String getSkillName(String id){
+        if(id != null && allSkills != null && allSkills.containsKey(id) && allSkills.get(id) != null)
+            return allSkills.get(id).getString(Common.OBJECT_SKILL_NAME);
+
+        //If the handle can't be found, return whatever value was passed in
+        return id;
+    }
+
+
+
     private static HashMap<String, ParseObject> allInterests;
 
     public static HashMap<String, ParseObject> get_allInterests(){
@@ -84,7 +121,6 @@ public class ParseImpl {
             List<ParseObject> results = interestQuery.find();
             allInterests = new HashMap<>();
             for(int i = 0; i < results.size(); i++){
-                Log.d("WILL", "map put " +results.get(i).getString(Common.OBJECT_INTEREST_NAME));
                 allInterests.put(results.get(i).getObjectId(), results.get(i));
             }
         } catch (ParseException e) {
