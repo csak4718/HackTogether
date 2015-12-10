@@ -172,13 +172,6 @@ public class CreateGroupActivity extends BaseActivity {
             }
         });
 
-//        ll_GroupInterestsContent.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Utils.gotoAddInterestActivity(CreateGroupActivity.this, groupInterestIds, TAG);
-//            }
-//        });
-
         
     }
 
