@@ -51,6 +51,7 @@
             android:background= "@color/light_gray_line"/>
 
         <LinearLayout
+            android:id="@+id/ll_members"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -63,15 +64,23 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"/>
-            <LinearLayout
+            <!--<LinearLayout-->
+                <!--android:id="@+id/ll_member_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:paddingLeft="10dp"-->
+                <!--android:paddingTop="15dp"-->
+                <!--android:paddingBottom="15dp">-->
+            <!--</LinearLayout>-->
+            <org.apmem.tools.layouts.FlowLayout
                 android:id="@+id/ll_member_content"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp">
-            </LinearLayout>
+            </org.apmem.tools.layouts.FlowLayout>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

@@ -218,6 +218,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
         //Uses the helper function to make sure all participant names are appropriately displayed
         // and not cut off due to size constraints
+        addViewsToFlowLayout(ll_MemberContent, participantList, this);
         populateViewWithWrapping(mParticipantsList, participantList, this);
     }
 

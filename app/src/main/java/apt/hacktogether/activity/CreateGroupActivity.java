@@ -53,11 +53,11 @@ public class CreateGroupActivity extends BaseActivity {
     @Bind(R.id.txt_hackathon_header) TextView txtHackathonHeader;
     @Bind(R.id.txt_hackathon_content) TextView txtHackathonContent;
 
-    @OnClick(R.id.txt_member_header) void goAddPerson(){
+    @OnClick(R.id.ll_members) void goAddPerson(){
         Utils.gotoAddPersonActivity(CreateGroupActivity.this, selectedPersonIds, TAG);
     }
 
-    @Bind(R.id.ll_member_content) LinearLayout ll_MemberContent;
+    @Bind(R.id.ll_member_content) FlowLayout ll_MemberContent;
     @Bind(R.id.switch_need_teammates) Switch switchNeedTeammates;
     @Bind(R.id.spec_container) LinearLayout ll_SpecContainer;
 
@@ -156,14 +156,6 @@ public class CreateGroupActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.create_group);
 
-
-        ll_MemberContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.gotoAddPersonActivity(CreateGroupActivity.this, selectedPersonIds, TAG);
-            }
-        });
-
         switchNeedTeammates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -205,18 +197,8 @@ public class CreateGroupActivity extends BaseActivity {
 
         //Uses the helper function to make sure all participant names are appropriately displayed
         // and not cut off due to size constraints
-//        populateViewWithWrapping(ll_GroupInterestsContent, interestList, this);
-        // TODO: Move the following to BaseActivity
-        ll_GroupInterestsContent.removeAllViews();
-        for (TextView tv: interestList){
-            LinearLayout ll = new LinearLayout(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            ll.setLayoutParams(params);
-            ll.setPadding(5, 5, 5, 5);
+        addViewsToFlowLayout(ll_GroupInterestsContent, interestList, this);
 
-            ll.addView(tv);
-            ll_GroupInterestsContent.addView(ll);
-        }
     }
 
     private void populateToMemberField(List<String> participantIds){
@@ -239,7 +221,7 @@ public class CreateGroupActivity extends BaseActivity {
 
         //Uses the helper function to make sure all participant names are appropriately displayed
         // and not cut off due to size constraints
-        populateViewWithWrapping(ll_MemberContent, participantList, this);
+        addViewsToFlowLayout(ll_MemberContent, participantList, this);
     }
 
 
