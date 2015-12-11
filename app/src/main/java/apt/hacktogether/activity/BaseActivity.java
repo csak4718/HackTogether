@@ -26,6 +26,7 @@ import apt.hacktogether.R;
 import apt.hacktogether.layer.LayerCallbacks;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.parse.ParseImpl;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /*
  * ActivityBase.java
@@ -111,6 +112,20 @@ public class BaseActivity extends ActionBarActivity implements LayerCallbacks, V
             flowLayout.addView(ll);
         }
     }
+
+    protected void addViewsAndIconsToFlowLayout(FlowLayout flowLayout, LinearLayout[] wrapList, Context context){
+        flowLayout.removeAllViews();
+        for (LinearLayout wrap: wrapList){
+            LinearLayout ll = new LinearLayout(context);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ll.setLayoutParams(params);
+            ll.setPadding(5, 5, 5, 5);
+
+            ll.addView(wrap);
+            flowLayout.addView(ll);
+        }
+    }
+
 
     //A helper class that adds several Views to a LinearLayout with automatic wrapping, so that
     // items in the views array don't get cut off. In other words, turns this:

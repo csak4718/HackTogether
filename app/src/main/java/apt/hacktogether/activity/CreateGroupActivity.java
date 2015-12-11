@@ -17,11 +17,13 @@ import android.widget.TextView;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.squareup.picasso.Picasso;
 
 import org.apmem.tools.layouts.FlowLayout;
 
@@ -44,6 +46,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CreateGroupActivity extends BaseActivity {
     public static final String TAG = Common.TAG_CREATE_GROUP_ACTIVITY;
@@ -316,18 +319,33 @@ public class CreateGroupActivity extends BaseActivity {
     }
 
     private void populateToMemberField(List<String> participantIds){
-        TextView[] participantList = new TextView[participantIds.size()];
+        LinearLayout[] wrapList = new LinearLayout[participantIds.size()];
+
         int idx = 0;
         for(String id : participantIds){
-
             //Create a new stylized text view
             TextView tv = new TextView(this);
             tv.setText(ParseImpl.getUsername(id));
             tv.setTextSize(16);
             tv.setTextColor(getResources().getColor(R.color.white));
             tv.setPadding(5, 5, 5, 5);
-            tv.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
-            participantList[idx] = tv;
+
+            CircleImageView imgProfile = new CircleImageView(this);
+            LinearLayout.LayoutParams imgProfile_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imgProfile.setLayoutParams(imgProfile_params);
+            imgProfile.getLayoutParams().height = 50;
+            imgProfile.getLayoutParams().width = 50;
+            ParseFile imgFile = ParseImpl.getUserIcon(id);
+            Picasso.with(this)
+                    .load(imgFile.getUrl())
+                    .into(imgProfile);
+
+            LinearLayout wrap = new LinearLayout(this);
+            wrap.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            wrap.setBackgroundColor(getResources().getColor(R.color.hack_together_blue));
+            wrap.addView(imgProfile);
+            wrap.addView(tv);
+            wrapList[idx] = wrap;
 
             idx++;
 
@@ -335,7 +353,7 @@ public class CreateGroupActivity extends BaseActivity {
 
         //Uses the helper function to make sure all participant names are appropriately displayed
         // and not cut off due to size constraints
-        addViewsToFlowLayout(ll_MemberContent, participantList, this);
+        addViewsAndIconsToFlowLayout(ll_MemberContent, wrapList, this);
     }
 
 
