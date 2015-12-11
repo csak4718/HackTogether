@@ -30,7 +30,6 @@ import java.util.List;
 
 import apt.hacktogether.R;
 import apt.hacktogether.adapter.HackathonsAdapter;
-import apt.hacktogether.fragment.FragmentBrowse;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.ParseUtils;
@@ -58,10 +57,6 @@ public class MainActivity extends BaseActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
 
-    /*
-     Fragment
-     */
-    FragmentBrowse fragmentBrowse;
 
     @OnClick(R.id.btn_conversation) void goConversation() {
         Utils.gotoConversationsActivity(MainActivity.this);

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -16,6 +17,8 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -154,5 +157,14 @@ public class ParseUtils {
         ParseRelation<ParseUser> pendingMembers = inviteGroup.getRelation(Common.OBJECT_GROUP_PENDINGMEMBERS);
         pendingMembers.remove(ParseUser.getCurrentUser());
         inviteGroup.saveInBackground();
+    }
+
+    static public void addGroupToInviteGroups(ParseObject group, ArrayList<String> selectedPersonIds){
+        for (String selectedPersonId: selectedPersonIds){
+            Map<String, Object> params = new HashMap<>();
+            params.put("groupId", group.getObjectId());
+            params.put("pendingMemberId", selectedPersonId);
+            ParseCloud.callFunctionInBackground("addGroupToInviteGroup", params);
+        }
     }
 }

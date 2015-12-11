@@ -38,6 +38,7 @@ import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.layout.PredicateLayout;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
+import apt.hacktogether.utils.ParseUtils;
 import apt.hacktogether.utils.Utils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -132,11 +133,8 @@ public class CreateGroupActivity extends BaseActivity {
                 myGroups.add(group);
                 currentUser.saveInBackground();
 
-
-
                 // add group into inviteGroups of pending members
-
-
+                ParseUtils.addGroupToInviteGroups(group, selectedPersonIds);
 
                 if (switchNeedTeammates.isChecked()){
                     // add group into interested_groups of Interest
@@ -170,33 +168,49 @@ public class CreateGroupActivity extends BaseActivity {
                     }
                 }
 
+
+
+                ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+                hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, hackathonName);
+                hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(final ParseObject hackathon, ParseException e) {
+                        if (e == null){
+                            // hackers of Hackathon (simply add current user. Later, in invitation group tab, if user hit accept, he will be added into hackers of Hackathon AND not into hackersNeedGuy of Hackathon)
+                            ParseRelation<ParseUser> hackers = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERS);
+                            hackers.add(currentUser);
+
+                            // groupsNeedGuy of Hackathon (if switch is on)
+                            if (switchNeedTeammates.isChecked()){
+                                ParseRelation<ParseObject> groupsNeedGuy = hackathon.getRelation(Common.OBJECT_HACKATHON_GROUPSNEEDGUY);
+                                groupsNeedGuy.add(group);
+                            }
+
+                            // groups of Hackathon
+                            ParseRelation<ParseObject> groups = hackathon.getRelation(Common.OBJECT_HACKATHON_GROUPS);
+                            groups.add(group);
+
+                            hackathon.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    // myHackathons of User
+                                    ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
+                                    myHackathons.add(hackathon); // if hackathon is already there, Parse will handle this automatically
+                                    currentUser.saveInBackground();
+                                }
+                            });
+
+
+                            // Do not put the hackathon into myNeedGuyHackathons of current user
+                        }
+                    }
+                });
+
             }
         });
 
-        // myHackathons of User
-        ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
-        hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, hackathonName);
-        hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject hackathon, ParseException e) {
-                if (e == null){
-                    // hackers of Hackathon (simply add current user. Later, in invitation group tab, if user hit accept, he will be added into hackers of Hackathon AND not into hackersNeedGuy of Hackathon)
-
-                    // groupsNeedGuy of Hackathon (if switch is on)
-
-                    // groups of Hackathon
 
 
-                    // write the following in save callback of hackathon save
-//                    ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
-//                    myHackathons.add(hackathon);
-
-
-
-                    // Do not put the hackathon into myNeedGuyHackathons of current user
-                }
-            }
-        });
 
 
         CreateGroupActivity.this.finish();
