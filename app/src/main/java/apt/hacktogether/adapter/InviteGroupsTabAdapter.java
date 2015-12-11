@@ -96,14 +96,14 @@ public class InviteGroupsTabAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 finalConvertView.setVisibility(View.GONE);
-                ParseUtils.moveInviteGroupToMyGroup(inviteGroup);
+                ParseUtils.acceptInvitation(inviteGroup);
             }
         });
         holder.rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finalConvertView.setVisibility(View.GONE);
-                ParseUtils.removePendingMember(inviteGroup);
+                ParseUtils.rejectInvitation(inviteGroup);
             }
         });
 

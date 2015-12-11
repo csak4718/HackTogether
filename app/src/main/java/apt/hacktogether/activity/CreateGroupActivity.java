@@ -128,11 +128,6 @@ public class CreateGroupActivity extends BaseActivity {
         group.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                // add group into myGroups of User
-                ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
-                myGroups.add(group);
-                currentUser.saveInBackground();
-
                 // add group into inviteGroups of pending members
                 ParseUtils.addGroupToInviteGroups(group, selectedPersonIds);
 
@@ -145,7 +140,7 @@ public class CreateGroupActivity extends BaseActivity {
                             public void done(ParseObject interest, ParseException e) {
                                 if (e == null){
                                     ParseRelation<ParseObject> interested_groups = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_GROUPS);
-                                    interested_groups.add(group);
+                                    interested_groups.add(group); // Must do add(group) in SaveCallback. Otherwise, won't add.
                                     interest.saveInBackground();
                                 }
                             }
@@ -193,6 +188,10 @@ public class CreateGroupActivity extends BaseActivity {
                             hackathon.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
+                                    // add group into myGroups of User
+                                    ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
+                                    myGroups.add(group);
+
                                     // myHackathons of User
                                     ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
                                     myHackathons.add(hackathon); // if hackathon is already there, Parse will handle this automatically
