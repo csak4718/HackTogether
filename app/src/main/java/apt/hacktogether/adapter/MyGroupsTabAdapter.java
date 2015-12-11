@@ -91,7 +91,7 @@ public class MyGroupsTabAdapter extends BaseAdapter{
             @Override
             public void onClick(View v) {
                 // card clicked
-                Utils.gotoEditGroupActivity(mContext, holder.txtGroupName.getText().toString());
+                Utils.gotoEditGroupActivity(mContext, myGroup.getObjectId());
             }
         });
 

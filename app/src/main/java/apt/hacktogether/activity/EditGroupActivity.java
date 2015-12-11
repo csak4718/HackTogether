@@ -1,20 +1,46 @@
 package apt.hacktogether.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
+
 import apt.hacktogether.R;
+import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
+import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 public class EditGroupActivity extends BaseActivity {
-    // TODO: in EditGroup: From current user, get myGroups, then use for loop to find a group whose name is the same as txtGroupName
+    private String groupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group);
+        ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.edit_group);
+
+
+        groupId = getIntent().getStringExtra(Common.EXTRA_GROUP_ID);
+        ParseQuery<ParseObject> groupObjectQuery = ParseQuery.getQuery(Common.OBJECT_GROUP);
+        groupObjectQuery.getInBackground(groupId, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject group, ParseException e) {
+
+            }
+        });
     }
 
     //Called when the Activity starts, or when the App is coming to the foreground.
@@ -41,9 +67,8 @@ public class EditGroupActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(id == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

@@ -29,6 +29,7 @@
     <string name="recent_chats">Recent Chats</string>
     <string name="need_teammates">Need teammates: </string>
     <string name="create_group">Create Group</string>
+    <string name="edit_group">Edit Group</string>
     <string name="tag_message_activity">MessageActivity</string>
     <string name="tag_create_group_activity">CreateGroupActivity</string>
     <string name="title_activity_add_interest">AddInterestActivity</string>

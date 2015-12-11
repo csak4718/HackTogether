@@ -73,9 +73,9 @@ public class Utils {
         activity.startActivity(it);
     }
 
-    public static void gotoEditGroupActivity(Context context, String groupName){
+    public static void gotoEditGroupActivity(Context context, String groupId){
         Intent it = new Intent(context, EditGroupActivity.class);
-        it.putExtra(Common.EXTRA_GROUP_NAME, groupName);
+        it.putExtra(Common.EXTRA_GROUP_ID, groupId);
         context.startActivity(it);
     }
 

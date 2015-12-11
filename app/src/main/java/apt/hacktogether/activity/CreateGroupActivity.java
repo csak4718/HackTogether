@@ -208,10 +208,6 @@ public class CreateGroupActivity extends BaseActivity {
             }
         });
 
-
-
-
-
         CreateGroupActivity.this.finish();
     }
 
