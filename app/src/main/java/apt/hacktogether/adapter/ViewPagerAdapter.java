@@ -28,7 +28,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public void refreshTabsquery(String queryText){
         for(FragmentTab fragmentTab : mFragmentList) {
             fragmentTab.query(queryText);
-            Log.d("query_Fraglist", "The raglist" + mFragmentList);
+            Log.d("query_Fraglist_before", "The raglist" + mFragmentList);
         }
     }
 

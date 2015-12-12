@@ -159,9 +159,7 @@ public class FragmentBrowseTab extends FragmentTab {
                                     boolean j = interestsString.toLowerCase().contains(query_text.toLowerCase());
                                     if (i || j) {
                                     } else {
-                                        Log.d("Remove","remove+"+interestsString.toLowerCase()+"USER"+user.getString(Common.OBJECT_USER_NICK).toLowerCase());
-                                        mList_groupsNeedGuy.remove(user);
-                                        Log.d("List_removed","Remocer"+mList_groupsNeedGuy);
+                                        mList_hackersNeedGuy.remove(user);
                                     }
                                 }
                             });
@@ -170,6 +168,47 @@ public class FragmentBrowseTab extends FragmentTab {
                 }
             }
             swipeRefreshLayout.setRefreshing(false);
+            mAdapter.notifyDataSetChanged();
+        }
+        else if(mType == Common.GROUP_TAB){
+            refresh_mList_hackersNeedGuy(event.hackersNeedGuyList);
+            if(query_text == null || query_text.length() < 1){}
+            else{
+                for(final ParseObject group: mList_groupsNeedGuy){
+                    ParseRelation<ParseObject> groupInterestsRelation = group.getRelation(Common.OBJECT_GROUP_GROUPINTERESTS);
+                    ParseQuery<ParseObject> groupInterestsQuery = groupInterestsRelation.getQuery();
+                    groupInterestsQuery.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(final List<ParseObject> groupInterests, ParseException e) {
+                            ParseRelation<ParseObject> groupSkillsRelation = group.getRelation(Common.OBJECT_GROUP_LOOKFORSKILLS);
+                            ParseQuery<ParseObject> userSkillsQuery = groupSkillsRelation.getQuery();
+                            userSkillsQuery.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> groupSkills, ParseException e) {
+                                    StringBuilder strBuilder = new StringBuilder();
+                                    for (ParseObject interest : groupInterests) {
+                                        strBuilder.append(interest.getString(Common.OBJECT_INTEREST_NAME));
+                                        strBuilder.append(",");
+                                    }
+                                    for (ParseObject skill : groupSkills) {
+                                        strBuilder.append(skill.getString(Common.OBJECT_SKILL_NAME));
+                                        strBuilder.append(",");
+                                    }
+                                    String interestsString = strBuilder.toString();
+                                    boolean i = group.getString(Common.OBJECT_GROUP_NAME).toLowerCase().contains(query_text.toLowerCase());
+                                    boolean j = interestsString.toLowerCase().contains(query_text.toLowerCase());
+                                    if (i || j) {
+                                    } else {
+                                        mList_groupsNeedGuy.remove(group);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+            swipeRefreshLayout.setRefreshing(false);
+            mAdapter.notifyDataSetChanged();
         }
     }
     public void onEvent(GroupTabEvent event) {

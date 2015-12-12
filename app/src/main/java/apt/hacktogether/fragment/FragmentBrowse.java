@@ -37,7 +37,7 @@ public class FragmentBrowse extends Fragment{
 
     public void setFilter(String queryText) {
         adapter.refreshTabsquery(queryText);
-        setupAdapter();
+        Log.d("refresh","refresh");
     }
 
     @Override

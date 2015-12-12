@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -148,7 +149,9 @@ public class BrowseActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(final String newText) {
+                Log.d("startquery", "Querystart");
                 fragmentBrowse.setFilter(newText);
+                Log.d("queryend", "refresh");
                 return true;
             }
         });
