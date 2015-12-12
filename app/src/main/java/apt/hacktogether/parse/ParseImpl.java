@@ -71,6 +71,41 @@ public class ParseImpl {
         installation.saveInBackground();
     }
 
+    private static HashMap<String, ParseObject> allHackathons;
+
+    public static HashMap<String, ParseObject> get_allHackathons(){
+        return allHackathons;
+    }
+
+    public static void cacheAllHackathons(){
+        ParseQuery<ParseObject> hackathonQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+        hackathonQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> results, ParseException e) {
+                if(e == null){
+                    allHackathons = new HashMap<>();
+                    for(int i = 0; i < results.size(); i++){
+                        allHackathons.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
+            }
+        });
+    }
+
+    public static Set<String> getAllHackathonIds(){
+        // TODO: change return type to ArrayList<String>. Return ordered idList
+        Set<String> hackathonIdSet = allHackathons.keySet();
+        return hackathonIdSet;
+    }
+
+    public static String getHackathonName(String id){
+        if(id != null && allHackathons != null && allHackathons.containsKey(id) && allHackathons.get(id) != null)
+            return allHackathons.get(id).getString(Common.OBJECT_HACKATHON_NAME);
+
+        //If the handle can't be found, return whatever value was passed in
+        return id;
+    }
+
 
 
     private static HashMap<String, ParseObject> allSkills;

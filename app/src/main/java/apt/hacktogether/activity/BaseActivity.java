@@ -46,6 +46,11 @@ public class BaseActivity extends ActionBarActivity implements LayerCallbacks, V
 
         //Registers the activity so callbacks are executed on the correct class
         LayerImpl.setContext(this);
+
+        ParseImpl.cacheAllUsers();
+        ParseImpl.cacheAllInterests();
+        ParseImpl.cacheAllSkills();
+        ParseImpl.cacheAllHackathons();
     }
 
     //This can be called when the app moves from the foreground to the background, and when the
@@ -56,14 +61,10 @@ public class BaseActivity extends ActionBarActivity implements LayerCallbacks, V
         //Registers the activity so callbacks are executed on the correct class
         LayerImpl.setContext(this);
 
-        //Runs a Parse Query to return all users registered with the app
         ParseImpl.cacheAllUsers();
-
-        //TODO Async cache all interests and skills: cacheAllSkills(), cacheAllInterests()
         ParseImpl.cacheAllInterests();
         ParseImpl.cacheAllSkills();
-
-        //TODO minor: remove unneccessary calls of cache functions
+        ParseImpl.cacheAllHackathons();
     }
 
     //Handler to put up an alert dialog

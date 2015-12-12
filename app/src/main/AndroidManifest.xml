@@ -88,6 +88,18 @@
             android:name=".activity.AddOneHackathonActivity"
             android:label="@string/title_activity_add_one_hackathon" >
         </activity>
+        <activity
+            android:name=".activity.CreateProfileActivity"
+            android:label="@string/title_activity_create_profile" >
+        </activity>
+        <activity
+            android:name=".activity.AddPublicHackathonActivity"
+            android:label="@string/title_activity_add_public_hackathon" >
+        </activity>
+        <activity
+            android:name=".activity.AddPrivateHackathonActivity"
+            android:label="@string/title_activity_add_private_hackathon" >
+        </activity>
     </application>
 
 </manifest>

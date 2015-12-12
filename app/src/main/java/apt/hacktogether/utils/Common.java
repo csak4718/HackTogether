@@ -7,6 +7,7 @@ public class Common {
     public final static String TAG_MESSAGE_ACTIVITY = "MessageActivity";
     public final static String TAG_CREATE_GROUP_ACTIVITY = "CreateGroupActivity";
     public final static String TAG_EDIT_GROUP_ACTIVITY = "EditGroupActivity";
+    public final static String TAG_CREATE_PROFILE_ACTIVITY = "CreateProfileActivity";
     public final static String TAG_EDIT_PROFILE_ACTIVITY = "EditProfileActivity";
 
     /*
@@ -62,6 +63,8 @@ public class Common {
     public final static String EXTRA_PERSON_ID_LIST = "person_id_list";
     public final static String EXTRA_INTEREST_ID_LIST = "interest_id_list";
     public final static String EXTRA_SKILL_ID_LIST = "skill_id_list";
+    public final static String EXTRA_PUBLIC_HACKATHON_ID_LIST = "public_hackathon_id_list";
+    public final static String EXTRA_PRIVATE_HACKATHON_ID_LIST = "private_hackathon_id_list";
     public final static String EXTRA_TAG = "tag";
     public final static String EXTRA_INACTIVE_PERSON_ID_LIST = "inactive_person_id_list";
 
@@ -75,5 +78,11 @@ public class Common {
     public final static String TAB_NAME_INVITEGROUPS = "invitations";
     public final static int MYGROUPS_TAB = 0;
     public final static int INVITEGROUPS_TAB = 1;
+
+    // Toast
+    public final static String ERROR_NO_MY_INTERESTS = "Need to fill out your interests";
+    public final static String ERROR_NO_MY_SKILLS = "Need to fill out your skills";
+    public final static String ERROR_HACKATHONS_CONFLICT = "Hackathon can't be both public and private";
+
 
 }

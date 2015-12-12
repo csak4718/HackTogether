@@ -53,7 +53,7 @@ public class GroupManageActivity extends BaseActivity {
     }
     @OnClick(R.id.btn_settings) void goSettings() {
 //        TODO: uncomment later
-//        Utils.gotoSettingsActivity(GroupManageActivity.this);
+        Utils.gotoSettingsActivity(GroupManageActivity.this);
         mDrawerLayout.closeDrawers();
     }
 

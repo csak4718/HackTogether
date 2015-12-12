@@ -95,7 +95,7 @@
             android:id="@+id/btn_chat_room"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="@string/group_chat"
+            android:text="Group Chat"
             android:background="@color/yellow"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/horizontal_relative_layout"

@@ -30,10 +30,15 @@
     <string name="need_teammates">Need teammates: </string>
     <string name="create_group">Create Group</string>
     <string name="edit_group">Edit Group</string>
+    <string name="create_profile">Create Profile</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="tag_message_activity">MessageActivity</string>
     <string name="tag_create_group_activity">CreateGroupActivity</string>
     <string name="title_activity_add_interest">AddInterestActivity</string>
     <string name="title_activity_add_skill">AddSkillActivity</string>
     <string name="title_activity_add_one_hackathon">AddOneHackathonActivity</string>
+    <string name="title_activity_create_profile">CreateProfileActivity</string>
+    <string name="title_activity_add_public_hackathon">AddPublicHackathonActivity</string>
+    <string name="title_activity_add_private_hackathon">AddPrivateHackathonActivity</string>
 
 </resources>
