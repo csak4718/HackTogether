@@ -20,6 +20,7 @@ import java.util.Set;
 import apt.hacktogether.R;
 import apt.hacktogether.event.AddInterestToCreateGroupEvent;
 
+import apt.hacktogether.event.AddInterestToEditGroupEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
@@ -128,7 +129,7 @@ public class AddInterestActivity extends BaseActivity {
                     EventBus.getDefault().post(new AddInterestToCreateGroupEvent(mInterestIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
-                    // TODO
+                    EventBus.getDefault().post(new AddInterestToEditGroupEvent(mInterestIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_PROFILE_ACTIVITY)){
                     // TODO

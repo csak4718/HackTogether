@@ -23,6 +23,7 @@ import java.util.Set;
 
 import apt.hacktogether.R;
 import apt.hacktogether.event.AddPersonToCreateGroupEvent;
+import apt.hacktogether.event.AddPersonToEditGroupEvent;
 import apt.hacktogether.event.AddPersonToMessageEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
@@ -31,8 +32,10 @@ import de.greenrobot.event.EventBus;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddPersonActivity extends BaseActivity {
+
     private ArrayList<String> mPersonIdList;
     private String receiveTag;
+    private ArrayList<String> mInactivePersonIdList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,9 @@ public class AddPersonActivity extends BaseActivity {
 
         Intent it = getIntent();
         receiveTag = it.getStringExtra(Common.EXTRA_TAG);
+        if (receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
+            mInactivePersonIdList = it.getStringArrayListExtra(Common.EXTRA_INACTIVE_PERSON_ID_LIST);
+        }
 
         // it.getStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST) might be null
         mPersonIdList = it.getStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST);
@@ -57,6 +63,13 @@ public class AddPersonActivity extends BaseActivity {
         //Grab a list of all friendID (For now, all friendID are equivalent to all userID except current userID)
         Set friendIds = ParseImpl.getAllFriends();
 
+        if (receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
+            for(String inactiveId: mInactivePersonIdList){
+                if (friendIds.contains(inactiveId)) friendIds.remove(inactiveId);
+            }
+        }
+
+
         //A Map of the CheckBox with the Parse Object ID
         final HashMap<CheckBox, String> allUsers = new HashMap<>();
 
@@ -67,7 +80,6 @@ public class AddPersonActivity extends BaseActivity {
         Iterator itr = friendIds.iterator();
         while(itr.hasNext()) {
             String friendId = (String)itr.next();
-
 
             LinearLayout ll_horizontal = new LinearLayout(this);
             ll_horizontal.setOrientation(LinearLayout.HORIZONTAL);
@@ -103,8 +115,6 @@ public class AddPersonActivity extends BaseActivity {
             textView.setText(ParseImpl.getUsername(friendId));
             textView.setTextSize(20);
             textView.setTextColor(getResources().getColor(R.color.black));
-
-
 
             ll_horizontal.addView(checkBox);
             ll_horizontal.addView(imgProfile);
@@ -151,7 +161,8 @@ public class AddPersonActivity extends BaseActivity {
                     EventBus.getDefault().post(new AddPersonToCreateGroupEvent(mPersonIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
-                    // TODO: in the corresponding event in EditGroupActivity, pendingMembers Relation need to add selected persons
+                    // in the corresponding event in EditGroupActivity, simply do assignment and populate to fields
+                    EventBus.getDefault().post(new AddPersonToEditGroupEvent(mPersonIdList));
                 }
 
                 AddPersonActivity.this.finish();

@@ -99,7 +99,6 @@ public class CreateGroupActivity extends BaseActivity {
 
         if (switchNeedTeammates.isChecked()){
             // needGuy
-            // TODO, after finishing, Group Tab will show something if needGuy is true
             group.put(Common.OBJECT_GROUP_NEEDGUY, true);
 
             // groupInterests
@@ -322,7 +321,7 @@ public class CreateGroupActivity extends BaseActivity {
         LinearLayout[] wrapList = new LinearLayout[participantIds.size()];
 
         int idx = 0;
-        for(String id : participantIds){
+        for(String id: participantIds){
             //Create a new stylized text view
             TextView tv = new TextView(this);
             tv.setText(ParseImpl.getUsername(id));

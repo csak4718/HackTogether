@@ -58,6 +58,12 @@ public class BaseActivity extends ActionBarActivity implements LayerCallbacks, V
 
         //Runs a Parse Query to return all users registered with the app
         ParseImpl.cacheAllUsers();
+
+        //TODO Async cache all interests and skills: cacheAllSkills(), cacheAllInterests()
+        ParseImpl.cacheAllInterests();
+        ParseImpl.cacheAllSkills();
+
+        //TODO minor: remove unneccessary calls of cache functions
     }
 
     //Handler to put up an alert dialog

@@ -63,6 +63,7 @@ public class Common {
     public final static String EXTRA_INTEREST_ID_LIST = "interest_id_list";
     public final static String EXTRA_SKILL_ID_LIST = "skill_id_list";
     public final static String EXTRA_TAG = "tag";
+    public final static String EXTRA_INACTIVE_PERSON_ID_LIST = "inactive_person_id_list";
 
     // Tab
     public final static String TAB_NAME_PERSON = "Individual";

@@ -19,6 +19,7 @@ import java.util.Set;
 
 import apt.hacktogether.R;
 import apt.hacktogether.event.AddSkillToCreateGroupEvent;
+import apt.hacktogether.event.AddSkillToEditGroupEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
@@ -126,7 +127,7 @@ public class AddSkillActivity extends BaseActivity {
                     EventBus.getDefault().post(new AddSkillToCreateGroupEvent(mSkillIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
-                    // TODO
+                    EventBus.getDefault().post(new AddSkillToEditGroupEvent(mSkillIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_PROFILE_ACTIVITY)){
                     // TODO

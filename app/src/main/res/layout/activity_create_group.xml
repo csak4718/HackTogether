@@ -165,7 +165,7 @@
         <ImageButton
             android:id="@+id/btn_confirm"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:src="@drawable/ic_check_black_24dp"
             android:background="@color/green"/>
 

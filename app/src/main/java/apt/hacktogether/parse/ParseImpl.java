@@ -78,19 +78,35 @@ public class ParseImpl {
     public static HashMap<String, ParseObject> get_allSkills(){
         return allSkills;
     }
+      // correct
+//    public static void cacheAllSkills(){
+//        // cache all skills synchronously
+//        ParseQuery<ParseObject> skillQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
+//        try {
+//            List<ParseObject> results = skillQuery.find();
+//            allSkills = new HashMap<>();
+//            for(int i = 0; i < results.size(); i++){
+//                allSkills.put(results.get(i).getObjectId(), results.get(i));
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
+    // test
     public static void cacheAllSkills(){
-        // cache all skills synchronously
         ParseQuery<ParseObject> skillQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
-        try {
-            List<ParseObject> results = skillQuery.find();
-            allSkills = new HashMap<>();
-            for(int i = 0; i < results.size(); i++){
-                allSkills.put(results.get(i).getObjectId(), results.get(i));
+        skillQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> results, ParseException e) {
+                if(e == null){
+                    allSkills = new HashMap<>();
+                    for(int i = 0; i < results.size(); i++){
+                        allSkills.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     public static Set<String> getAllSkillIds(){
@@ -114,35 +130,36 @@ public class ParseImpl {
         return allInterests;
     }
 
-    public static void cacheAllInterests(){
-        // cache all interests synchronously
-        ParseQuery<ParseObject> interestQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
-        try {
-            List<ParseObject> results = interestQuery.find();
-            allInterests = new HashMap<>();
-            for(int i = 0; i < results.size(); i++){
-                allInterests.put(results.get(i).getObjectId(), results.get(i));
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-// using findInBackground will have problem
+    // correct
 //    public static void cacheAllInterests(){
+//        // cache all interests synchronously
 //        ParseQuery<ParseObject> interestQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
-//        interestQuery.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> results, ParseException e) {
-//                if(e == null){
-//                    allInterests = new HashMap<>();
-//                    for(int i = 0; i < results.size(); i++){
-//                        allInterests.put(results.get(i).getObjectId(), results.get(i));
-//                    }
-//                }
+//        try {
+//            List<ParseObject> results = interestQuery.find();
+//            allInterests = new HashMap<>();
+//            for(int i = 0; i < results.size(); i++){
+//                allInterests.put(results.get(i).getObjectId(), results.get(i));
 //            }
-//        });
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 //    }
+
+//  test
+    public static void cacheAllInterests(){
+        ParseQuery<ParseObject> interestQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
+        interestQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> results, ParseException e) {
+                if(e == null){
+                    allInterests = new HashMap<>();
+                    for(int i = 0; i < results.size(); i++){
+                        allInterests.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
+            }
+        });
+    }
 
     public static Set<String> getAllInterestIds(){
         Set<String> interestIdSet = allInterests.keySet();

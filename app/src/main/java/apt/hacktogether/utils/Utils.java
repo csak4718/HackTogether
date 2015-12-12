@@ -91,6 +91,14 @@ public class Utils {
         activity.startActivity(it);
     }
 
+    public static void fromEditGroupToAddPersonActivity(Activity activity, ArrayList<String> mTargetParticipants, ArrayList<String> inactivePersonIds, String tag){
+        Intent it = new Intent(activity, AddPersonActivity.class);
+        it.putStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST, mTargetParticipants);
+        it.putStringArrayListExtra(Common.EXTRA_INACTIVE_PERSON_ID_LIST, inactivePersonIds);
+        it.putExtra(Common.EXTRA_TAG, tag);
+        activity.startActivity(it);
+    }
+
     public static void gotoAddInterestActivity(Activity activity, ArrayList<String> interestIds, String tag){
         Intent it = new Intent(activity, AddInterestActivity.class);
         it.putStringArrayListExtra(Common.EXTRA_INTEREST_ID_LIST, interestIds);

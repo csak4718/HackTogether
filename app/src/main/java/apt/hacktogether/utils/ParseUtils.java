@@ -212,4 +212,18 @@ public class ParseUtils {
             ParseCloud.callFunctionInBackground("addGroupToInviteGroup", params);
         }
     }
+
+    static public void removeUnwantedGroupInterest(String groupId, String delete_groupInterestId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("groupId", groupId);
+        params.put("delete_groupInterestId", delete_groupInterestId);
+        ParseCloud.callFunctionInBackground("removeUnwantedGroupInterest", params);
+    }
+
+    static public void removeUnwantedLookForSkill(String groupId, String delete_lookForSkillId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("groupId", groupId);
+        params.put("delete_lookForSkillId", delete_lookForSkillId);
+        ParseCloud.callFunctionInBackground("removeUnwantedLookForSkill", params);
+    }
 }
