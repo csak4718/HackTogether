@@ -139,23 +139,19 @@ public class BrowseActivity extends BaseActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_browse, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-//        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                mainFragment.setFilter(query);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(final String newText) {
-//                fragmentBrowse.setFilter(newText);
-//                if(fragmentBrowse != null) {
-//                    fragmentBrowse.refreshAllTab();
-//                }
-//                return true;
-//            }
-//        });
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                fragmentBrowse.setFilter(newText);
+                return true;
+            }
+        });
 
         return true;
     }

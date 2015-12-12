@@ -7,4 +7,5 @@ import android.support.v4.app.Fragment;
  */
 public abstract class FragmentTab extends Fragment {
     abstract public void getNewData();
+    abstract public void query(String text);
 }
