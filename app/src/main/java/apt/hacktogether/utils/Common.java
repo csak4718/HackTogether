@@ -7,6 +7,7 @@ public class Common {
     public final static String TAG_MESSAGE_ACTIVITY = "MessageActivity";
     public final static String TAG_CREATE_GROUP_ACTIVITY = "CreateGroupActivity";
     public final static String TAG_EDIT_GROUP_ACTIVITY = "EditGroupActivity";
+    public final static String TAG_EDIT_PROFILE_ACTIVITY = "EditProfileActivity";
 
     /*
      Parse object
@@ -53,15 +54,16 @@ public class Common {
 
 
     // alphabetical order
-    public final static String[] HACKATHONS = {"BigRed//Hacks","BoilerMake","BostonHacks","Cal Hacks","Citrus Hack","CodeRED","Codestellation","DubHacks","HackDartmouth","HackDuke","HackGT","HackHarvard","HackHolyoke","HackISU","HackNC","HackNJIT","HackPrinceton","HackRPI","HackRU","HackTX","HackUMass","HopHacks","Huskie Hack","Kent Hack Enough","LocalHackDay","MHacks","MinneHack","PennApps","RamHacks","SDHacks","Technica","UGA Hacks","VandyHacks","WHACK","WUHack","WildHacks","hackNY","hackUstate"};
+    public final static String[] HACKATHONS = {"BigRed//Hacks","BoilerMake","BostonHacks","Cal Hacks","Citrus Hack","CodeRED","Codestellation","DubHacks","HackDartmouth","HackDuke","HackGT","HackHarvard","HackHolyoke","HackISU","HackNC","HackNJIT","hackNY","HackPrinceton","HackRPI","HackRU","HackTX","HackUMass","hackUstate","HopHacks","Huskie Hack","Kent Hack Enough","LocalHackDay","MHacks","MinneHack","PennApps","RamHacks","SDHacks","Technica","UGA Hacks","VandyHacks","WHACK","WUHack","WildHacks"};
 
     // extra data in Intent (for going from one Activity to another)
     public final static String EXTRA_HACKATHON_NAME = "hackathon_name";
-    public final static String EXTRA_GROUP_NAME = "group_name";
+    public final static String EXTRA_GROUP_ID = "group_id";
     public final static String EXTRA_PERSON_ID_LIST = "person_id_list";
     public final static String EXTRA_INTEREST_ID_LIST = "interest_id_list";
     public final static String EXTRA_SKILL_ID_LIST = "skill_id_list";
     public final static String EXTRA_TAG = "tag";
+    public final static String EXTRA_INACTIVE_PERSON_ID_LIST = "inactive_person_id_list";
 
     // Tab
     public final static String TAB_NAME_PERSON = "Individual";

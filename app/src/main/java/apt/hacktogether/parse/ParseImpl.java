@@ -1,6 +1,7 @@
 package apt.hacktogether.parse;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -9,6 +10,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -69,9 +71,119 @@ public class ParseImpl {
         installation.saveInBackground();
     }
 
+
+
+    private static HashMap<String, ParseObject> allSkills;
+    
+    public static HashMap<String, ParseObject> get_allSkills(){
+        return allSkills;
+    }
+      // correct
+//    public static void cacheAllSkills(){
+//        // cache all skills synchronously
+//        ParseQuery<ParseObject> skillQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
+//        try {
+//            List<ParseObject> results = skillQuery.find();
+//            allSkills = new HashMap<>();
+//            for(int i = 0; i < results.size(); i++){
+//                allSkills.put(results.get(i).getObjectId(), results.get(i));
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    // test
+    public static void cacheAllSkills(){
+        ParseQuery<ParseObject> skillQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
+        skillQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> results, ParseException e) {
+                if(e == null){
+                    allSkills = new HashMap<>();
+                    for(int i = 0; i < results.size(); i++){
+                        allSkills.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
+            }
+        });
+    }
+
+    public static Set<String> getAllSkillIds(){
+        Set<String> skillIdSet = allSkills.keySet();
+        return skillIdSet;
+    }
+
+    public static String getSkillName(String id){
+        if(id != null && allSkills != null && allSkills.containsKey(id) && allSkills.get(id) != null)
+            return allSkills.get(id).getString(Common.OBJECT_SKILL_NAME);
+
+        //If the handle can't be found, return whatever value was passed in
+        return id;
+    }
+
+
+
+    private static HashMap<String, ParseObject> allInterests;
+
+    public static HashMap<String, ParseObject> get_allInterests(){
+        return allInterests;
+    }
+
+    // correct
+//    public static void cacheAllInterests(){
+//        // cache all interests synchronously
+//        ParseQuery<ParseObject> interestQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
+//        try {
+//            List<ParseObject> results = interestQuery.find();
+//            allInterests = new HashMap<>();
+//            for(int i = 0; i < results.size(); i++){
+//                allInterests.put(results.get(i).getObjectId(), results.get(i));
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+//  test
+    public static void cacheAllInterests(){
+        ParseQuery<ParseObject> interestQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
+        interestQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> results, ParseException e) {
+                if(e == null){
+                    allInterests = new HashMap<>();
+                    for(int i = 0; i < results.size(); i++){
+                        allInterests.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
+            }
+        });
+    }
+
+    public static Set<String> getAllInterestIds(){
+        Set<String> interestIdSet = allInterests.keySet();
+        return interestIdSet;
+    }
+
+    public static String getInterestName(String id){
+        if(id != null && allInterests != null && allInterests.containsKey(id) && allInterests.get(id) != null)
+            return allInterests.get(id).getString(Common.OBJECT_INTEREST_NAME);
+
+        //If the handle can't be found, return whatever value was passed in
+        return id;
+    }
+
+
+
     //We keep track of all users associated with this app in Parse. You can override this to implement
     // your own user management system (based on a friends list, for example)
     private static HashMap<String, ParseUser> allUsers;
+
+    public static HashMap<String, ParseUser> get_allUsers(){
+        return allUsers;
+    }
+
     public static void cacheAllUsers(){
         // cache all users asynchronously
         ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
@@ -142,7 +254,5 @@ public class ParseImpl {
         return null;
     }
 
-    public static HashMap<String, ParseUser> get_allUsers(){
-        return allUsers;
-    }
+
 }

@@ -7,6 +7,8 @@ import android.util.Log;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
+import com.parse.Parse;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -16,6 +18,8 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -134,25 +138,92 @@ public class ParseUtils {
         });
     }
 
-    static public void moveInviteGroupToMyGroup(final ParseObject inviteGroup){
-        // add to myGroups
+    static public void acceptInvitation(final ParseObject inviteGroup){
         final ParseUser currentUser = ParseUser.getCurrentUser();
-        ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
-        myGroups.add(inviteGroup);
-        currentUser.saveInBackground(new SaveCallback() {
+
+        // move this user from pendingMembers to members in Group class
+        ParseRelation<ParseUser> members = inviteGroup.getRelation(Common.OBJECT_GROUP_MEMBERS);
+        members.add(currentUser);
+        ParseRelation<ParseUser> pendingMembers = inviteGroup.getRelation(Common.OBJECT_GROUP_PENDINGMEMBERS);
+        pendingMembers.remove(currentUser);
+        inviteGroup.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                // remove from inviteGroups
+                String hackathonName = inviteGroup.getString(Common.OBJECT_GROUP_HACKATHONATTEND);
+                ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+                hackathonObjectQuery.whereEqualTo(Common.OBJECT_HACKATHON_NAME, hackathonName);
+                hackathonObjectQuery.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(final ParseObject hackathon, ParseException e) {
+
+                        // after getting hackathon object, add this hackathon object into myHackathons
+                        ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
+                        myHackathons.add(hackathon);
+
+                        // add to myGroups
+                        ParseRelation<ParseObject> myGroups = currentUser.getRelation(Common.OBJECT_USER_MYGROUPS);
+                        myGroups.add(inviteGroup);
+
+                        // remove from inviteGroups
+                        ParseRelation<ParseObject> inviteGroups = currentUser.getRelation(Common.OBJECT_USER_INVITEGROUPS);
+                        inviteGroups.remove(inviteGroup);
+                        currentUser.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+
+                                // in Hackathon class, hackers add this user (And do nothing on hackersNeedGuy)
+                                ParseRelation<ParseUser> hackers = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERS);
+                                hackers.add(currentUser);
+                                hackathon.saveInBackground();
+                            }
+                        });
+
+                    }
+                });
+            }
+        });
+
+    }
+
+    static public void rejectInvitation(final ParseObject inviteGroup){
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+
+        // remove this user from pendingMembers
+        ParseRelation<ParseUser> pendingMembers = inviteGroup.getRelation(Common.OBJECT_GROUP_PENDINGMEMBERS);
+        pendingMembers.remove(currentUser);
+        inviteGroup.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+
+                // remove this inviteGroup from inviteGroups of current user.
                 ParseRelation<ParseObject> inviteGroups = currentUser.getRelation(Common.OBJECT_USER_INVITEGROUPS);
                 inviteGroups.remove(inviteGroup);
                 currentUser.saveInBackground();
             }
         });
+
     }
 
-    static public void removePendingMember(ParseObject inviteGroup){
-        ParseRelation<ParseUser> pendingMembers = inviteGroup.getRelation(Common.OBJECT_GROUP_PENDINGMEMBERS);
-        pendingMembers.remove(ParseUser.getCurrentUser());
-        inviteGroup.saveInBackground();
+    static public void addGroupToInviteGroups(ParseObject group, ArrayList<String> selectedPersonIds){
+        for (String selectedPersonId: selectedPersonIds){
+            Map<String, Object> params = new HashMap<>();
+            params.put("groupId", group.getObjectId());
+            params.put("pendingMemberId", selectedPersonId);
+            ParseCloud.callFunctionInBackground("addGroupToInviteGroup", params);
+        }
+    }
+
+    static public void removeUnwantedGroupInterest(String groupId, String delete_groupInterestId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("groupId", groupId);
+        params.put("delete_groupInterestId", delete_groupInterestId);
+        ParseCloud.callFunctionInBackground("removeUnwantedGroupInterest", params);
+    }
+
+    static public void removeUnwantedLookForSkill(String groupId, String delete_lookForSkillId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("groupId", groupId);
+        params.put("delete_lookForSkillId", delete_lookForSkillId);
+        ParseCloud.callFunctionInBackground("removeUnwantedLookForSkill", params);
     }
 }

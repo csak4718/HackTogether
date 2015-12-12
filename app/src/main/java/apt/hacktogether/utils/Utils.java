@@ -12,7 +12,10 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
+import apt.hacktogether.activity.AddInterestActivity;
+import apt.hacktogether.activity.AddOneHackathonActivity;
 import apt.hacktogether.activity.AddPersonActivity;
+import apt.hacktogether.activity.AddSkillActivity;
 import apt.hacktogether.activity.BrowseActivity;
 import apt.hacktogether.activity.ConversationsActivity;
 import apt.hacktogether.activity.CreateGroupActivity;
@@ -70,9 +73,9 @@ public class Utils {
         activity.startActivity(it);
     }
 
-    public static void gotoEditGroupActivity(Context context, String groupName){
+    public static void gotoEditGroupActivity(Context context, String groupId){
         Intent it = new Intent(context, EditGroupActivity.class);
-        it.putExtra(Common.EXTRA_GROUP_NAME, groupName);
+        it.putExtra(Common.EXTRA_GROUP_ID, groupId);
         context.startActivity(it);
     }
 
@@ -85,6 +88,33 @@ public class Utils {
         Intent it = new Intent(activity, AddPersonActivity.class);
         it.putStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST, mTargetParticipants);
         it.putExtra(Common.EXTRA_TAG, tag);
+        activity.startActivity(it);
+    }
+
+    public static void fromEditGroupToAddPersonActivity(Activity activity, ArrayList<String> mTargetParticipants, ArrayList<String> inactivePersonIds, String tag){
+        Intent it = new Intent(activity, AddPersonActivity.class);
+        it.putStringArrayListExtra(Common.EXTRA_PERSON_ID_LIST, mTargetParticipants);
+        it.putStringArrayListExtra(Common.EXTRA_INACTIVE_PERSON_ID_LIST, inactivePersonIds);
+        it.putExtra(Common.EXTRA_TAG, tag);
+        activity.startActivity(it);
+    }
+
+    public static void gotoAddInterestActivity(Activity activity, ArrayList<String> interestIds, String tag){
+        Intent it = new Intent(activity, AddInterestActivity.class);
+        it.putStringArrayListExtra(Common.EXTRA_INTEREST_ID_LIST, interestIds);
+        it.putExtra(Common.EXTRA_TAG, tag);
+        activity.startActivity(it);
+    }
+
+    public static void gotoAddSkillActivity(Activity activity, ArrayList<String> skillIds, String tag){
+        Intent it = new Intent(activity, AddSkillActivity.class);
+        it.putStringArrayListExtra(Common.EXTRA_SKILL_ID_LIST, skillIds);
+        it.putExtra(Common.EXTRA_TAG, tag);
+        activity.startActivity(it);
+    }
+
+    public static void gotoAddOneHackathonActivity(Activity activity){
+        Intent it = new Intent(activity, AddOneHackathonActivity.class);
         activity.startActivity(it);
     }
 

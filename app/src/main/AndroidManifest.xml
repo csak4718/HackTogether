@@ -80,6 +80,14 @@
             android:name=".activity.AddInterestActivity"
             android:label="@string/title_activity_add_interest" >
         </activity>
+        <activity
+            android:name=".activity.AddSkillActivity"
+            android:label="@string/title_activity_add_skill" >
+        </activity>
+        <activity
+            android:name=".activity.AddOneHackathonActivity"
+            android:label="@string/title_activity_add_one_hackathon" >
+        </activity>
     </application>
 
 </manifest>

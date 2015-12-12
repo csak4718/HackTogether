@@ -3,6 +3,7 @@ package apt.hacktogether.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,12 +120,14 @@ public class FragmentGroupManageTab extends FragmentTab {
     }
     public void onEvent(InviteGroupsTabEvent event) {
         if(mType == Common.INVITEGROUPS_TAB) {
+//            Log.d("WILL", "REFRESH inviteGroupsTab");
             refresh_mList(event.inviteGroupsList);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
 
     private void refresh_mList(List<ParseObject> list) {
+//        for(ParseObject o: list) Log.d("WILL", o.getString(Common.OBJECT_GROUP_NAME));
         mList.clear();
         mList.addAll(list);
         mAdapter.notifyDataSetChanged();
