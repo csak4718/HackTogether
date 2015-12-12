@@ -15,10 +15,13 @@ import java.util.ArrayList;
 import apt.hacktogether.activity.AddInterestActivity;
 import apt.hacktogether.activity.AddOneHackathonActivity;
 import apt.hacktogether.activity.AddPersonActivity;
+import apt.hacktogether.activity.AddPrivateHackathonActivity;
+import apt.hacktogether.activity.AddPublicHackathonActivity;
 import apt.hacktogether.activity.AddSkillActivity;
 import apt.hacktogether.activity.BrowseActivity;
 import apt.hacktogether.activity.ConversationsActivity;
 import apt.hacktogether.activity.CreateGroupActivity;
+import apt.hacktogether.activity.CreateProfileActivity;
 import apt.hacktogether.activity.EditGroupActivity;
 import apt.hacktogether.activity.GroupManageActivity;
 import apt.hacktogether.activity.LoginActivity;
@@ -113,6 +116,20 @@ public class Utils {
         activity.startActivity(it);
     }
 
+    public static void gotoAddPublicHackathonActivity(Activity activity, ArrayList<String> publicHackathonIds, String tag){
+        Intent it = new Intent(activity, AddPublicHackathonActivity.class);
+        it.putStringArrayListExtra(Common.EXTRA_PUBLIC_HACKATHON_ID_LIST, publicHackathonIds);
+        it.putExtra(Common.EXTRA_TAG, tag);
+        activity.startActivity(it);
+    }
+
+    public static void gotoAddPrivateHackathonActivity(Activity activity, ArrayList<String> privateHackathonIds, String tag){
+        Intent it = new Intent(activity, AddPrivateHackathonActivity.class);
+        it.putStringArrayListExtra(Common.EXTRA_PRIVATE_HACKATHON_ID_LIST, privateHackathonIds);
+        it.putExtra(Common.EXTRA_TAG, tag);
+        activity.startActivity(it);
+    }
+
     public static void gotoAddOneHackathonActivity(Activity activity){
         Intent it = new Intent(activity, AddOneHackathonActivity.class);
         activity.startActivity(it);
@@ -127,9 +144,9 @@ public class Utils {
     }
 
 //      TODO: uncomment later
-//    public static void gotoSettingsActivity(Activity activity){
-//        Intent it = new Intent(activity, SettingsActivity.class);
-//        activity.startActivity(it);
-//    }
+    public static void gotoSettingsActivity(Activity activity){
+        Intent it = new Intent(activity, CreateProfileActivity.class);
+        activity.startActivity(it);
+    }
 
 }

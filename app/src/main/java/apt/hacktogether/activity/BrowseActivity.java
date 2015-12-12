@@ -55,7 +55,7 @@ public class BrowseActivity extends BaseActivity {
     }
     @OnClick(R.id.btn_settings) void goSettings() {
 //        TODO: uncomment later
-//        Utils.gotoSettingsActivity(BrowseActivity.this);
+        Utils.gotoSettingsActivity(BrowseActivity.this);
         mDrawerLayout.closeDrawers();
     }
 

@@ -7,9 +7,11 @@ import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.Set;
 import apt.hacktogether.R;
 import apt.hacktogether.event.AddInterestToCreateGroupEvent;
 
+import apt.hacktogether.event.AddInterestToCreateProfileEvent;
 import apt.hacktogether.event.AddInterestToEditGroupEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
@@ -43,12 +46,16 @@ public class AddInterestActivity extends BaseActivity {
         mInterestIdList = it.getStringArrayListExtra(Common.EXTRA_INTEREST_ID_LIST);
 
         //Update interest list from Parse
-        ParseImpl.cacheAllInterests();
+//        ParseImpl.cacheAllInterests();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.select_interests);
 
         LinearLayout ll_vertical = (LinearLayout) findViewById(R.id.vertical_ll);
+
+        LinearLayout ll_child_vertical = new LinearLayout(this);
+        ll_child_vertical.setOrientation(LinearLayout.VERTICAL);
+        ll_child_vertical.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         Set interestIds = ParseImpl.getAllInterestIds();
 
@@ -99,13 +106,19 @@ public class AddInterestActivity extends BaseActivity {
             cardView.setLayoutParams(cardView_params);
 
             cardView.addView(ll_horizontal);
-            ll_vertical.addView(cardView);
+            ll_child_vertical.addView(cardView);
 
             allInterests.put(checkBox, interestId);
         }
 
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.85f));
+        scrollView.getLayoutParams().height = 0;
+        scrollView.addView(ll_child_vertical);
+
         ImageButton confirmButton = new ImageButton(this);
-        confirmButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        confirmButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0.15f));
+        confirmButton.getLayoutParams().height = 0;
         confirmButton.setImageResource(R.drawable.ic_check_black_24dp);
         confirmButton.setBackgroundColor(getResources().getColor(R.color.green));
         confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +144,9 @@ public class AddInterestActivity extends BaseActivity {
                 else if(receiveTag.equals(Common.TAG_EDIT_GROUP_ACTIVITY)){
                     EventBus.getDefault().post(new AddInterestToEditGroupEvent(mInterestIdList));
                 }
+                else if(receiveTag.equals(Common.TAG_CREATE_PROFILE_ACTIVITY)){
+                    EventBus.getDefault().post(new AddInterestToCreateProfileEvent(mInterestIdList));
+                }
                 else if(receiveTag.equals(Common.TAG_EDIT_PROFILE_ACTIVITY)){
                     // TODO
                 }
@@ -139,6 +155,7 @@ public class AddInterestActivity extends BaseActivity {
             }
         });
 
+        ll_vertical.addView(scrollView);
         ll_vertical.addView(confirmButton);
     }
 

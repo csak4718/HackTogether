@@ -37,7 +37,6 @@ import apt.hacktogether.event.AddOneHackathonToCreateGroupEvent;
 import apt.hacktogether.event.AddPersonToCreateGroupEvent;
 import apt.hacktogether.event.AddSkillToCreateGroupEvent;
 import apt.hacktogether.layer.LayerImpl;
-import apt.hacktogether.layout.PredicateLayout;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.ParseUtils;

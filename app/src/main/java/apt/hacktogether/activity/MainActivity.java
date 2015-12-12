@@ -67,12 +67,11 @@ public class MainActivity extends BaseActivity {
         mDrawerLayout.closeDrawers();
     }
     @OnClick(R.id.btn_hackathons) void goHackathons() {
-        Utils.gotoMainActivity(MainActivity.this);
         mDrawerLayout.closeDrawers();
     }
     @OnClick(R.id.btn_settings) void goSettings() {
 //        TODO: uncomment later
-//        Utils.gotoSettingsActivity(BrowseActivity.this);
+        Utils.gotoSettingsActivity(MainActivity.this);
         mDrawerLayout.closeDrawers();
     }
 
