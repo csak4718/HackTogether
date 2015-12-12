@@ -1,10 +1,12 @@
 package apt.hacktogether.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,13 +14,17 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import apt.hacktogether.R;
+import apt.hacktogether.activity.MessageActivity;
 import apt.hacktogether.utils.Common;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,12 +45,11 @@ public class GroupTabAdapter extends BaseAdapter {
         @Bind(R.id.ll_members) public LinearLayout ll_Members;
         @Bind(R.id.txt_group_interests) public TextView txtGroupInterests;
         @Bind(R.id.txt_look_for_skills) public TextView txtLookForSkills;
-        @OnClick(R.id.btn_chat_room) void goMessage(){
-//            TODO
-        }
+        public Button chatRoomButton;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
+            chatRoomButton = (Button) view.findViewById(R.id.btn_chat_room);
         }
     }
 
@@ -86,6 +91,32 @@ public class GroupTabAdapter extends BaseAdapter {
         getMembers(group, holder);
         getGroupInterests(group, holder);
         getLookForSkills(group, holder);
+        holder.chatRoomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                ParseRelation<ParseUser> groupMembersRelation = group.getRelation(Common.OBJECT_GROUP_MEMBERS);
+                ParseQuery<ParseUser> groupMembersQuery = groupMembersRelation.getQuery();
+                groupMembersQuery.findInBackground(new FindCallback<ParseUser>() {
+                    @Override
+                    public void done(List<ParseUser> groupMembers, ParseException e) {
+                        ArrayList<String> groupMemberIds = new ArrayList<String>();
+                        for (ParseUser groupMember : groupMembers) {
+                            groupMemberIds.add(groupMember.getObjectId());
+                        }
+                        Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                        if(groupMemberIds.contains(ParseUser.getCurrentUser().getObjectId())){
+
+                        }
+                        else{
+                            groupMemberIds.add(ParseUser.getCurrentUser().getObjectId());
+                        }
+                        intent.putStringArrayListExtra("mTargetParticipants", groupMemberIds);
+                        v.getContext().startActivity(intent);
+                    }
+                });
+
+            }
+        });
 
         return convertView;
     }

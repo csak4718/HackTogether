@@ -149,9 +149,7 @@ public class BrowseActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(final String newText) {
-                Log.d("startquery", "Querystart");
                 fragmentBrowse.setFilter(newText);
-                Log.d("queryend", "refresh");
                 return true;
             }
         });

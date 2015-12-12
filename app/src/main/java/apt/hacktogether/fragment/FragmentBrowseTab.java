@@ -160,6 +160,7 @@ public class FragmentBrowseTab extends FragmentTab {
                                     if (i || j) {
                                     } else {
                                         mList_hackersNeedGuy.remove(user);
+                                        mAdapter.notifyDataSetChanged();
                                     }
                                 }
                             });
@@ -168,7 +169,6 @@ public class FragmentBrowseTab extends FragmentTab {
                 }
             }
             swipeRefreshLayout.setRefreshing(false);
-            mAdapter.notifyDataSetChanged();
         }
         else if(mType == Common.GROUP_TAB){
             refresh_mList_hackersNeedGuy(event.hackersNeedGuyList);
@@ -200,6 +200,7 @@ public class FragmentBrowseTab extends FragmentTab {
                                     if (i || j) {
                                     } else {
                                         mList_groupsNeedGuy.remove(group);
+                                        mAdapter.notifyDataSetChanged();
                                     }
                                 }
                             });
@@ -208,7 +209,6 @@ public class FragmentBrowseTab extends FragmentTab {
                 }
             }
             swipeRefreshLayout.setRefreshing(false);
-            mAdapter.notifyDataSetChanged();
         }
     }
     public void onEvent(GroupTabEvent event) {
