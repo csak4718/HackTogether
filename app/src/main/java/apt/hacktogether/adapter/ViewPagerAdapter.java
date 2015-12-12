@@ -3,6 +3,7 @@ package apt.hacktogether.adapter;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public void refreshAllTabs() {
         for(FragmentTab fragmentTab : mFragmentList) {
             fragmentTab.getNewData();
+            Log.d("Fraglist", "The raglist" + mFragmentList);
         }
     }
 
