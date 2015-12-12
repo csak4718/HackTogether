@@ -79,4 +79,10 @@ public class Common {
     public final static int MYGROUPS_TAB = 0;
     public final static int INVITEGROUPS_TAB = 1;
 
+    // Toast
+    public final static String ERROR_NO_MY_INTERESTS = "Need to fill out your interests";
+    public final static String ERROR_NO_MY_SKILLS = "Need to fill out your skills";
+    public final static String ERROR_HACKATHONS_CONFLICT = "Hackathon can't be both public and private";
+
+
 }

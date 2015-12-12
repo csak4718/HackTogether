@@ -5,14 +5,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import apt.hacktogether.R;
@@ -64,7 +72,133 @@ public class CreateProfileActivity extends BaseActivity {
 
 
     @OnClick(R.id.btn_confirm) void create(){
-        
+        if(myPublicHackathonIds==null) myPublicHackathonIds = new ArrayList<>();
+        if(myPrivateHackathonIds==null) myPrivateHackathonIds = new ArrayList<>();
+
+        // Test User Input
+        if (myInterestIds == null || myInterestIds.size() == 0) {
+            Toast.makeText(this, Common.ERROR_NO_MY_INTERESTS, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(mySkillIds == null || mySkillIds.size() == 0){
+            Toast.makeText(this, Common.ERROR_NO_MY_SKILLS, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(myPublicHackathonIds.size() != 0 && myPrivateHackathonIds.size() != 0){
+            for (String myPublicHackathonId: myPublicHackathonIds){
+                if (myPrivateHackathonIds.contains(myPublicHackathonId)){
+                    Toast.makeText(this, Common.ERROR_HACKATHONS_CONFLICT, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        }
+
+        final ArrayList<String> myHackathonIds = new ArrayList<>();
+        myHackathonIds.addAll(myPublicHackathonIds);
+        myHackathonIds.addAll(myPrivateHackathonIds);
+
+        final ParseUser currentUser = ParseUser.getCurrentUser();
+
+        // myInterests
+        HashMap<String, ParseObject> allInterests = ParseImpl.get_allInterests();
+        ParseRelation<ParseObject> myInterests = currentUser.getRelation(Common.OBJECT_USER_INTERESTS);
+        for (String myInterestId: myInterestIds){
+            myInterests.add(allInterests.get(myInterestId));
+        }
+
+        // mySkills
+        HashMap<String, ParseObject> allSkills = ParseImpl.get_allSkills();
+        ParseRelation<ParseObject> mySkills = currentUser.getRelation(Common.OBJECT_USER_SKILLS);
+        for (String mySkillId: mySkillIds){
+            mySkills.add(allSkills.get(mySkillId));
+        }
+
+        // myNeedGuyHackathons
+        HashMap<String, ParseObject> allHackathons = ParseImpl.get_allHackathons();
+        ParseRelation<ParseObject> myNeedGuyHackathons = currentUser.getRelation(Common.OBJECT_USER_MYNEEDGUYHACKATHONS);
+        for (String myPublicHackathonId: myPublicHackathonIds){
+            myNeedGuyHackathons.add(allHackathons.get(myPublicHackathonId));
+        }
+
+        // myHackathons
+        ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
+        for (String myHackathonId: myHackathonIds){
+            myHackathons.add(allHackathons.get(myHackathonId));
+        }
+
+
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                // add currentUser into interested_hackers of Interest
+                for (String myInterestId: myInterestIds){
+                    ParseQuery<ParseObject> interestObjectQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
+                    interestObjectQuery.getInBackground(myInterestId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject interest, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> interested_hackers = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_HACKERS);
+                                interested_hackers.add(currentUser); // Must do add(currentUser) in SaveCallback. Otherwise, won't add.
+                                interest.saveInBackground();
+                            }
+                        }
+                    });
+                }
+
+                // add currentUser into skilled_hackers of Skill
+                for (String mySkillId: mySkillIds){
+                    ParseQuery<ParseObject> skillObjectQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
+                    skillObjectQuery.getInBackground(mySkillId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject skill, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> skilled_hackers = skill.getRelation(Common.OBJECT_SKILL_SKILLED_HACKERS);
+                                skilled_hackers.add(currentUser);
+                                skill.saveInBackground();
+                            }
+                        }
+                    });
+                }
+
+                // add currentUser into hackersNeedGuy of Hackathon
+                for (String myPublicHackathonId: myPublicHackathonIds){
+                    ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+                    hackathonObjectQuery.getInBackground(myPublicHackathonId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject hackathon, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> hackersNeedGuy = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERSNEEDGUY);
+                                hackersNeedGuy.add(currentUser);
+                                hackathon.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+
+                                        // add currentUser into hackers of Hackathon
+                                        for (String myHackathonId: myHackathonIds){
+                                            ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+                                            hackathonObjectQuery.getInBackground(myHackathonId, new GetCallback<ParseObject>() {
+                                                @Override
+                                                public void done(ParseObject hackathon, ParseException e) {
+                                                    if (e == null){
+                                                        ParseRelation<ParseUser> hackers = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERS);
+                                                        hackers.add(currentUser);
+                                                        hackathon.saveInBackground();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+
+
+            }
+        });
+
+        CreateProfileActivity.this.finish();
     }
 
 
