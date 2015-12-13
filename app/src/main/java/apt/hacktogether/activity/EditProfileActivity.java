@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import apt.hacktogether.R;
@@ -28,6 +29,7 @@ import apt.hacktogether.event.AddPublicHackathonToEditProfileEvent;
 import apt.hacktogether.event.AddSkillToEditProfileEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
+import apt.hacktogether.utils.ParseUtils;
 import apt.hacktogether.utils.Utils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -88,9 +90,34 @@ public class EditProfileActivity extends BaseActivity {
             }
         }
 
-        
 
+        final ArrayList<String> delete_myInterestIds = new ArrayList<>();
+        final ArrayList<String> delete_mySkillIds = new ArrayList<>();
+        final ArrayList<String> delete_myPublicHackathonIds = new ArrayList<>();
+        final ArrayList<String> delete_myPrivateHackathonIds = new ArrayList<>();
 
+        // myInterests
+        final HashMap<String, ParseObject> allInterests = ParseImpl.get_allInterests();
+        final ParseRelation<ParseObject> myInterests = currentUser.getRelation(Common.OBJECT_USER_INTERESTS);
+        ParseQuery<ParseObject> interestsQuery = myInterests.getQuery();
+        interestsQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> originalInterests, ParseException e) {
+                if (e==null){
+                    for (ParseObject originalInterest: originalInterests){
+                        if(!myInterestIds.contains(originalInterest.getObjectId())) delete_myInterestIds.add(originalInterest.getObjectId());
+                    }
+
+                    for (String delete_myInterestId: delete_myInterestIds){
+//                        ParseUtils.removeUnwantedMyInterest(currentUser.getObjectId(), delete_myInterestId);
+                    }
+                }
+
+            }
+        });
+        for (String myInterestId: myInterestIds){ // Do not put this loop into the above done function. Won't work.
+            myInterests.add(allInterests.get(myInterestId));
+        }
 
 
         EditProfileActivity.this.finish();
