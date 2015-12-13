@@ -1,6 +1,8 @@
 package apt.hacktogether.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -104,7 +106,25 @@ public class GroupManageActivity extends BaseActivity {
         setupActionBar();
         setupDrawer();
 
-        fragmentGroupManage = new FragmentGroupManage();
+        Intent it = getIntent();
+        if (it != null && it.getData() != null){
+            Uri uri = it.getData();
+            String host = uri.getHost();
+            String path = uri.getPath();
+            if(host.contains("groupManage")) {
+//                if(path.contains("myGroups")) {
+//                    fragmentGroupManage = FragmentGroupManage.newInstance(Common.MYGROUPS_TAB);
+//                }
+                if(path.contains("invitations")) {
+                    fragmentGroupManage = FragmentGroupManage.newInstance(Common.INVITEGROUPS_TAB);
+                }
+            }
+
+        }
+        else{
+            fragmentGroupManage = FragmentGroupManage.newInstance(Common.MYGROUPS_TAB); // default tab
+        }
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame_content, fragmentGroupManage)
                 .commit();

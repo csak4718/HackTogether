@@ -1,6 +1,7 @@
 package apt.hacktogether.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,6 +42,21 @@ public class ConversationsActivity extends BaseActivity implements ConversationQ
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.recent_chats);
+
+        Intent it = getIntent();
+        if(it != null && it.getData() != null) {
+            Uri uri = it.getData();
+            String host = uri.getHost();
+            String path = uri.getPath();
+
+            if(host.contains("im")) {
+                // TODO
+//                String senderId = path.substring(1);
+//                Utils.gotoSpinnerActivity(this, senderId);
+            }
+        }
+
+
 
 //        Button logoutBtn = (Button) findViewById(R.id.logout);
 //        if (logoutBtn != null)

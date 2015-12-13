@@ -207,9 +207,10 @@ public class EditProfileActivity extends BaseActivity {
                         @Override
                         public void done(ParseObject interest, ParseException e) {
                             if (e == null){
-                                ParseRelation<ParseUser> interested_hackers = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_HACKERS);
-                                interested_hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
-                                interest.saveInBackground();
+//                                ParseRelation<ParseUser> interested_hackers = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_HACKERS);
+//                                interested_hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
+//                                interest.saveInBackground();
+                                ParseUtils.removeUserFromInterestedHackers(interest.getObjectId(), currentUser.getObjectId());
                             }
                         }
                     });
@@ -236,9 +237,10 @@ public class EditProfileActivity extends BaseActivity {
                         @Override
                         public void done(ParseObject skill, ParseException e) {
                             if (e == null){
-                                ParseRelation<ParseUser> skilled_hackers = skill.getRelation(Common.OBJECT_SKILL_SKILLED_HACKERS);
-                                skilled_hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
-                                skill.saveInBackground();
+//                                ParseRelation<ParseUser> skilled_hackers = skill.getRelation(Common.OBJECT_SKILL_SKILLED_HACKERS);
+//                                skilled_hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
+//                                skill.saveInBackground();
+                                ParseUtils.removeUserFromSkilledHackers(skill.getObjectId(), currentUser.getObjectId());
                             }
                         }
                     });
@@ -265,9 +267,10 @@ public class EditProfileActivity extends BaseActivity {
                         @Override
                         public void done(ParseObject hackathon, ParseException e) {
                             if (e == null){
-                                ParseRelation<ParseUser> hackersNeedGuy = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERSNEEDGUY);
-                                hackersNeedGuy.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
-                                hackathon.saveInBackground();
+//                                ParseRelation<ParseUser> hackersNeedGuy = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERSNEEDGUY);
+//                                hackersNeedGuy.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
+//                                hackathon.saveInBackground();
+                                ParseUtils.removeUserFromHackersNeedGuy(hackathon.getObjectId(), currentUser.getObjectId());
                             }
                         }
                     });
@@ -294,9 +297,10 @@ public class EditProfileActivity extends BaseActivity {
                         @Override
                         public void done(ParseObject hackathon, ParseException e) {
                             if (e == null){
-                                ParseRelation<ParseUser> hackers = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERS);
-                                hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
-                                hackathon.saveInBackground();
+//                                ParseRelation<ParseUser> hackers = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERS);
+//                                hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
+//                                hackathon.saveInBackground();
+                                ParseUtils.removeUserFromHackers(hackathon.getObjectId(), currentUser.getObjectId());
                             }
                         }
                     });

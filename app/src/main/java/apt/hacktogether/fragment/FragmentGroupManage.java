@@ -21,6 +21,15 @@ public class FragmentGroupManage extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
+    int mTab;
+
+    static public FragmentGroupManage newInstance(int tab) {
+        FragmentGroupManage fragment = new FragmentGroupManage();
+        Bundle args = new Bundle();
+        args.putInt("tab", tab);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     private void setupAdapter() {
         adapter.addFrag(FragmentGroupManageTab.newInstance(Common.MYGROUPS_TAB), Common.TAB_NAME_MYGROUPS);
@@ -34,6 +43,9 @@ public class FragmentGroupManage extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        mTab = args.getInt("tab", 0);
 
         adapter = new ViewPagerAdapter(getChildFragmentManager());
         setupAdapter();
@@ -53,5 +65,11 @@ public class FragmentGroupManage extends Fragment {
         viewPager.setAdapter(adapter);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        setCurrentPage(mTab);
+    }
+
+    public void setCurrentPage(int i ){
+        viewPager.setCurrentItem(i);
     }
 }
