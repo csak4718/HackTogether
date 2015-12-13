@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,13 +81,13 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         EventBus.getDefault().register(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Instant Message");
 
         //View containing all messages in the target Conversastion
         mMessagesView = (RecyclerView) findViewById(R.id.mRecyclerView);
 
         //Check to see when the locally Authenticated user is trying to send a message
-        Button sendButton = (Button)findViewById(R.id.sendButton);
+        ImageButton sendButton = (ImageButton)findViewById(R.id.sendButton);
         if(sendButton != null)
             sendButton.setOnClickListener(this);
 

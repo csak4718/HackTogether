@@ -6,6 +6,7 @@
     <item name="light_blue" type="color">#80cbff</item>
 
     <item name="white" type="color">#FFFFFF</item>
+    <color name="facebook_blue">#B1D1FF</color>
     <color name="light_gray_line">#cccccc</color>
     <color name="drawer_header">#848484</color>
     <color name="drawer_content">#4A4A4A</color>

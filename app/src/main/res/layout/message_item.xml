@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#ffe7e8ff"
+        android:background="#ffffff"
         android:padding="10dp"
         android:gravity="left"
         android:id="@+id/contentLayout"

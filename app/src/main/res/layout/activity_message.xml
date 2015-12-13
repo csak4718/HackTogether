@@ -70,7 +70,8 @@
                 android:layout_height="wrap_content"
                 class="android.support.v7.widget.RecyclerView"
                 android:id="@+id/mRecyclerView"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:background="#d2d2d2" />
         </LinearLayout>
 
         <LinearLayout
@@ -98,8 +99,8 @@
             android:padding="12dp"
             android:hint="Your Message..." />
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
+        <ImageButton
+            android:src="@drawable/ic_send_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send"
@@ -108,7 +109,10 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:clickable="true"
-            android:enabled="true" />
+            android:enabled="true"
+            android:background="#ffffff"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp" />
 
     </RelativeLayout>
 </LinearLayout>
