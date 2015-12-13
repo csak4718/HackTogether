@@ -80,10 +80,20 @@ public class Common {
     public final static int INVITEGROUPS_TAB = 1;
 
     // Toast
+    public final static String ERROR_NO_MESSAGE_WRITTEN = "You should specify the message to be sent";
+    public final static String ERROR_NO_PERSON_TO_SENT_TO = "You must at least assign one person to send";
+
+    // Create Profile
     public final static String ERROR_NO_MY_INTERESTS = "Need to fill out your interests";
     public final static String ERROR_NO_MY_SKILLS = "Need to fill out your skills";
     public final static String ERROR_HACKATHONS_CONFLICT = "Hackathon can't be both public and private";
-    public final static String ERROR_NO_MESSAGE_WRITTEN = "You should specify the message to be sent";
-    public final static String ERROR_NO_PERSON_TO_SENT_TO = "You must at least assign one person to send";
+
+    // Create Group
+    public final static String ERROR_NO_GROUP_NAME = "Need to fill out Group name";
+    public final static String ERROR_NO_HACKATHON_ATTEND = "Need to fill out Hackathon";
+    public final static String ERROR_NO_MEMBER = "Need to fill out Members";
+    public final static String ERROR_NO_GROUP_INTERESTS = "Need to fill out group interests";
+    public final static String ERROR_NO_LOOK_FOR_SKILLS = "Need to fill out Skills looking for";
+
 
 }

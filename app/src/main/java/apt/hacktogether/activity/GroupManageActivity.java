@@ -51,9 +51,8 @@ public class GroupManageActivity extends BaseActivity {
         Utils.gotoMainActivity(GroupManageActivity.this);
         mDrawerLayout.closeDrawers();
     }
-    @OnClick(R.id.btn_settings) void goSettings() {
-//        TODO: uncomment later
-        Utils.gotoSettingsActivity(GroupManageActivity.this);
+    @OnClick(R.id.btn_edit_profile) void goEditProfile() {
+        Utils.gotoEditProfileActivity(GroupManageActivity.this);
         mDrawerLayout.closeDrawers();
     }
 

@@ -40,5 +40,6 @@
     <string name="title_activity_create_profile">CreateProfileActivity</string>
     <string name="title_activity_add_public_hackathon">AddPublicHackathonActivity</string>
     <string name="title_activity_add_private_hackathon">AddPrivateHackathonActivity</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
 
 </resources>

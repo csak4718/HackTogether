@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -82,7 +83,32 @@ public class CreateGroupActivity extends BaseActivity {
 
 
 
-    @OnClick(R.id.btn_confirm) void create(){
+    @OnClick(R.id.btn_confirm) void createGroup(){
+        // Test User Input
+        if(edtGroupName == null || edtGroupName.getText() == null || edtGroupName.getText().toString() == null || edtGroupName.getText().toString().length() == 0){
+            Toast.makeText(this, Common.ERROR_NO_GROUP_NAME, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(hackathonName == null || hackathonName.length() == 0){
+            Toast.makeText(this, Common.ERROR_NO_HACKATHON_ATTEND, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(selectedPersonIds == null || selectedPersonIds.size() == 0){
+            Toast.makeText(this, Common.ERROR_NO_MEMBER, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(switchNeedTeammates.isChecked()){
+            if(groupInterestIds == null || groupInterestIds.size() == 0){
+                Toast.makeText(this, Common.ERROR_NO_GROUP_INTERESTS, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else if(lookForSkillIds == null || lookForSkillIds.size() == 0){
+                Toast.makeText(this, Common.ERROR_NO_LOOK_FOR_SKILLS, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+
         final ParseUser currentUser = ParseUser.getCurrentUser();
         final ParseObject group = new ParseObject(Common.OBJECT_GROUP);
 

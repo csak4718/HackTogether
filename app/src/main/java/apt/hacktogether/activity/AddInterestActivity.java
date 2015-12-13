@@ -24,6 +24,7 @@ import apt.hacktogether.event.AddInterestToCreateGroupEvent;
 
 import apt.hacktogether.event.AddInterestToCreateProfileEvent;
 import apt.hacktogether.event.AddInterestToEditGroupEvent;
+import apt.hacktogether.event.AddInterestToEditProfileEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
@@ -148,7 +149,7 @@ public class AddInterestActivity extends BaseActivity {
                     EventBus.getDefault().post(new AddInterestToCreateProfileEvent(mInterestIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_PROFILE_ACTIVITY)){
-                    // TODO
+                    EventBus.getDefault().post(new AddInterestToEditProfileEvent(mInterestIdList));
                 }
 
                 AddInterestActivity.this.finish();

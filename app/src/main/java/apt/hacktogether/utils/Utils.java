@@ -23,6 +23,7 @@ import apt.hacktogether.activity.ConversationsActivity;
 import apt.hacktogether.activity.CreateGroupActivity;
 import apt.hacktogether.activity.CreateProfileActivity;
 import apt.hacktogether.activity.EditGroupActivity;
+import apt.hacktogether.activity.EditProfileActivity;
 import apt.hacktogether.activity.GroupManageActivity;
 import apt.hacktogether.activity.LoginActivity;
 import apt.hacktogether.activity.MainActivity;
@@ -143,9 +144,8 @@ public class Utils {
         imgView.setColorFilter(filter);
     }
 
-//      TODO: uncomment later
-    public static void gotoSettingsActivity(Activity activity){
-        Intent it = new Intent(activity, CreateProfileActivity.class);
+    public static void gotoEditProfileActivity(Activity activity){
+        Intent it = new Intent(activity, EditProfileActivity.class);
         activity.startActivity(it);
     }
 

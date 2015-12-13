@@ -69,9 +69,8 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.btn_hackathons) void goHackathons() {
         mDrawerLayout.closeDrawers();
     }
-    @OnClick(R.id.btn_settings) void goSettings() {
-//        TODO: uncomment later
-        Utils.gotoSettingsActivity(MainActivity.this);
+    @OnClick(R.id.btn_edit_profile) void goEditProfile() {
+        Utils.gotoEditProfileActivity(MainActivity.this);
         mDrawerLayout.closeDrawers();
     }
 
