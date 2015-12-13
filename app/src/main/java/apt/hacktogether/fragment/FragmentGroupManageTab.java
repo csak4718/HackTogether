@@ -101,6 +101,8 @@ public class FragmentGroupManageTab extends FragmentTab {
     }
 
     @Override
+    public void query(String text){}
+    @Override
     public void onStart() {
         EventBus.getDefault().register(this);
         super.onStart();

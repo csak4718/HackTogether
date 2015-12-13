@@ -11,7 +11,11 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -41,6 +45,7 @@ public class FragmentBrowseTab extends FragmentTab {
     private List<ParseUser> mList_hackersNeedGuy;
     private List<ParseObject> mList_groupsNeedGuy;
     private BaseAdapter mAdapter;
+    String query_text;
 
     public static FragmentBrowseTab newInstance(int type, String hackathon_name) {
         FragmentBrowseTab fragment = new FragmentBrowseTab();
@@ -101,6 +106,16 @@ public class FragmentBrowseTab extends FragmentTab {
             ParseUtils.getGroupsNeedGuy(hackathonName);
         }
     }
+    @Override
+    public void query(String text){
+        if(mType == Common.PERSON_TAB) {
+            ParseUtils.getHackersNeedGuy(hackathonName);
+        }
+        else if(mType == Common.GROUP_TAB) {
+            ParseUtils.getGroupsNeedGuy(hackathonName);
+        }
+        query_text = text;
+    }
 
     @Override
     public void onStart() {
@@ -117,6 +132,82 @@ public class FragmentBrowseTab extends FragmentTab {
     public void onEvent(PersonTabEvent event) {
         if(mType == Common.PERSON_TAB) {
             refresh_mList_hackersNeedGuy(event.hackersNeedGuyList);
+            if(query_text == null || query_text.length() < 1){}
+            else{
+                for(final ParseUser user: mList_hackersNeedGuy){
+                    ParseRelation<ParseObject> userInterestsRelation = user.getRelation(Common.OBJECT_USER_INTERESTS);
+                    ParseQuery<ParseObject> userInterestsQuery = userInterestsRelation.getQuery();
+                    userInterestsQuery.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(final List<ParseObject> userInterests, ParseException e) {
+                            ParseRelation<ParseObject> userSkillsRelation = user.getRelation(Common.OBJECT_USER_SKILLS);
+                            ParseQuery<ParseObject> userSkillsQuery = userSkillsRelation.getQuery();
+                            userSkillsQuery.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> userSkills, ParseException e) {
+                                    StringBuilder strBuilder = new StringBuilder();
+                                    for (ParseObject interest : userInterests) {
+                                        strBuilder.append(interest.getString(Common.OBJECT_INTEREST_NAME));
+                                        strBuilder.append(",");
+                                    }
+                                    for (ParseObject skill : userSkills) {
+                                        strBuilder.append(skill.getString(Common.OBJECT_SKILL_NAME));
+                                        strBuilder.append(",");
+                                    }
+                                    String interestsString = strBuilder.toString();
+                                    boolean i = user.getString(Common.OBJECT_USER_NICK).toLowerCase().contains(query_text.toLowerCase());
+                                    boolean j = interestsString.toLowerCase().contains(query_text.toLowerCase());
+                                    if (i || j) {
+                                    } else {
+                                        mList_hackersNeedGuy.remove(user);
+                                        mAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        else if(mType == Common.GROUP_TAB){
+            refresh_mList_hackersNeedGuy(event.hackersNeedGuyList);
+            if(query_text == null || query_text.length() < 1){}
+            else{
+                for(final ParseObject group: mList_groupsNeedGuy){
+                    ParseRelation<ParseObject> groupInterestsRelation = group.getRelation(Common.OBJECT_GROUP_GROUPINTERESTS);
+                    ParseQuery<ParseObject> groupInterestsQuery = groupInterestsRelation.getQuery();
+                    groupInterestsQuery.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(final List<ParseObject> groupInterests, ParseException e) {
+                            ParseRelation<ParseObject> groupSkillsRelation = group.getRelation(Common.OBJECT_GROUP_LOOKFORSKILLS);
+                            ParseQuery<ParseObject> userSkillsQuery = groupSkillsRelation.getQuery();
+                            userSkillsQuery.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> groupSkills, ParseException e) {
+                                    StringBuilder strBuilder = new StringBuilder();
+                                    for (ParseObject interest : groupInterests) {
+                                        strBuilder.append(interest.getString(Common.OBJECT_INTEREST_NAME));
+                                        strBuilder.append(",");
+                                    }
+                                    for (ParseObject skill : groupSkills) {
+                                        strBuilder.append(skill.getString(Common.OBJECT_SKILL_NAME));
+                                        strBuilder.append(",");
+                                    }
+                                    String interestsString = strBuilder.toString();
+                                    boolean i = group.getString(Common.OBJECT_GROUP_NAME).toLowerCase().contains(query_text.toLowerCase());
+                                    boolean j = interestsString.toLowerCase().contains(query_text.toLowerCase());
+                                    if (i || j) {
+                                    } else {
+                                        mList_groupsNeedGuy.remove(group);
+                                        mAdapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }
             swipeRefreshLayout.setRefreshing(false);
         }
     }

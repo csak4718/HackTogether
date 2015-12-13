@@ -3,10 +3,12 @@ package apt.hacktogether.adapter;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import apt.hacktogether.fragment.FragmentBrowse;
 import apt.hacktogether.fragment.FragmentTab;
 
 /**
@@ -19,6 +21,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public void refreshAllTabs() {
         for(FragmentTab fragmentTab : mFragmentList) {
             fragmentTab.getNewData();
+            Log.d("Fraglist", "The raglist" + mFragmentList);
+        }
+    }
+
+    public void refreshTabsquery(String queryText){
+        for(FragmentTab fragmentTab : mFragmentList) {
+            fragmentTab.query(queryText);
+            Log.d("query_Fraglist_before", "The raglist" + mFragmentList);
         }
     }
 

@@ -143,13 +143,13 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
         viewHolder.participants.setText(participants);
 
         //Grab the last message in the conversation and show it in the format "sender: last message content"
+
         Message message = conversation.getLastMessage();
         if (message != null) {
             viewHolder.lastMsgContent.setText(ParseImpl.getUsername(message.getSender().getUserId()) + ": " + LayerImpl.getMessageText(message));
         } else {
             viewHolder.lastMsgContent.setText("");
         }
-
         //Draw the date the last message was received (downloaded from the server)
         viewHolder.time.setText(LayerImpl.getReceivedAtTime(message));
     }

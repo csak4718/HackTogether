@@ -1,131 +1,49 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="apt.hacktogether.activity.CreateGroupActivity">
-    <LinearLayout
+    tools:context="apt.hacktogether.activity.CreateGroupActivity"
+    android:orientation="vertical">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:animateLayoutChanges="true">
-        <EditText
-            android:id="@+id/edt_group_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:hint="Group name"
-            android:background = "@null"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background= "@color/light_gray_line"/>
-
+        tools:context="apt.hacktogether.activity.CreateGroupActivity"
+        android:layout_height="0dp"
+        android:layout_weight="0.85">
         <LinearLayout
-            android:id="@+id/ll_hackathon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hackathon: "
-                android:textSize="20sp"
-                android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"/>
-            <org.apmem.tools.layouts.FlowLayout
-                android:id="@+id/ll_hackathon_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp">
-            </org.apmem.tools.layouts.FlowLayout>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background= "@color/light_gray_line"/>
-
-        <LinearLayout
-            android:id="@+id/ll_members"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Members: "
-                android:textSize="20sp"
-                android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"/>
-            <org.apmem.tools.layouts.FlowLayout
-                android:id="@+id/ll_member_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp">
-            </org.apmem.tools.layouts.FlowLayout>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background= "#cccccc" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="20sp"
-                android:text="@string/need_teammates"
-                android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"/>
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:id="@+id/switch_need_teammates"
-                android:paddingRight="10dp"/>
-        </LinearLayout>
-
-
-
-        <LinearLayout
-            android:id="@+id/spec_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:animateLayoutChanges="true">
+            <EditText
+                android:id="@+id/edt_group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:hint="Group name"
+                android:background = "@null"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background= "#cccccc" />
+            android:background= "@color/light_gray_line"/>
 
             <LinearLayout
-                android:id="@+id/ll_group_interests"
+                android:id="@+id/ll_hackathon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Interested in: "
+                    android:text="Hackathon: "
                     android:textSize="20sp"
                     android:paddingLeft="10dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"/>
                 <org.apmem.tools.layouts.FlowLayout
-                    android:id="@+id/ll_group_interests_content"
+                    android:id="@+id/ll_hackathon_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -139,20 +57,20 @@
                 android:background= "@color/light_gray_line"/>
 
             <LinearLayout
-                android:id="@+id/ll_look_for_skills"
+                android:id="@+id/ll_members"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Skills looking for: "
+                    android:text="Members: "
                     android:textSize="20sp"
                     android:paddingLeft="10dp"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"/>
                 <org.apmem.tools.layouts.FlowLayout
-                    android:id="@+id/ll_look_for_skills_content"
+                    android:id="@+id/ll_member_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -160,15 +78,103 @@
                     android:paddingBottom="15dp">
                 </org.apmem.tools.layouts.FlowLayout>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background= "#cccccc" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="20sp"
+                    android:text="@string/need_teammates"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"/>
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:id="@+id/switch_need_teammates"
+                    android:paddingRight="10dp"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/spec_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background= "#cccccc" />
+
+                <LinearLayout
+                    android:id="@+id/ll_group_interests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Interested in: "
+                        android:textSize="20sp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"/>
+                    <org.apmem.tools.layouts.FlowLayout
+                        android:id="@+id/ll_group_interests_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp">
+                    </org.apmem.tools.layouts.FlowLayout>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background= "@color/light_gray_line"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_look_for_skills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Skills looking for: "
+                        android:textSize="20sp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"/>
+                    <org.apmem.tools.layouts.FlowLayout
+                        android:id="@+id/ll_look_for_skills_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp">
+                    </org.apmem.tools.layouts.FlowLayout>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/btn_confirm"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_check_black_24dp"
-            android:background="@color/green"/>
-
-    </LinearLayout>
-
-</ScrollView>
+    </ScrollView>
+    <ImageButton
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:src="@drawable/ic_check_black_24dp"
+        android:background="@color/green"/>
+</LinearLayout>

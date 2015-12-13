@@ -35,6 +35,11 @@ public class FragmentBrowse extends Fragment{
         adapter.refreshAllTabs();
     }
 
+    public void setFilter(String queryText) {
+        adapter.refreshTabsquery(queryText);
+        Log.d("refresh","refresh");
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

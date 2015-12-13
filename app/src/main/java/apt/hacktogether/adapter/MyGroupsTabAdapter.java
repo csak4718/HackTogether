@@ -121,6 +121,12 @@ public class MyGroupsTabAdapter extends BaseAdapter{
                     Picasso.with(mContext)
                             .load(imgFile.getUrl())
                             .into(imgProfile);
+                    imgProfile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Utils.gotoEditGroupActivity(mContext, myGroup.getObjectId());
+                        }
+                    });
 
                     holder.ll_Members.addView(imgProfile);
                 }
@@ -151,6 +157,12 @@ public class MyGroupsTabAdapter extends BaseAdapter{
                             .load(imgFile.getUrl())
                             .into(imgProfile);
                     Utils.toGrayScale(imgProfile);
+                    imgProfile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Utils.gotoEditGroupActivity(mContext, myGroup.getObjectId());
+                        }
+                    });
 
                     holder.ll_pendingMembers.addView(imgProfile);
                 }

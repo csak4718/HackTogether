@@ -144,10 +144,10 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
         params.weight = 1.0f;
         if(message != null && !senderId.equals(LayerImpl.getLayerClient().getAuthenticatedUserId())) {
             params.gravity = Gravity.LEFT;
-            viewHolder.contentLayout.setBackgroundColor(Color.YELLOW);
+            viewHolder.contentLayout.setBackgroundColor(Color.WHITE);
         } else {
             params.gravity = Gravity.RIGHT;
-            viewHolder.contentLayout.setBackgroundColor(Color.CYAN);
+            viewHolder.contentLayout.setBackgroundColor(0xFFB1D1FF);
         }
         viewHolder.contentLayout.setLayoutParams(params);
 
