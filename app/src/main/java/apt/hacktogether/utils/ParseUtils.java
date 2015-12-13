@@ -226,4 +226,32 @@ public class ParseUtils {
         params.put("delete_lookForSkillId", delete_lookForSkillId);
         ParseCloud.callFunctionInBackground("removeUnwantedLookForSkill", params);
     }
+
+    static public void removeUnwantedMyInterest(String userId, String delete_myInterestId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("delete_myInterestId", delete_myInterestId);
+        ParseCloud.callFunctionInBackground("removeUnwantedMyInterest", params);
+    }
+
+    static public void removeUnwantedMySkill(String userId, String delete_mySkillId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("delete_mySkillId", delete_mySkillId);
+        ParseCloud.callFunctionInBackground("removeUnwantedMySkill", params);
+    }
+
+    static public void removeUnwantedMyNeedGuyHackathon(String userId, String delete_myNeedGuyHackathonId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("delete_myNeedGuyHackathonId", delete_myNeedGuyHackathonId);
+        ParseCloud.callFunctionInBackground("removeUnwantedMyNeedGuyHackathon", params);
+    }
+
+    static public void removeUnwantedMyHackathon(String userId, String delete_myHackathonId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("delete_myHackathonId", delete_myHackathonId);
+        ParseCloud.callFunctionInBackground("removeUnwantedMyHackathon", params);
+    }
 }

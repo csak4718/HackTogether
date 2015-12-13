@@ -15,7 +15,10 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -92,10 +95,26 @@ public class ParseImpl {
         });
     }
 
-    public static Set<String> getAllHackathonIds(){
-        // TODO: change return type to ArrayList<String>. Return ordered idList
+    public static ArrayList<String> getAllHackathonIds(){
         Set<String> hackathonIdSet = allHackathons.keySet();
-        return hackathonIdSet;
+
+        ArrayList<String> hackathonNameList = new ArrayList<>();
+        ArrayList<String> orderedByName_hackathonIdList = new ArrayList<>();
+        HashMap<String, String> name_id = new HashMap<>();
+
+        Iterator itr = hackathonIdSet.iterator();
+        while(itr.hasNext()) {
+            String hackathonId = (String)itr.next();
+            name_id.put(getHackathonName(hackathonId).toLowerCase(), hackathonId);
+            hackathonNameList.add(getHackathonName(hackathonId).toLowerCase());
+        }
+        Collections.sort(hackathonNameList);
+
+        for(String name: hackathonNameList){
+            orderedByName_hackathonIdList.add(name_id.get(name));
+        }
+
+        return orderedByName_hackathonIdList;
     }
 
     public static String getHackathonName(String id){
