@@ -83,6 +83,7 @@ public class Common {
     public final static String ERROR_NO_MY_INTERESTS = "Need to fill out your interests";
     public final static String ERROR_NO_MY_SKILLS = "Need to fill out your skills";
     public final static String ERROR_HACKATHONS_CONFLICT = "Hackathon can't be both public and private";
-
+    public final static String ERROR_NO_MESSAGE_WRITTEN = "You should specify the message to be sent";
+    public final static String ERROR_NO_PERSON_TO_SENT_TO = "You must at least assign one person to send";
 
 }

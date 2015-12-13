@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Message;
@@ -293,20 +294,21 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         if(mConversation == null){
             //Make sure there are valid participants. Since the Authenticated user will always be
             // included in a new Conversation, we check to see if there is more than one target participant
-            if(mTargetParticipants.size() > 1) {
+            if(mTargetParticipants != null) {
+                if(mTargetParticipants.size() > 1){
+                                //Create a new conversation, and tie it to the QueryAdapter
+                    mConversation = LayerImpl.getLayerClient().newConversation(mTargetParticipants);
+                    createMessagesAdapter();
 
-                //Create a new conversation, and tie it to the QueryAdapter
-                mConversation = LayerImpl.getLayerClient().newConversation(mTargetParticipants);
-                createMessagesAdapter();
-
-                //Once the Conversation object is created, we don't allow changing the Participant List
-                // Note: this is an implementation choice. It is always possible to add/remove participants
-                // after a Conversation has been created
-                hideAddParticipantsButton();
-
-            } else {
-                showAlert("Send Message Error","You need to specify at least one participant before sending a message.");
-                return;
+                    //Once the Conversation object is created, we don't allow changing the Participant List
+                    // Note: this is an implementation choice. It is always possible to add/remove participants
+                    // after a Conversation has been created
+                    hideAddParticipantsButton();}
+                else{
+                    Toast.makeText(this,Common.ERROR_NO_PERSON_TO_SENT_TO,Toast.LENGTH_SHORT).show();
+                }
+            } else{
+                Toast.makeText(this,Common.ERROR_NO_PERSON_TO_SENT_TO,Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -324,7 +326,7 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
             input.setText("");
 
         } else {
-            showAlert("Send Message Error","You cannot send an empty message.");
+            Toast.makeText(this,Common.ERROR_NO_MESSAGE_WRITTEN, Toast.LENGTH_SHORT).show();
         }
     }
 

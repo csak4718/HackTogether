@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.layer.sdk.messaging.Conversation;
+import com.melnykov.fab.FloatingActionButton;
 import com.parse.ParseUser;
 
 import apt.hacktogether.R;
@@ -40,11 +41,6 @@ public class ConversationsActivity extends BaseActivity implements ConversationQ
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.recent_chats);
-
-        //Register the button click listeners
-        Button newConversationBtn = (Button) findViewById(R.id.newConversation);
-        if (newConversationBtn != null)
-            newConversationBtn.setOnClickListener(this);
 
 //        Button logoutBtn = (Button) findViewById(R.id.logout);
 //        if (logoutBtn != null)
@@ -96,6 +92,13 @@ public class ConversationsActivity extends BaseActivity implements ConversationQ
 
         //Grab the Recycler View and list all conversation objects in a vertical list
         RecyclerView conversationsView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        //Register the button click listeners
+        FloatingActionButton newConversationBtn = (FloatingActionButton) findViewById(R.id.newConversation);
+        if (newConversationBtn != null)
+            newConversationBtn.setOnClickListener(this);
+        newConversationBtn.attachToRecyclerView(conversationsView);
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         conversationsView.setLayoutManager(layoutManager);
 
