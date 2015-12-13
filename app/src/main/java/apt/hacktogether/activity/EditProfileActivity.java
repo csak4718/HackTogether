@@ -8,12 +8,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
 import org.apmem.tools.layouts.FlowLayout;
@@ -91,10 +93,62 @@ public class EditProfileActivity extends BaseActivity {
         }
 
 
+
+
+        final ArrayList<String> myHackathonIds = new ArrayList<>(); // First do: myPublicHackathonIds + myPrivateHackathonIds
+        myHackathonIds.addAll(myPublicHackathonIds);
+        myHackathonIds.addAll(myPrivateHackathonIds);
+
         final ArrayList<String> delete_myInterestIds = new ArrayList<>();
         final ArrayList<String> delete_mySkillIds = new ArrayList<>();
-        final ArrayList<String> delete_myPublicHackathonIds = new ArrayList<>();
-        final ArrayList<String> delete_myPrivateHackathonIds = new ArrayList<>();
+        final ArrayList<String> delete_myNeedGuyHackathonIds = new ArrayList<>(); //2nd easy: query old, compare with myPublicHackathonIds, create delete_myNeedGuyHackathonIds
+        final ArrayList<String> delete_myHackathonIds = new ArrayList<>(); //3rd: query old myHackathons, compare with myHackathonIds, create delete_myHackathonIds
+
+
+        final HashMap<String, ParseObject> allHackathons = ParseImpl.get_allHackathons();
+
+        // myNeedGuyHackathons
+        final ParseRelation<ParseObject> myNeedGuyHackathons = currentUser.getRelation(Common.OBJECT_USER_MYNEEDGUYHACKATHONS);
+        ParseQuery<ParseObject> myNeedGuyHackathonsQuery = myNeedGuyHackathons.getQuery();
+        myNeedGuyHackathonsQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> original_myNeedGuyHackathons, ParseException e) {
+                if (e == null){
+                    for(ParseObject original_myNeedGuyHackathon: original_myNeedGuyHackathons){
+                        if(!myPublicHackathonIds.contains(original_myNeedGuyHackathon.getObjectId())) delete_myNeedGuyHackathonIds.add(original_myNeedGuyHackathon.getObjectId());
+                    }
+
+                    for(String delete_myNeedGuyHackathonId: delete_myNeedGuyHackathonIds){
+                        ParseUtils.removeUnwantedMyNeedGuyHackathon(currentUser.getObjectId(), delete_myNeedGuyHackathonId);
+                    }
+                }
+            }
+        });
+        for(String myPublicHackathonId: myPublicHackathonIds){
+            myNeedGuyHackathons.add(allHackathons.get(myPublicHackathonId));
+        }
+
+        // myHackathons
+        final ParseRelation<ParseObject> myHackathons = currentUser.getRelation(Common.OBJECT_USER_MYHACKATHONS);
+        ParseQuery<ParseObject> myHackathonsQuery = myHackathons.getQuery();
+        myHackathonsQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> original_myHackathons, ParseException e) {
+                if (e==null){
+                    for(ParseObject original_myHackathon: original_myHackathons){
+                        if(!myHackathonIds.contains(original_myHackathon.getObjectId())) delete_myHackathonIds.add(original_myHackathon.getObjectId());
+                    }
+
+                    for(String delete_myHackathonId: delete_myHackathonIds){
+                        ParseUtils.removeUnwantedMyHackathon(currentUser.getObjectId(), delete_myHackathonId);
+                    }
+                }
+            }
+        });
+        for(String myHackathonId: myHackathonIds){
+            myHackathons.add(allHackathons.get(myHackathonId));
+        }
+
 
         // myInterests
         final HashMap<String, ParseObject> allInterests = ParseImpl.get_allInterests();
@@ -109,7 +163,7 @@ public class EditProfileActivity extends BaseActivity {
                     }
 
                     for (String delete_myInterestId: delete_myInterestIds){
-//                        ParseUtils.removeUnwantedMyInterest(currentUser.getObjectId(), delete_myInterestId);
+                        ParseUtils.removeUnwantedMyInterest(currentUser.getObjectId(), delete_myInterestId);
                     }
                 }
 
@@ -118,6 +172,152 @@ public class EditProfileActivity extends BaseActivity {
         for (String myInterestId: myInterestIds){ // Do not put this loop into the above done function. Won't work.
             myInterests.add(allInterests.get(myInterestId));
         }
+
+        // mySkills
+        final HashMap<String, ParseObject> allSkills = ParseImpl.get_allSkills();
+        final ParseRelation<ParseObject> mySkills = currentUser.getRelation(Common.OBJECT_USER_SKILLS);
+        ParseQuery<ParseObject> skillsQuery = mySkills.getQuery();
+        skillsQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> originalSkills, ParseException e) {
+                if (e==null){
+                    for (ParseObject originalSkill: originalSkills){
+                        if(!mySkillIds.contains(originalSkill.getObjectId())) delete_mySkillIds.add(originalSkill.getObjectId());
+                    }
+
+                    for (String delete_mySkillId: delete_mySkillIds){
+                        ParseUtils.removeUnwantedMySkill(currentUser.getObjectId(), delete_mySkillId);
+                    }
+                }
+
+            }
+        });
+        for (String mySkillId: mySkillIds){ // Do not put this loop into the above done function. Won't work.
+            mySkills.add(allSkills.get(mySkillId));
+        }
+
+
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                // remove currentUser from interested_hackers of particular Interest (ex: Android App)
+                for (String delete_myInterestId: delete_myInterestIds){
+                    ParseQuery<ParseObject> interestObjectQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
+                    interestObjectQuery.getInBackground(delete_myInterestId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject interest, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> interested_hackers = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_HACKERS);
+                                interested_hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
+                                interest.saveInBackground();
+                            }
+                        }
+                    });
+                }
+                // add currentUser into interested_hackers of particular Interest (ex: Web App)
+                for (String myInterestId: myInterestIds){
+                    ParseQuery<ParseObject> interestObjectQuery = ParseQuery.getQuery(Common.OBJECT_INTEREST);
+                    interestObjectQuery.getInBackground(myInterestId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject interest, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> interested_hackers = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_HACKERS);
+                                interested_hackers.add(currentUser); // Must do in SaveCallback. Otherwise, won't add.
+                                interest.saveInBackground();
+                            }
+                        }
+                    });
+                }
+
+                // remove currentUser from skilled_hackers of particular Skill
+                for (String delete_mySkillId: delete_mySkillIds){
+                    ParseQuery<ParseObject> skillObjectQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
+                    skillObjectQuery.getInBackground(delete_mySkillId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject skill, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> skilled_hackers = skill.getRelation(Common.OBJECT_SKILL_SKILLED_HACKERS);
+                                skilled_hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
+                                skill.saveInBackground();
+                            }
+                        }
+                    });
+                }
+                // add currentUser into skilled_hackers of particular Skill
+                for (String mySkillId: mySkillIds){
+                    ParseQuery<ParseObject> skillObjectQuery = ParseQuery.getQuery(Common.OBJECT_SKILL);
+                    skillObjectQuery.getInBackground(mySkillId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject skill, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> skilled_hackers = skill.getRelation(Common.OBJECT_SKILL_SKILLED_HACKERS);
+                                skilled_hackers.add(currentUser); // Must do in SaveCallback. Otherwise, won't add.
+                                skill.saveInBackground();
+                            }
+                        }
+                    });
+                }
+
+                // remove currentUser from hackersNeedGuy of particular Hackathon
+                for (String delete_myNeedGuyHackathonId: delete_myNeedGuyHackathonIds){
+                    ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+                    hackathonObjectQuery.getInBackground(delete_myNeedGuyHackathonId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject hackathon, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> hackersNeedGuy = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERSNEEDGUY);
+                                hackersNeedGuy.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
+                                hackathon.saveInBackground();
+                            }
+                        }
+                    });
+                }
+                // add currentUser into hackersNeedGuy of particular Hackathon
+                for (String myPublicHackathonId: myPublicHackathonIds){
+                    ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+                    hackathonObjectQuery.getInBackground(myPublicHackathonId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject hackathon, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> hackersNeedGuy = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERSNEEDGUY);
+                                hackersNeedGuy.add(currentUser); // Must do in SaveCallback. Otherwise, won't add.
+                                hackathon.saveInBackground();
+                            }
+                        }
+                    });
+                }
+
+                // remove currentUser from hackers of particular Hackathon
+                for (String delete_myHackathonId: delete_myHackathonIds){
+                    ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+                    hackathonObjectQuery.getInBackground(delete_myHackathonId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject hackathon, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> hackers = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERS);
+                                hackers.remove(currentUser); // Must do in SaveCallback. Otherwise, won't remove.
+                                hackathon.saveInBackground();
+                            }
+                        }
+                    });
+                }
+                // add currentUser into hackers of particular Hackathon
+                for (String myHackathonId: myHackathonIds){
+                    ParseQuery<ParseObject> hackathonObjectQuery = ParseQuery.getQuery(Common.OBJECT_HACKATHON);
+                    hackathonObjectQuery.getInBackground(myHackathonId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject hackathon, ParseException e) {
+                            if (e == null){
+                                ParseRelation<ParseUser> hackers = hackathon.getRelation(Common.OBJECT_HACKATHON_HACKERS);
+                                hackers.add(currentUser); // Must do in SaveCallback. Otherwise, won't add.
+                                hackathon.saveInBackground();
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
 
 
         EditProfileActivity.this.finish();

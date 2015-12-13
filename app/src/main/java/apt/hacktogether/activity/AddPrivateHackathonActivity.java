@@ -51,7 +51,7 @@ public class AddPrivateHackathonActivity extends BaseActivity {
         ll_child_vertical.setOrientation(LinearLayout.VERTICAL);
         ll_child_vertical.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        Set hackathonIds = ParseImpl.getAllHackathonIds();
+        ArrayList<String> hackathonIds = ParseImpl.getAllHackathonIds();
 
         //A Map of the CheckBox with the Parse Object ID
         final HashMap<CheckBox, String> allHackathons = new HashMap<>();
