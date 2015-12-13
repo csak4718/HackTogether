@@ -65,6 +65,11 @@ public class FragmentBrowse extends Fragment{
         viewPager.setAdapter(adapter);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_person_black_24dp);
+        tabLayout.getTabAt(0).setText("");
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_people_black_24dp);
+        tabLayout.getTabAt(1).setText("");
+
     }
 
 }
