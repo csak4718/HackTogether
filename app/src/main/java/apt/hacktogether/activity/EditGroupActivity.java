@@ -210,6 +210,7 @@ public class EditGroupActivity extends BaseActivity {
 
 
                 if (switchNeedTeammates.isChecked()){
+                    // TODO: change all removes into cloud code
                     // Add and Remove can do at the same time
 
                     // remove myGroup from interested_groups of particular Interest (ex: Android App)

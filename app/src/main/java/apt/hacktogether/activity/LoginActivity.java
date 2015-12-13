@@ -1,6 +1,7 @@
 package apt.hacktogether.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -104,7 +105,20 @@ public class LoginActivity extends BaseActivity {
     private void gotoNextActivity() {
         Intent it = getIntent();
         if(it.getAction().equals("android.intent.action.VIEW")) {
-            Intent notiIntent = new Intent(this, MainActivity.class);
+            if(it != null && it.getData() != null){
+                Uri uri = it.getData();
+                String host = uri.getHost();
+
+                if(host.contains("im")) {
+                    // go to ConversationActivity first. Later, go to MessageActivity
+                    Intent notiIntent = new Intent(this, ConversationsActivity.class);
+                    notiIntent.setData(it.getData());
+                    startActivity(notiIntent);
+                }
+            }
+
+            // invitation notification
+            Intent notiIntent = new Intent(this, GroupManageActivity.class);
             notiIntent.setData(it.getData());
             startActivity(notiIntent);
         }
