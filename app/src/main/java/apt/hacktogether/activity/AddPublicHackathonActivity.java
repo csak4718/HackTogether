@@ -21,6 +21,7 @@ import java.util.Set;
 
 import apt.hacktogether.R;
 import apt.hacktogether.event.AddPublicHackathonToCreateProfileEvent;
+import apt.hacktogether.event.AddPublicHackathonToEditProfileEvent;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
 import apt.hacktogether.utils.Utils;
@@ -135,7 +136,7 @@ public class AddPublicHackathonActivity extends BaseActivity {
                     EventBus.getDefault().post(new AddPublicHackathonToCreateProfileEvent(mPublicHackathonIdList));
                 }
                 else if(receiveTag.equals(Common.TAG_EDIT_PROFILE_ACTIVITY)){
-                    // TODO
+                    EventBus.getDefault().post(new AddPublicHackathonToEditProfileEvent(mPublicHackathonIdList));
                 }
 
                 AddPublicHackathonActivity.this.finish();

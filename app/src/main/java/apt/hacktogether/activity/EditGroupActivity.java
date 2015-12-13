@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -82,6 +83,19 @@ public class EditGroupActivity extends BaseActivity {
 
 
     @OnClick(R.id.btn_confirm) void save(){
+        if(switchNeedTeammates.isChecked()){
+            if(groupInterestIds == null || groupInterestIds.size() == 0){
+                Toast.makeText(this, Common.ERROR_NO_GROUP_INTERESTS, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else if(lookForSkillIds == null || lookForSkillIds.size() == 0){
+                Toast.makeText(this, Common.ERROR_NO_LOOK_FOR_SKILLS, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+
+
         final ArrayList<String> delete_groupInterestIds = new ArrayList<>();
         final ArrayList<String> delete_lookForSkillIds = new ArrayList<>();
 
