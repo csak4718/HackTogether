@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,10 +17,19 @@ import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.Predicate;
 import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import apt.hacktogether.R;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.parse.ParseImpl;
+import apt.hacktogether.utils.Common;
+import apt.hacktogether.utils.ParseUtils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by de-weikung on 11/12/15.
@@ -36,6 +46,7 @@ import apt.hacktogether.parse.ParseImpl;
  *   other rich media content, etc.
  */
 public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapter.ViewHolder> {
+    private Context mContext;
 
     //Inflates the view associated with each Message object returned by the Query
     private final LayoutInflater mInflater;
@@ -65,6 +76,7 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
         public TextView time;
         public TextView content;
         public Message message;
+        public CircleImageView ImagePic;
         public LinearLayout contentLayout;
         public final MessageClickHandler messageClickHandler;
 
@@ -99,7 +111,8 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
 
 
         //Sets the LayoutInflator, Click callback handler, and the view parent
-        mInflater = LayoutInflater.from(context);
+        mContext = context;
+        mInflater = LayoutInflater.from(mContext);
         mMessageClickHandler = messageClickHandler;
         mParentView = recyclerView;
     }
@@ -108,7 +121,8 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         //The message_item is just an example view you can use to display each message in a list
-        View itemView = mInflater.inflate(R.layout.message_item, mParentView, false);
+
+        View itemView = mInflater.inflate(R.layout.message_item_right, mParentView, false);
 
         //Tie the view elements to the fields in the actual view after it has been created
         ViewHolder holder = new ViewHolder(itemView, mMessageClickHandler);
@@ -116,12 +130,12 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
         holder.content = (TextView) itemView.findViewById(R.id.msgContent);
         holder.time = (TextView) itemView.findViewById(R.id.sendTime);
         holder.contentLayout = (LinearLayout) itemView.findViewById(R.id.contentLayout);
-
+        holder.ImagePic = (CircleImageView) itemView.findViewById(R.id.img_pic);
         return holder;
     }
 
     //After the ViewHolder is created, we need to populate the fields with information from the Message
-    public void onBindViewHolder(ViewHolder viewHolder, Message message) {
+    public void onBindViewHolder(final ViewHolder viewHolder, Message message) {
         if (message == null) {
             // If the item no longer exists, the ID probably migrated.
             refresh();
@@ -144,10 +158,18 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
         params.weight = 1.0f;
         if(message != null && !senderId.equals(LayerImpl.getLayerClient().getAuthenticatedUserId())) {
             params.gravity = Gravity.LEFT;
-            viewHolder.contentLayout.setBackgroundColor(Color.WHITE);
+            viewHolder.content.setBackgroundResource(R.drawable.img_chats_bg_01);
+            viewHolder.content.setPadding(35, 20, 20, 10);
+            ParseFile imgFile = ParseImpl.get_allUsers().get(senderId).getParseFile(Common.OBJECT_USER_PROFILE_PIC);
+            Picasso.with(mContext)
+                    .load(imgFile.getUrl())
+                    .into(viewHolder.ImagePic);
+//            ParseUtils.displayParseImage(imgFile, viewHolder.ImagePic);
         } else {
             params.gravity = Gravity.RIGHT;
-            viewHolder.contentLayout.setBackgroundColor(0xFFB1D1FF);
+//            viewHolder.contentLayout.setBackgroundColor(0xFFB1D1FF);
+            viewHolder.content.setBackgroundResource(R.drawable.im);
+            viewHolder.ImagePic.setVisibility(View.GONE);
         }
         viewHolder.contentLayout.setLayoutParams(params);
 
