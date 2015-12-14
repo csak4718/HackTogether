@@ -24,6 +24,7 @@ public class Common {
     public final static String OBJECT_USER_SKILLS = "skills";
     public final static String OBJECT_USER_MYGROUPS = "myGroups";
     public final static String OBJECT_USER_INVITEGROUPS = "inviteGroups";
+    public final static String OBJECT_USER_IS_RETURN_USER = "isReturnUser";
 
 
     public final static String OBJECT_GROUP = "Group";

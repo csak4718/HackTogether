@@ -211,8 +211,6 @@ public class EditGroupActivity extends BaseActivity {
 
 
                 if (switchNeedTeammates.isChecked()){
-                    // TODO: change all removes into cloud code
-                    // Add and Remove can do at the same time
 
                     // remove myGroup from interested_groups of particular Interest (ex: Android App)
                     for (String delete_groupInterestId: delete_groupInterestIds){
@@ -221,9 +219,10 @@ public class EditGroupActivity extends BaseActivity {
                             @Override
                             public void done(ParseObject interest, ParseException e) {
                                 if (e == null){
-                                    ParseRelation<ParseObject> interested_groups = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_GROUPS);
-                                    interested_groups.remove(myGroup); // Must do in SaveCallback. Otherwise, won't remove.
-                                    interest.saveInBackground();
+//                                    ParseRelation<ParseObject> interested_groups = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_GROUPS);
+//                                    interested_groups.remove(myGroup); // Must do in SaveCallback. Otherwise, won't remove.
+//                                    interest.saveInBackground();
+                                    ParseUtils.removeGroupFromInterestedGroups(interest.getObjectId(), myGroup.getObjectId());
                                 }
                             }
                         });
@@ -251,9 +250,10 @@ public class EditGroupActivity extends BaseActivity {
                             @Override
                             public void done(ParseObject skill, ParseException e) {
                                 if (e == null){
-                                    ParseRelation<ParseObject> lookFor_groups = skill.getRelation(Common.OBJECT_SKILL_LOOKFOR_GROUPS);
-                                    lookFor_groups.remove(myGroup); // Must do in SaveCallback. Otherwise, won't remove.
-                                    skill.saveInBackground();
+//                                    ParseRelation<ParseObject> lookFor_groups = skill.getRelation(Common.OBJECT_SKILL_LOOKFOR_GROUPS);
+//                                    lookFor_groups.remove(myGroup); // Must do in SaveCallback. Otherwise, won't remove.
+//                                    skill.saveInBackground();
+                                    ParseUtils.removeGroupFromLookForGroups(skill.getObjectId(), myGroup.getObjectId());
                                 }
                             }
                         });
@@ -282,9 +282,10 @@ public class EditGroupActivity extends BaseActivity {
                         @Override
                         public void done(List<ParseObject> interests, ParseException e) {
                             for (ParseObject interest: interests){
-                                ParseRelation<ParseObject> interestedGroups = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_GROUPS);
-                                interestedGroups.remove(myGroup);
-                                interest.saveInBackground();
+//                                ParseRelation<ParseObject> interestedGroups = interest.getRelation(Common.OBJECT_INTEREST_INTERESTED_GROUPS);
+//                                interestedGroups.remove(myGroup);
+//                                interest.saveInBackground();
+                                ParseUtils.removeGroupFromInterestedGroups(interest.getObjectId(), myGroup.getObjectId());
                             }
                         }
                     });
@@ -296,9 +297,10 @@ public class EditGroupActivity extends BaseActivity {
                         @Override
                         public void done(List<ParseObject> skills, ParseException e) {
                             for (ParseObject skill: skills){
-                                ParseRelation<ParseObject> lookForGroups = skill.getRelation(Common.OBJECT_SKILL_LOOKFOR_GROUPS);
-                                lookForGroups.remove(myGroup);
-                                skill.saveInBackground();
+//                                ParseRelation<ParseObject> lookForGroups = skill.getRelation(Common.OBJECT_SKILL_LOOKFOR_GROUPS);
+//                                lookForGroups.remove(myGroup);
+//                                skill.saveInBackground();
+                                ParseUtils.removeGroupFromLookForGroups(skill.getObjectId(), myGroup.getObjectId());
                             }
                         }
                     });
