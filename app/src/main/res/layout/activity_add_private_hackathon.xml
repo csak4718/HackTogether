@@ -6,6 +6,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:id="@+id/vertical_ll"
+    android:background="@color/light_grey"
     tools:context="apt.hacktogether.activity.AddPrivateHackathonActivity">
 </LinearLayout>
 
