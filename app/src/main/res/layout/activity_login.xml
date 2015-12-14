@@ -8,16 +8,22 @@
     tools:context=".LoginActivity">
 
 
-    <TextView
-        android:id="@+id/txv_splash_logo"
+    <!--<TextView-->
+        <!--android:id="@+id/txv_splash_logo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:text="@string/app_name"-->
+        <!--android:textSize="40sp"-->
+        <!--android:textColor="@android:color/white"/>-->
+
+    <ImageView
+        android:id="@+id/launchPic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/app_name"
-        android:textSize="40sp"
-        android:textColor="@android:color/white"/>
-
+        android:src="@drawable/hackathon_launch"
+        android:layout_centerHorizontal="true"/>
     <Button
         android:id="@+id/btn_login_facebook"
         android:text="@string/login_fb"
@@ -26,7 +32,7 @@
         android:background="@drawable/login_fb"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/txv_splash_logo"
+        android:layout_below="@+id/launchPic"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
 
