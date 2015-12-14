@@ -1,6 +1,8 @@
 package apt.hacktogether.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -244,6 +247,18 @@ public class MainActivity extends BaseActivity {
         // test function
 //        test();
 
+        Intent it = getIntent();
+        if (it != null && it.getData() != null){
+            Uri uri = it.getData();
+            String host = uri.getHost();
+            if(host.contains("im")) {
+                // go to ConversationActivity, Later, go to MessageActivity
+                Intent notiIntent = new Intent(this, ConversationsActivity.class);
+                notiIntent.setData(it.getData());
+                startActivity(notiIntent);
+            }
+        }
+
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -260,6 +275,9 @@ public class MainActivity extends BaseActivity {
         scaleAdapter.setFirstOnly(false);
         mRecyclerView.setAdapter(scaleAdapter);
 
+
+
+
     }
 
     //Called when the Activity starts, or when the App is coming to the foreground.
@@ -269,6 +287,10 @@ public class MainActivity extends BaseActivity {
         // Check to see the state of the LayerClient, and if everything is set up, then good; do nothing.
         Utils.checkSetup(this);
 
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", false);
+        installation.put("user", ParseUser.getCurrentUser());
+        installation.saveInBackground();
     }
 
     @Override

@@ -2,6 +2,7 @@ package apt.hacktogether.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -281,5 +282,15 @@ public class ParseUtils {
         params.put("hackathonId", hackathonId);
         params.put("delete_userId", delete_userId);
         ParseCloud.callFunctionInBackground("removeUserFromHackers", params);
+    }
+
+    static public void instantMessageNotification(String senderId, String recipientId, String textMessage, String conversationId, boolean isGroupChat){
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("senderId", senderId);
+        params.put("recipientId", recipientId);
+        params.put("textMessage", textMessage);
+        params.put("conversationId", conversationId);
+        params.put("isGroupChat", isGroupChat);
+        ParseCloud.callFunctionInBackground("instantMessageNotification", params);
     }
 }

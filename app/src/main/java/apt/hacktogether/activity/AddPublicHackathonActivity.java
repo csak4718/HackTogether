@@ -14,6 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -154,6 +157,11 @@ public class AddPublicHackathonActivity extends BaseActivity {
 
         // Check to see the state of the LayerClient, and if everything is set up, then good; do nothing.
         Utils.checkSetup(this);
+
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", false);
+        installation.put("user", ParseUser.getCurrentUser());
+        installation.saveInBackground();
     }
 
     @Override
