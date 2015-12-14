@@ -160,7 +160,8 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
         if(message != null && !senderId.equals(LayerImpl.getLayerClient().getAuthenticatedUserId())) {
             params.gravity = Gravity.LEFT;
             viewHolder.content.setBackgroundResource(R.drawable.img_chats_bg_01);
-            viewHolder.content.setPadding(35, 20, 20, 10);
+            viewHolder.content.setPadding(45, 20, 20, 10);
+            viewHolder.contentLayout.setGravity(Gravity.LEFT);
             ParseFile imgFile = ParseImpl.get_allUsers().get(senderId).getParseFile(Common.OBJECT_USER_PROFILE_PIC);
             Picasso.with(mContext)
                     .load(imgFile.getUrl())
@@ -170,6 +171,7 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
             params.gravity = Gravity.RIGHT;
 //            viewHolder.contentLayout.setBackgroundColor(0xFFB1D1FF);
             viewHolder.content.setBackgroundResource(R.drawable.im);
+            viewHolder.sender.setVisibility(View.GONE);
             viewHolder.ImagePic.setVisibility(View.GONE);
         }
         viewHolder.contentLayout.setLayoutParams(params);
