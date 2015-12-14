@@ -11,6 +11,7 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -540,6 +541,11 @@ public class EditProfileActivity extends BaseActivity {
 
         // Check to see the state of the LayerClient, and if everything is set up, then good; do nothing.
         Utils.checkSetup(this);
+
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", false);
+        installation.put("user", ParseUser.getCurrentUser());
+        installation.saveInBackground();
 
     }
 

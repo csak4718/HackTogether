@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.messaging.MessagePart;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
 import org.apmem.tools.layouts.FlowLayout;
@@ -41,6 +42,7 @@ import apt.hacktogether.event.AddPersonToMessageEvent;
 import apt.hacktogether.layer.LayerImpl;
 import apt.hacktogether.parse.ParseImpl;
 import apt.hacktogether.utils.Common;
+import apt.hacktogether.utils.ParseUtils;
 import apt.hacktogether.utils.Utils;
 import de.greenrobot.event.EventBus;
 
@@ -135,8 +137,9 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
             Intent it = getIntent();
             //This is an existing Conversation, display the messages, otherwise, allow the user to
             // add/remove participants and create a new Conversation
-            if (mConversation != null)
+            if (mConversation != null) {
                 setupMessagesView();
+            }
             else if(it.getStringArrayListExtra("mTargetParticipants") != null){
                 Log.d("DebugBefore","List"+mTargetParticipants);
                 // the intent content would overwrite add participant every time
@@ -144,9 +147,14 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
                 populateToField(mTargetParticipants);
                 setupMessagesView_new();
             }
-            else
+            else {
                 createNewConversationView();
+            }
         }
+
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", true);
+        installation.saveInBackground();
     }
 
     private void setupMessagesView_new() {
@@ -189,6 +197,10 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", false);
+        installation.saveInBackground();
         super.onDestroy();
     }
 
@@ -322,7 +334,35 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
 
             MessagePart part = LayerImpl.getLayerClient().newMessagePart(text);
             Message msg = LayerImpl.getLayerClient().newMessage(part);
-            mConversation.send(msg);
+            mConversation.send(msg);//
+            mTargetParticipants = (ArrayList<String>)mConversation.getParticipants();
+            Log.d("WILL mTargetParticipants", mTargetParticipants.toString());
+
+
+            Log.d("WILL mConversation.getId().toString()", mConversation.getId().toString());
+            Uri myUri = Uri.parse("layer:///conversations/d5ba6093-d55d-4736-b91e-67d07097ff88");
+            Log.d("WILL myUri.toString()", myUri.toString());
+
+
+
+            if(mTargetParticipants.size() > 2){
+                // Group Chat
+                for (String mTargetParticipantId: mTargetParticipants){
+                    if(!ParseUser.getCurrentUser().getObjectId().equals(mTargetParticipantId)){
+                        ParseUtils.instantMessageNotification(ParseUser.getCurrentUser().getObjectId(), mTargetParticipantId, text, mConversation.getId().toString(), true);
+                    }
+                }
+            }
+            else{
+                // 1 on 1 Chat
+                for (String mTargetParticipantId: mTargetParticipants){
+                    if(!ParseUser.getCurrentUser().getObjectId().equals(mTargetParticipantId)){
+                        ParseUtils.instantMessageNotification(ParseUser.getCurrentUser().getObjectId(), mTargetParticipantId, text, mConversation.getId().toString(), false);
+                    }
+                }
+            }
+
+
 
             input.setText("");
 
@@ -368,8 +408,32 @@ public class MessageActivity extends BaseActivity implements MessageQueryAdapter
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onStart(){
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", true);
+        installation.saveInBackground();
 
+        super.onStart();
+    }
 
+    @Override
+    public void onPause() {
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", false);
+        installation.saveInBackground();
+
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", false);
+        installation.saveInBackground();
+
+        super.onStop();
+    }
     //Shows a list of all users that can be added to the Conversation
 //    private void showParticipantPicker(){
 //

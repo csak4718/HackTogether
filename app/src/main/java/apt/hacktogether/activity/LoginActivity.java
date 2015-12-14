@@ -110,17 +110,20 @@ public class LoginActivity extends BaseActivity {
                 String host = uri.getHost();
 
                 if(host.contains("im")) {
-                    // go to ConversationActivity first. Later, go to MessageActivity
-                    Intent notiIntent = new Intent(this, ConversationsActivity.class);
+                    // go to MainActivity first. Then, go to ConversationActivity, Later, go to MessageActivity
+                    Intent notiIntent = new Intent(this, MainActivity.class);
+                    notiIntent.setData(it.getData());
+                    startActivity(notiIntent);
+                }
+                else{
+                    // invitation notification
+                    Intent notiIntent = new Intent(this, GroupManageActivity.class);
                     notiIntent.setData(it.getData());
                     startActivity(notiIntent);
                 }
             }
 
-            // invitation notification
-            Intent notiIntent = new Intent(this, GroupManageActivity.class);
-            notiIntent.setData(it.getData());
-            startActivity(notiIntent);
+
         }
         else {
             Utils.gotoMainActivity(this);

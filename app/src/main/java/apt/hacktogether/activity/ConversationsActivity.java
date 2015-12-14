@@ -14,6 +14,7 @@ import android.widget.Button;
 
 import com.layer.sdk.messaging.Conversation;
 import com.melnykov.fab.FloatingActionButton;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
 import apt.hacktogether.R;
@@ -48,11 +49,18 @@ public class ConversationsActivity extends BaseActivity implements ConversationQ
             Uri uri = it.getData();
             String host = uri.getHost();
             String path = uri.getPath();
+            Log.d("WILL path", path);
 
             if(host.contains("im")) {
-                // TODO
-//                String senderId = path.substring(1);
-//                Utils.gotoSpinnerActivity(this, senderId);
+                // Get conversation-id from notif Intent
+                String conversationIdStr = path.substring(1);
+                Log.d("WILL conversationIdStr", conversationIdStr);
+                Uri conversationIdUri = Uri.parse(conversationIdStr);
+                Log.d("WILL conversationIdUri", conversationIdUri.toString());
+
+                Intent intent = new Intent(this, MessageActivity.class);
+                intent.putExtra("conversation-id", conversationIdUri);
+                startActivity(intent);
             }
         }
 
@@ -93,6 +101,11 @@ public class ConversationsActivity extends BaseActivity implements ConversationQ
             Log.d("Activity", "Starting conversation view");
             setupConversationView();
         }
+
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("inMessageActivity", false);
+        installation.put("user", ParseUser.getCurrentUser());
+        installation.saveInBackground();
     }
 
     //If the user authenticated, setup the Conversation list

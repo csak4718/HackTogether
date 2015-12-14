@@ -73,7 +73,7 @@ public abstract class QueryAdapter<Tquery extends Queryable, Tview extends Recyc
 
     //Returns the total number of items found by the query
     public int getItemCount() {
-        Log.d("Activity", "Query Adapter getItemCount: " + mQueryController.getItemCount());
+//        Log.d("Activity", "Query Adapter getItemCount: " + mQueryController.getItemCount());
         return mQueryController.getItemCount();
     }
 
