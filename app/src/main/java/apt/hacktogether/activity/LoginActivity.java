@@ -13,7 +13,9 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -44,7 +46,8 @@ import de.greenrobot.event.EventBus;
 
 public class LoginActivity extends BaseActivity {
     private Button mBtnLoginFacebook;
-    private TextView mTxvSplashLogo;
+//    private TextView mTxvSplashLogo;
+    private RelativeLayout mContainer;
     private Handler mHandler = new Handler();
     private String mNickName;
     private String mFbId;
@@ -80,8 +83,8 @@ public class LoginActivity extends BaseActivity {
             setContentView(R.layout.activity_login);
             ButterKnife.bind(this);
             mBtnLoginFacebook = (Button) findViewById(R.id.btn_login_facebook);
-            mTxvSplashLogo = (TextView) findViewById(R.id.txv_splash_logo);
-
+//            mTxvSplashLogo = (TextView) findViewById(R.id.txv_splash_logo);
+            mContainer = (RelativeLayout) findViewById(R.id.container);
         }
 
 
@@ -195,7 +198,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void showLoginAnimation() {
-        TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -200);
+        TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -100);
         animation.setDuration(1000);
         animation.setFillAfter(true);
         animation.setFillEnabled(true);
@@ -215,10 +218,12 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
-        mTxvSplashLogo.setAnimation(animation);
+//        mTxvSplashLogo.setAnimation(animation);
+        mContainer.setAnimation(animation);
 
         Log.d("Animation", "startAnimation");
-        mTxvSplashLogo.startAnimation(animation);
+//        mTxvSplashLogo.startAnimation(animation);
+        mContainer.startAnimation(animation);
     }
 
     public void onEvent(UserProfileEvent event) {

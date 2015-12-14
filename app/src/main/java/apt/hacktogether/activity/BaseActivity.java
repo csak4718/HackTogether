@@ -47,7 +47,7 @@ public class BaseActivity extends ActionBarActivity implements LayerCallbacks, V
         //Registers the activity so callbacks are executed on the correct class
         LayerImpl.setContext(this);
 
-        ParseImpl.cacheAllUsers();
+        ParseImpl.cacheAllUsers(this);
         ParseImpl.cacheAllInterests();
         ParseImpl.cacheAllSkills();
         ParseImpl.cacheAllHackathons();
@@ -61,7 +61,7 @@ public class BaseActivity extends ActionBarActivity implements LayerCallbacks, V
         //Registers the activity so callbacks are executed on the correct class
         LayerImpl.setContext(this);
 
-        ParseImpl.cacheAllUsers();
+        ParseImpl.cacheAllUsers(this);
         ParseImpl.cacheAllInterests();
         ParseImpl.cacheAllSkills();
         ParseImpl.cacheAllHackathons();

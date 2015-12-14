@@ -14,6 +14,7 @@ import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +23,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import apt.hacktogether.activity.BaseActivity;
 import apt.hacktogether.utils.Common;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by de-weikung on 11/11/15.
@@ -233,12 +236,16 @@ public class ParseImpl {
     //We keep track of all users associated with this app in Parse. You can override this to implement
     // your own user management system (based on a friends list, for example)
     private static HashMap<String, ParseUser> allUsers;
+//    private static HashMap<String, CircleImageView> allUserCircleViews;
 
     public static HashMap<String, ParseUser> get_allUsers(){
         return allUsers;
     }
+//    public static HashMap<String, CircleImageView> get_allUserCircleViews(){
+//        return allUserCircleViews;
+//    }
 
-    public static void cacheAllUsers(){
+    public static void cacheAllUsers(final BaseActivity activity){
         // cache all users asynchronously
         ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
         userQuery.findInBackground(new FindCallback<ParseUser>() {
@@ -252,6 +259,32 @@ public class ParseImpl {
             }
         });
     }
+
+//    cache CircleImageView at the same time
+//    public static void cacheAllUsers(final BaseActivity activity){
+//        // cache all users asynchronously
+//        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+//        userQuery.findInBackground(new FindCallback<ParseUser>() {
+//            public void done(List<ParseUser> results, ParseException e) {
+//                if(e == null){
+//                    allUsers = new HashMap<>();
+//                    allUserCircleViews = new HashMap<>();
+//                    for(int i = 0; i < results.size(); i++){
+//                        allUsers.put(results.get(i).getObjectId(), results.get(i));
+//
+//
+//                        ParseFile imgFile = results.get(i).getParseFile(Common.OBJECT_USER_PROFILE_PIC);
+//                        CircleImageView ImagePic = new CircleImageView(activity);
+//                        Picasso.with(activity)
+//                                .load(imgFile.getUrl())
+//                                .into(ImagePic);
+//                        allUserCircleViews.put(results.get(i).getObjectId(), ImagePic);
+//                    }
+//                }
+//            }
+//        });
+//    }
+
 
 //    Official doc says don't use find()
 //    public static void cacheAllUsers(){
