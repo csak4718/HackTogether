@@ -3,6 +3,7 @@ package apt.hacktogether.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,16 +160,18 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
         if(message != null && !senderId.equals(LayerImpl.getLayerClient().getAuthenticatedUserId())) {
             params.gravity = Gravity.LEFT;
             viewHolder.content.setBackgroundResource(R.drawable.img_chats_bg_01);
-            viewHolder.content.setPadding(35, 20, 20, 10);
+            viewHolder.content.setPadding(45, 20, 20, 10);
+            viewHolder.contentLayout.setGravity(Gravity.LEFT);
             ParseFile imgFile = ParseImpl.get_allUsers().get(senderId).getParseFile(Common.OBJECT_USER_PROFILE_PIC);
             Picasso.with(mContext)
                     .load(imgFile.getUrl())
                     .into(viewHolder.ImagePic);
-//            ParseUtils.displayParseImage(imgFile, viewHolder.ImagePic);
+            Log.d("Execute", "Replace Image");
         } else {
             params.gravity = Gravity.RIGHT;
 //            viewHolder.contentLayout.setBackgroundColor(0xFFB1D1FF);
             viewHolder.content.setBackgroundResource(R.drawable.im);
+            viewHolder.sender.setVisibility(View.GONE);
             viewHolder.ImagePic.setVisibility(View.GONE);
         }
         viewHolder.contentLayout.setLayoutParams(params);
