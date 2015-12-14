@@ -108,6 +108,7 @@ public class LoginActivity extends BaseActivity {
     private void gotoNextActivity() {
         Intent it = getIntent();
         if(it.getAction().equals("android.intent.action.VIEW")) {
+            Log.d("WILLL", "in VIEW");
             if(it != null && it.getData() != null){
                 Uri uri = it.getData();
                 String host = uri.getHost();
@@ -130,9 +131,11 @@ public class LoginActivity extends BaseActivity {
         }
         else {
             if(ParseUser.getCurrentUser().getBoolean(Common.OBJECT_USER_IS_RETURN_USER)){
+                Log.d("WILLL", "isRETURN user");
                 Utils.gotoMainActivity(this);
             }
             else{
+                Log.d("WILLL", "isNOT RETURN user");
                 Utils.gotoCreateProfileActivity(this);
             }
 
@@ -184,8 +187,9 @@ public class LoginActivity extends BaseActivity {
 
         //Go to the MainActivity
         Log.d("Activity", "User authenticated");
+        Log.d("WILLL", "IN onUserAuthenticated");
 
-        Utils.gotoMainActivity(LoginActivity.this);
+        gotoNextActivity();
         finish();
     }
 

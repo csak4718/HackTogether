@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.layer.sdk.internal.persistence.sync.Util;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -199,7 +200,7 @@ public class CreateProfileActivity extends BaseActivity {
             }
         });
 
-        CreateProfileActivity.this.finish();
+        Utils.gotoMainActivity(this);
     }
 
 
