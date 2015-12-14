@@ -126,7 +126,13 @@ public class LoginActivity extends BaseActivity {
 
         }
         else {
-            Utils.gotoMainActivity(this);
+            if(ParseUser.getCurrentUser().getBoolean(Common.OBJECT_USER_IS_RETURN_USER)){
+                Utils.gotoMainActivity(this);
+            }
+            else{
+                Utils.gotoCreateProfileActivity(this);
+            }
+
         }
         finish();
     }

@@ -256,6 +256,28 @@ public class ParseUtils {
         ParseCloud.callFunctionInBackground("removeUnwantedMyHackathon", params);
     }
 
+
+
+
+
+    static public void removeGroupFromInterestedGroups(String interestId, String delete_groupId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("interestId", interestId);
+        params.put("delete_groupId", delete_groupId);
+        ParseCloud.callFunctionInBackground("removeGroupFromInterestedGroups", params);
+    }
+
+    static public void removeGroupFromLookForGroups(String skillId, String delete_groupId){
+        Map<String, Object> params = new HashMap<>();
+        params.put("skillId", skillId);
+        params.put("delete_groupId", delete_groupId);
+        ParseCloud.callFunctionInBackground("removeGroupFromLookForGroups", params);
+    }
+
+
+
+
+
     static public void removeUserFromInterestedHackers(String interestId, String delete_userId){
         Map<String, Object> params = new HashMap<>();
         params.put("interestId", interestId);
@@ -283,6 +305,7 @@ public class ParseUtils {
         params.put("delete_userId", delete_userId);
         ParseCloud.callFunctionInBackground("removeUserFromHackers", params);
     }
+
 
     static public void instantMessageNotification(String senderId, String recipientId, String textMessage, String conversationId, boolean isGroupChat){
         Map<String, Object> params = new HashMap<String, Object>();

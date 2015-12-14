@@ -149,4 +149,8 @@ public class Utils {
         activity.startActivity(it);
     }
 
+    public static void gotoCreateProfileActivity(Activity activity){
+        Intent it = new Intent(activity, CreateProfileActivity.class);
+        activity.startActivity(it);
+    }
 }

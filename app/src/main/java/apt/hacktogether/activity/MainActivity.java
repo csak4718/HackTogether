@@ -247,6 +247,11 @@ public class MainActivity extends BaseActivity {
         // test function
 //        test();
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUser.put(Common.OBJECT_USER_IS_RETURN_USER, true); // won't go into CreateProfile again
+        currentUser.saveInBackground();
+
+
         Intent it = getIntent();
         if (it != null && it.getData() != null){
             Uri uri = it.getData();
