@@ -3,6 +3,7 @@ package apt.hacktogether.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -164,7 +165,7 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
             Picasso.with(mContext)
                     .load(imgFile.getUrl())
                     .into(viewHolder.ImagePic);
-//            ParseUtils.displayParseImage(imgFile, viewHolder.ImagePic);
+            Log.d("Execute", "Replace Image");
         } else {
             params.gravity = Gravity.RIGHT;
 //            viewHolder.contentLayout.setBackgroundColor(0xFFB1D1FF);
